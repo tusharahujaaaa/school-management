@@ -6,6 +6,7 @@ import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 
 export const appRoutes: Routes = [
+    { path: 'erp', loadChildren: () => import('./app/erp/routes/erp.routes').then(m => m.erpRoutes) },
     {
         path: '',
         component: AppLayout,

@@ -1,0 +1,49 @@
+.erp-dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+
+  .erp-topbar {
+    height: 4rem;
+    z-index: 10;
+  }
+
+  .erp-main-container {
+    height: calc(100vh - 4rem);
+    
+    .erp-sidebar {
+      width: 16rem;
+      &.hidden {
+        width: 0;
+        overflow: hidden;
+      }
+    }
+    
+    .erp-content {
+      background-color: var(--erp-bg-body, #f4f6f8);
+    }
+  }
+
+  &.sidebar-hidden {
+    .erp-sidebar {
+      margin-left: -16rem;
+    }
+  }
+}
+
+// Mobile responsive
+@media screen and (max-width: 768px) {
+  .erp-dashboard-layout {
+    .erp-sidebar {
+      position: absolute;
+      z-index: 9;
+      height: calc(100vh - 4rem);
+      margin-left: -16rem;
+    }
+    &:not(.sidebar-hidden) .erp-sidebar {
+      margin-left: 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  }
+}
