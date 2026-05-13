@@ -1,0 +1,109 @@
+<div class="parent-attendance-page">
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-3">
+    <div>
+      <div class="flex align-items-center gap-2 mb-1">
+        <i class="pi pi-user text-primary"></i>
+        <span class="text-500 text-sm">Parent Dashboard</span>
+      </div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ child().name }}'s Attendance</h2>
+      <span class="text-500 text-sm">{{ child().class }} — Section {{ child().section }}</span>
+    </div>
+    <div class="flex gap-2">
+      <button class="flex align-items-center gap-2 px-3 py-2 surface-100 border-round-lg text-700 text-sm font-medium border-none cursor-pointer hover:surface-200 transition-colors">
+        <i class="pi pi-download"></i> Download Report
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Alert Banner ───────────────────────────────────── -->
+  <div *ngIf="alert()" class="border-round-xl p-4 mb-4 flex align-items-center gap-3"
+       [ngClass]="alert()!.severity === 'critical' ? 'bg-red-50 border-1 border-red-300' : 'bg-orange-50 border-1 border-orange-300'">
+    <i class="pi pi-exclamation-triangle text-2xl"
+       [ngClass]="alert()!.severity === 'critical' ? 'text-red-500' : 'text-orange-500'"></i>
+    <div>
+      <div class="font-bold text-900 mb-1">
+        {{ alert()!.severity === 'critical' ? 'Critical Low Attendance' : 'Low Attendance Warning' }}
+      </div>
+      <div class="text-700 text-sm">
+        {{ child().name }}'s attendance is <strong>{{ alert()!.attendancePercentage }}%</strong>.
+        Minimum required is 75%. Please ensure regular attendance.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main Content Grid ─────────────────────────────── -->
+  <div class="grid">
+
+    <!-- Percentage Widget -->
+    <div class="col-12 md:col-4">
+      <app-attendance-percentage-widget
+        [percentage]="child().attendancePercentage"
+        label="Overall Attendance"
+        [subLabel]="child().class + ' — Sec ' + child().section"
+        [presentDays]="child().presentDays"
+        [totalDays]="child().totalDays">
+      </app-attendance-percentage-widget>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="col-12 md:col-8">
+      <div class="surface-card shadow-1 border-round-xl p-4 h-full">
+        <h3 class="text-900 font-semibold text-lg m-0 mb-4">Attendance Breakdown</h3>
+        <div class="grid">
+          <div class="col-6">
+            <div class="p-3 bg-green-50 border-round-xl text-center">
+              <div class="text-green-600 font-bold text-3xl">{{ child().presentDays }}</div>
+              <div class="text-500 text-sm mt-1">Days Present</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-red-50 border-round-xl text-center">
+              <div class="text-red-500 font-bold text-3xl">{{ child().totalDays - child().presentDays }}</div>
+              <div class="text-500 text-sm mt-1">Days Absent</div>
+            </div>
+          </div>
+          <div class="col-12 mt-3">
+            <div class="flex justify-content-between text-sm mb-2">
+              <span class="text-500 font-medium">Progress to 100%</span>
+              <span class="font-bold"
+                    [ngClass]="child().attendancePercentage >= 90 ? 'text-green-500' : child().attendancePercentage >= 75 ? 'text-orange-500' : 'text-red-500'">
+                {{ child().attendancePercentage }}%
+              </span>
+            </div>
+            <div class="w-full bg-surface-200 border-round" style="height:10px">
+              <div class="border-round h-full transition-all"
+                   [ngClass]="child().attendancePercentage >= 90 ? 'bg-green-500' : child().attendancePercentage >= 75 ? 'bg-orange-400' : 'bg-red-500'"
+                   [style.width.%]="child().attendancePercentage"></div>
+            </div>
+            <div class="text-400 text-xs mt-2">
+              <i class="pi pi-info-circle mr-1"></i>
+              Minimum 75% attendance required for examinations
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Class History -->
+    <div class="col-12">
+      <div class="surface-card shadow-1 border-round-xl p-4">
+        <h3 class="text-900 font-semibold text-lg m-0 mb-4">
+          <i class="pi pi-history mr-2 text-primary"></i>
+          Recent Class Attendance Records
+        </h3>
+        <div *ngIf="recentHistory().length > 0" class="grid">
+          <div class="col-12 md:col-6 lg:col-4" *ngFor="let record of recentHistory()">
+            <app-attendance-history-card [record]="record"></app-attendance-history-card>
+          </div>
+        </div>
+        <div *ngIf="recentHistory().length === 0" class="text-center py-5">
+          <i class="pi pi-calendar text-200 text-4xl block mb-3"></i>
+          <p class="text-500 m-0">No history available yet.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

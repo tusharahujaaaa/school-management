@@ -1,0 +1,71 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// ─── Brand Header ────────────────────────────────────────
+.sidebar-brand {
+  flex-shrink: 0;
+}
+
+// ─── Scrollable Nav Content ──────────────────────────────
+.sidebar-nav-content {
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: var(--surface-300); border-radius: 10px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
+
+// ─── Group Label ─────────────────────────────────────────
+.sidebar-group-label {
+  &:first-of-type { margin-top: 0.5rem; }
+}
+
+// ─── Nav Item ────────────────────────────────────────────
+.nav-item {
+  color: var(--text-color-secondary);
+
+  &__icon { color: inherit; }
+  &__label { color: inherit; }
+
+  &__badge {
+    background: var(--surface-100);
+    color: var(--text-color-secondary);
+    
+    &--soon {
+      background: var(--surface-100);
+      color: var(--text-color-secondary);
+    }
+  }
+
+  // Hover state
+  &:not(.nav-item--disabled):hover {
+    background: var(--surface-100);
+    color: var(--text-color);
+  }
+
+  // Active state (applied by routerLinkActive)
+  &--active {
+    background: var(--primary-50, #eff6ff) !important;
+    color: var(--primary-color) !important;
+    font-weight: 600;
+
+    .nav-item__icon,
+    .nav-item__label { color: var(--primary-color) !important; }
+  }
+
+  // Disabled state
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    color: var(--text-color-secondary);
+  }
+}
+
+// ─── Footer ──────────────────────────────────────────────
+.sidebar-footer {
+  flex-shrink: 0;
+}

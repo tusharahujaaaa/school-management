@@ -10,11 +10,11 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RippleModule } from 'primeng/ripple';
 import { PasswordModule } from 'primeng/password';
 import { AppFloatingConfigurator } from '../../../../layout/component/app.floatingconfigurator';
-
+import { ProgressBarModule } from 'primeng/progressbar';
 @Component({
   selector: 'app-erp-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, InputTextModule, ButtonModule, CheckboxModule, RippleModule, AppFloatingConfigurator, PasswordModule],
+  imports: [CommonModule, RouterModule, FormsModule, InputTextModule, ButtonModule, CheckboxModule, RippleModule, AppFloatingConfigurator, PasswordModule, ProgressBarModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

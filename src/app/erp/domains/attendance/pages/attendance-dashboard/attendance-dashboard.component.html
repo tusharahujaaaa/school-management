@@ -1,0 +1,194 @@
+<div class="attendance-dashboard">
+
+  <!-- Page Header -->
+  <div class="surface-card p-4 border-round-xl shadow-1 mb-4 border-left-3 border-left-primary flex flex-column md:flex-row justify-content-between align-items-md-center">
+    <div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Attendance Dashboard</h2>
+      <span class="text-500"><i class="pi pi-calendar mr-2"></i>{{ today }}</span>
+    </div>
+    <div class="flex gap-2 mt-3 md:mt-0">
+      <a routerLink="/erp/attendance/students" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
+        <i class="pi pi-plus"></i> Mark Student Attendance
+      </a>
+      <a routerLink="/erp/attendance/staff" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
+        <i class="pi pi-id-card"></i> Mark Staff Attendance
+      </a>
+    </div>
+  </div>
+
+  <!-- Section 1: Summary Stat Cards -->
+  <div class="grid mb-4">
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-2">
+      <app-attendance-stat-card
+        label="Total Students" [value]="stats().totalStudents"
+        icon="pi pi-users" iconBgClass="bg-blue-50" iconColorClass="text-blue-500">
+      </app-attendance-stat-card>
+    </div>
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-2">
+      <app-attendance-stat-card
+        label="Present Today" [value]="stats().presentToday"
+        icon="pi pi-check-circle" iconBgClass="bg-green-50" iconColorClass="text-green-500"
+        [percentage]="stats().overallPercentage">
+      </app-attendance-stat-card>
+    </div>
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-2">
+      <app-attendance-stat-card
+        label="Absent Today" [value]="stats().absentToday"
+        icon="pi pi-times-circle" iconBgClass="bg-red-50" iconColorClass="text-red-500">
+      </app-attendance-stat-card>
+    </div>
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-2">
+      <app-attendance-stat-card
+        label="Late Arrivals" [value]="stats().lateToday"
+        icon="pi pi-clock" iconBgClass="bg-orange-50" iconColorClass="text-orange-500">
+      </app-attendance-stat-card>
+    </div>
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-2">
+      <app-attendance-stat-card
+        label="On Leave" [value]="stats().onLeave"
+        icon="pi pi-calendar-minus" iconBgClass="bg-yellow-50" iconColorClass="text-yellow-600">
+      </app-attendance-stat-card>
+    </div>
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-2">
+      <app-attendance-stat-card
+        label="Staff Present" [value]="stats().staffPresent" [subLabel]="'of ' + stats().staffTotal"
+        icon="pi pi-id-card" iconBgClass="bg-purple-50" iconColorClass="text-purple-500">
+      </app-attendance-stat-card>
+    </div>
+  </div>
+
+  <!-- Section 2: Main Content -->
+  <div class="grid">
+
+    <!-- Left Col: Class-wise overview -->
+    <div class="col-12 xl:col-8">
+
+      <!-- Overall Progress -->
+      <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <h3 class="m-0 text-900 font-semibold text-lg">Overall Attendance Today</h3>
+          <span class="text-3xl font-bold" [ngClass]="stats().overallPercentage >= 90 ? 'text-green-500' : 'text-orange-500'">
+            {{ stats().overallPercentage }}%
+          </span>
+        </div>
+        <div class="flex gap-2 mb-3 flex-wrap">
+          <div class="flex align-items-center gap-2 px-3 py-2 bg-green-50 border-round-lg">
+            <i class="pi pi-check-circle text-green-500"></i>
+            <span class="font-semibold text-green-700">{{ stats().presentToday }} Present</span>
+          </div>
+          <div class="flex align-items-center gap-2 px-3 py-2 bg-red-50 border-round-lg">
+            <i class="pi pi-times-circle text-red-500"></i>
+            <span class="font-semibold text-red-700">{{ stats().absentToday }} Absent</span>
+          </div>
+          <div class="flex align-items-center gap-2 px-3 py-2 bg-orange-50 border-round-lg">
+            <i class="pi pi-clock text-orange-500"></i>
+            <span class="font-semibold text-orange-700">{{ stats().lateToday }} Late</span>
+          </div>
+          <div class="flex align-items-center gap-2 px-3 py-2 bg-blue-50 border-round-lg">
+            <i class="pi pi-calendar-minus text-blue-500"></i>
+            <span class="font-semibold text-blue-700">{{ stats().onLeave }} Leave</span>
+          </div>
+        </div>
+        <div class="w-full bg-surface-200 border-round" style="height:10px">
+          <div class="bg-green-500 border-round h-full transition-all" [style.width.%]="stats().overallPercentage"></div>
+        </div>
+      </div>
+
+      <!-- Class-wise Table -->
+      <div class="surface-card shadow-1 border-round-xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <h3 class="m-0 text-900 font-semibold text-lg">Class-wise Attendance</h3>
+          <a routerLink="/erp/attendance/history" class="text-primary text-sm font-medium no-underline hover:underline">View History <i class="pi pi-angle-right"></i></a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full" style="border-collapse: collapse;">
+            <thead>
+              <tr class="surface-50 text-left">
+                <th class="p-3 border-bottom-1 surface-border text-500 font-medium text-sm">Class</th>
+                <th class="p-3 border-bottom-1 surface-border text-500 font-medium text-sm">Section</th>
+                <th class="p-3 border-bottom-1 surface-border text-500 font-medium text-sm">Total</th>
+                <th class="p-3 border-bottom-1 surface-border text-500 font-medium text-sm text-green-600">Present</th>
+                <th class="p-3 border-bottom-1 surface-border text-500 font-medium text-sm text-red-500">Absent</th>
+                <th class="p-3 border-bottom-1 surface-border text-500 font-medium text-sm text-orange-500">Late</th>
+                <th class="p-3 border-bottom-1 surface-border text-500 font-medium text-sm">Attendance %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cls of classSummaries()" class="hover:surface-50 transition-colors border-bottom-1 surface-border">
+                <td class="p-3 text-900 font-medium">{{ cls.class }}</td>
+                <td class="p-3 text-700">{{ cls.section }}</td>
+                <td class="p-3 text-700">{{ cls.totalStudents }}</td>
+                <td class="p-3 text-green-600 font-semibold">{{ cls.present }}</td>
+                <td class="p-3 text-red-500 font-semibold">{{ cls.absent }}</td>
+                <td class="p-3 text-orange-500 font-semibold">{{ cls.late }}</td>
+                <td class="p-3">
+                  <div class="flex align-items-center gap-2">
+                    <div class="flex-grow-1 bg-surface-200 border-round" style="height:6px; min-width:60px">
+                      <div class="border-round h-full"
+                           [ngClass]="cls.percentage >= 90 ? 'bg-green-500' : cls.percentage >= 75 ? 'bg-orange-400' : 'bg-red-500'"
+                           [style.width.%]="cls.percentage"></div>
+                    </div>
+                    <span class="text-sm font-semibold w-3rem text-right"
+                          [ngClass]="cls.percentage >= 90 ? 'text-green-600' : cls.percentage >= 75 ? 'text-orange-500' : 'text-red-500'">
+                      {{ cls.percentage }}%
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Col: Alerts + Quick Actions -->
+    <div class="col-12 xl:col-4">
+
+      <!-- Quick Actions -->
+      <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
+        <h3 class="m-0 text-900 font-semibold text-lg mb-3">Quick Actions</h3>
+        <div class="grid">
+          <div class="col-6">
+            <a routerLink="/erp/attendance/students" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-blue-50 hover:bg-blue-100 cursor-pointer text-center h-full transition-colors no-underline">
+              <i class="pi pi-users text-blue-500 text-2xl mb-2"></i>
+              <span class="text-blue-700 font-medium text-sm">Student Attendance</span>
+            </a>
+          </div>
+          <div class="col-6">
+            <a routerLink="/erp/attendance/staff" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-purple-50 hover:bg-purple-100 cursor-pointer text-center h-full transition-colors no-underline">
+              <i class="pi pi-id-card text-purple-500 text-2xl mb-2"></i>
+              <span class="text-purple-700 font-medium text-sm">Staff Attendance</span>
+            </a>
+          </div>
+          <div class="col-6 mt-3">
+            <a routerLink="/erp/attendance/reports" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-teal-50 hover:bg-teal-100 cursor-pointer text-center h-full transition-colors no-underline">
+              <i class="pi pi-chart-bar text-teal-500 text-2xl mb-2"></i>
+              <span class="text-teal-700 font-medium text-sm">View Reports</span>
+            </a>
+          </div>
+          <div class="col-6 mt-3">
+            <a routerLink="/erp/attendance/history" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-orange-50 hover:bg-orange-100 cursor-pointer text-center h-full transition-colors no-underline">
+              <i class="pi pi-history text-orange-500 text-2xl mb-2"></i>
+              <span class="text-orange-700 font-medium text-sm">View History</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Low Attendance Alerts -->
+      <div class="surface-card shadow-1 border-round-xl p-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <div class="flex align-items-center gap-2">
+            <i class="pi pi-exclamation-triangle text-orange-500"></i>
+            <h3 class="m-0 text-900 font-semibold text-lg">Low Attendance Alerts</h3>
+          </div>
+          <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 border-round">{{ alerts().length }}</span>
+        </div>
+        <app-attendance-alert-card *ngFor="let alert of alerts() | slice:0:5" [alert]="alert"></app-attendance-alert-card>
+        <a routerLink="/erp/attendance/reports" class="text-primary text-sm font-medium no-underline hover:underline mt-2 block text-center">View all alerts <i class="pi pi-angle-right"></i></a>
+      </div>
+    </div>
+
+  </div>
+</div>

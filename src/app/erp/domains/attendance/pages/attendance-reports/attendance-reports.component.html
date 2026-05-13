@@ -1,0 +1,113 @@
+<div class="attendance-reports-page">
+
+  <!-- Header -->
+  <div class="surface-card p-4 border-round-xl shadow-1 mb-4">
+    <div class="flex flex-column md:flex-row justify-content-between align-items-md-center">
+      <div>
+        <h2 class="text-900 font-bold text-2xl m-0 mb-1">Attendance Reports</h2>
+        <span class="text-500">Generate, view and export attendance reports</span>
+      </div>
+      <button pButton label="Export All" icon="pi pi-download" class="p-button-outlined mt-3 md:mt-0"></button>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="grid mb-4">
+    <div class="col-12 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-green-500">
+        <div class="text-green-500 font-bold text-4xl mb-1">{{ stats().overallPercentage }}%</div>
+        <span class="text-500 font-medium">Overall Attendance</span>
+      </div>
+    </div>
+    <div class="col-12 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-blue-500">
+        <div class="text-blue-600 font-bold text-4xl mb-1">{{ stats().presentToday }}</div>
+        <span class="text-500 font-medium">Students Present Today</span>
+      </div>
+    </div>
+    <div class="col-12 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-red-500">
+        <div class="text-red-500 font-bold text-4xl mb-1">{{ stats().absentToday }}</div>
+        <span class="text-500 font-medium">Students Absent Today</span>
+      </div>
+    </div>
+    <div class="col-12 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-orange-500">
+        <div class="text-orange-500 font-bold text-4xl mb-1">{{ alerts().length }}</div>
+        <span class="text-500 font-medium">Low Attendance Alerts</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Cards Grid -->
+  <div class="grid mb-4">
+    <div class="col-12 md:col-6 lg:col-4" *ngFor="let report of reports()">
+      <div class="surface-card shadow-1 border-round-xl p-4 h-full hover:shadow-2 transition-all cursor-pointer group">
+        <div class="flex align-items-start justify-content-between mb-3">
+          <div class="flex align-items-center justify-content-center border-round-xl w-3rem h-3rem" [ngClass]="report.colorClass">
+            <i [class]="report.icon + ' text-xl'"></i>
+          </div>
+          <button pButton icon="pi pi-download" class="p-button-text p-button-sm" title="Export report"></button>
+        </div>
+        <h3 class="text-900 font-semibold m-0 mb-2">{{ report.title }}</h3>
+        <p class="text-500 m-0 text-sm line-height-3 mb-4">{{ report.description }}</p>
+        <div class="flex gap-2">
+          <button pButton label="Generate" icon="pi pi-chart-bar" class="p-button-sm p-button-outlined flex-grow-1"></button>
+          <button pButton icon="pi pi-download" class="p-button-sm p-button-outlined" title="Export"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Low Attendance Students Section -->
+  <div class="surface-card shadow-1 border-round-xl p-4">
+    <div class="flex justify-content-between align-items-center mb-4">
+      <div class="flex align-items-center gap-2">
+        <i class="pi pi-exclamation-triangle text-orange-500 text-xl"></i>
+        <h3 class="m-0 text-900 font-bold text-lg">Students Below 75% Attendance</h3>
+        <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 border-round">{{ alerts().length }} students</span>
+      </div>
+      <button pButton label="Export List" icon="pi pi-download" class="p-button-sm p-button-outlined p-button-danger"></button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full" style="border-collapse: collapse;">
+        <thead>
+          <tr class="surface-50">
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Student</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Class</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Present Days</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Attendance %</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Severity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alert of alerts()" class="hover:surface-50 transition-colors border-bottom-1 surface-border">
+            <td class="p-3">
+              <div class="flex align-items-center gap-2">
+                <div class="border-circle flex align-items-center justify-content-center text-xs font-bold"
+                     [ngClass]="alert.severity === 'critical' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600'"
+                     style="width:2rem;height:2rem">
+                  {{ alert.studentName.charAt(0) }}
+                </div>
+                <span class="text-900 font-medium">{{ alert.studentName }}</span>
+              </div>
+            </td>
+            <td class="p-3 text-700">{{ alert.class }}-{{ alert.section }}</td>
+            <td class="p-3 text-700">{{ alert.presentDays }}/{{ alert.totalDays }}</td>
+            <td class="p-3">
+              <span class="font-bold text-lg" [ngClass]="alert.severity === 'critical' ? 'text-red-500' : 'text-orange-500'">
+                {{ alert.attendancePercentage }}%
+              </span>
+            </td>
+            <td class="p-3">
+              <span class="px-2 py-1 border-round text-xs font-bold"
+                    [ngClass]="alert.severity === 'critical' ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'">
+                {{ alert.severity | titlecase }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

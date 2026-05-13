@@ -22,13 +22,17 @@ export const erpRoutes: Routes = [
     ]
   },
   {
-    path: 'dashboard',
+    path: '',
     component: DashboardLayoutComponent,
     canActivate: [authGuard],
     children: [
       {
-        path: '',
+        path: 'dashboard',
         loadComponent: () => import('../domains/dashboard/home/home.component').then(m => m.HomeComponent)
+      },
+      {
+        path: 'attendance',
+        loadChildren: () => import('../domains/attendance/routes/attendance.routes').then(m => m.attendanceRoutes)
       }
     ]
   }

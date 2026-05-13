@@ -1,49 +1,68 @@
-.erp-dashboard-layout {
+.erp-app.erp-dashboard-layout {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+}
 
-  .erp-topbar {
-    height: 4rem;
-    z-index: 10;
+// ─── Topbar ───────────────────────────────────────────────
+.erp-topbar {
+  height: 3.75rem;
+  flex-shrink: 0;
+  z-index: 100;
+  position: relative;
+}
+
+// ─── Main Body ────────────────────────────────────────────
+.erp-main-container {
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 3.75rem);
+}
+
+// ─── Sidebar ──────────────────────────────────────────────
+.erp-sidebar {
+  height: 100%;
+  overflow: hidden;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--visible {
+    width: 15.5rem;
   }
 
-  .erp-main-container {
-    height: calc(100vh - 4rem);
-    
-    .erp-sidebar {
-      width: 16rem;
-      &.hidden {
-        width: 0;
-        overflow: hidden;
-      }
-    }
-    
-    .erp-content {
-      background-color: var(--erp-bg-body, #f4f6f8);
-    }
-  }
-
-  &.sidebar-hidden {
-    .erp-sidebar {
-      margin-left: -16rem;
-    }
+  &--hidden {
+    width: 0;
   }
 }
 
-// Mobile responsive
+// ─── Content ──────────────────────────────────────────────
+.erp-content {
+  height: 100%;
+  overflow-y: auto;
+  background: var(--erp-bg-body, var(--surface-ground, #f4f6f8));
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: var(--surface-300); border-radius: 10px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
+
+// ─── Mobile ───────────────────────────────────────────────
 @media screen and (max-width: 768px) {
-  .erp-dashboard-layout {
-    .erp-sidebar {
-      position: absolute;
-      z-index: 9;
-      height: calc(100vh - 4rem);
-      margin-left: -16rem;
+  .erp-sidebar {
+    position: absolute;
+    z-index: 99;
+    height: calc(100vh - 3.75rem);
+    top: 3.75rem;
+    left: 0;
+    box-shadow: none;
+
+    &--visible {
+      width: 15.5rem;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
     }
-    &:not(.sidebar-hidden) .erp-sidebar {
-      margin-left: 0;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+    &--hidden {
+      width: 0;
     }
   }
 }

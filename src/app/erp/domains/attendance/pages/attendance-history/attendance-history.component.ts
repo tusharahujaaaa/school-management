@@ -1,0 +1,47 @@
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { SelectModule } from 'primeng/select';
+import { ButtonModule } from 'primeng/button';
+import { AttendanceService } from '../../services/attendance.service';
+import { AttendanceHistoryRecord } from '../../models/attendance.model';
+
+@Component({
+  selector: 'app-attendance-history',
+  standalone: true,
+  imports: [CommonModule, FormsModule, SelectModule, ButtonModule],
+  templateUrl: './attendance-history.component.html',
+  styleUrls: ['./attendance-history.component.scss']
+})
+export class AttendanceHistoryComponent {
+  private svc = inject(AttendanceService);
+
+  history = this.svc.history;
+  classOptions = [{ label: 'All Classes', value: '' }, ...this.svc.classes().map(c => ({ label: c, value: c }))];
+  sectionOptions = [{ label: 'All Sections', value: '' }, ...this.svc.sections().map(s => ({ label: `Section ${s}`, value: s }))];
+
+  filterClass = signal('');
+  filterSection = signal('');
+  filterDate = signal('');
+
+  get filteredHistory(): AttendanceHistoryRecord[] {
+    return this.history().filter(h => {
+      const matchClass = !this.filterClass() || h.class === this.filterClass();
+      const matchSection = !this.filterSection() || h.section === this.filterSection();
+      const matchDate = !this.filterDate() || h.date === this.filterDate();
+      return matchClass && matchSection && matchDate;
+    });
+  }
+
+  getPercentageClass(pct: number): string {
+    if (pct >= 90) return 'text-green-600';
+    if (pct >= 75) return 'text-orange-500';
+    return 'text-red-500';
+  }
+
+  resetFilters() {
+    this.filterClass.set('');
+    this.filterSection.set('');
+    this.filterDate.set('');
+  }
+}

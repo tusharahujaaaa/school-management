@@ -1,0 +1,84 @@
+<div class="attendance-history-page">
+
+  <!-- Header -->
+  <div class="surface-card p-4 border-round-xl shadow-1 mb-4 flex flex-column md:flex-row justify-content-between align-items-md-center">
+    <div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Attendance History</h2>
+      <span class="text-500">View and manage past attendance records</span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
+    <div class="grid align-items-end">
+      <div class="col-12 md:col-3">
+        <label class="block text-700 font-medium mb-2">Date</label>
+        <input type="date" [ngModel]="filterDate()" (ngModelChange)="filterDate.set($event)"
+               class="w-full p-3 border-1 surface-border border-round-lg surface-0 text-900 outline-none">
+      </div>
+      <div class="col-12 md:col-3">
+        <label class="block text-700 font-medium mb-2">Class</label>
+        <p-select [options]="classOptions" [ngModel]="filterClass()" (ngModelChange)="filterClass.set($event)"
+                    styleClass="w-full" placeholder="All Classes"></p-select>
+      </div>
+      <div class="col-12 md:col-3">
+        <label class="block text-700 font-medium mb-2">Section</label>
+        <p-select [options]="sectionOptions" [ngModel]="filterSection()" (ngModelChange)="filterSection.set($event)"
+                    styleClass="w-full" placeholder="All Sections"></p-select>
+      </div>
+      <div class="col-12 md:col-3">
+        <button pButton label="Reset Filters" icon="pi pi-filter-slash" class="p-button-outlined p-button-secondary w-full" (click)="resetFilters()"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="surface-card shadow-1 border-round-xl overflow-hidden">
+    <div class="p-3 border-bottom-1 surface-border flex justify-content-between align-items-center">
+      <span class="text-700 font-medium">{{ filteredHistory.length }} records found</span>
+      <button pButton label="Export" icon="pi pi-download" class="p-button-sm p-button-outlined"></button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full" style="border-collapse: collapse;">
+        <thead>
+          <tr class="surface-50">
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Date</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Class</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Section</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Total</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-green-600">Present</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-red-500">Absent</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Attendance %</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Marked By</th>
+            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of filteredHistory" class="hover:surface-50 transition-colors border-bottom-1 surface-border">
+            <td class="p-3 text-900 font-medium">{{ record.date | date:'dd MMM yyyy' }}</td>
+            <td class="p-3 text-700">{{ record.class }}</td>
+            <td class="p-3 text-700">{{ record.section }}</td>
+            <td class="p-3 text-700">{{ record.totalStudents }}</td>
+            <td class="p-3 text-green-600 font-semibold">{{ record.present }}</td>
+            <td class="p-3 text-red-500 font-semibold">{{ record.absent }}</td>
+            <td class="p-3">
+              <span class="font-bold" [ngClass]="getPercentageClass(record.percentage)">{{ record.percentage }}%</span>
+            </td>
+            <td class="p-3 text-500">{{ record.markedBy }}</td>
+            <td class="p-3">
+              <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm p-button-secondary" title="Edit attendance"></button>
+              <button pButton icon="pi pi-eye" class="p-button-text p-button-sm p-button-info" title="View details"></button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredHistory.length === 0">
+            <td colspan="9" class="p-6 text-center">
+              <i class="pi pi-inbox text-200 text-4xl mb-3 block"></i>
+              <p class="text-500 m-0">No records found for the selected filters.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
