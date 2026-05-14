@@ -5,6 +5,8 @@ import { AttendanceService } from '../../../services/attendance.service';
 import { PageHeaderComponent } from '../../../../../shared/ui/page-header/page-header.component';
 import { ErpTableComponent } from '../../../../../shared/ui/tables/erp-table.component';
 import { StatusBadgeComponent, BadgeSeverity } from '../../../../../shared/ui/badges/status-badge.component';
+import { HasPermissionDirective } from '../../../../../core/permissions/directives/has-permission.directive';
+import { ERP_PERMISSIONS } from '../../../../../core/permissions/constants/permission.constants';
 import { AttendanceStatus } from '../../../models/attendance.model';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -18,7 +20,7 @@ import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-teacher-attendance',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent],
+  imports: [CommonModule, RouterModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent, HasPermissionDirective],
   providers: [MessageService],
   templateUrl: './teacher-attendance.component.html',
   styleUrls: ['./teacher-attendance.component.scss']
@@ -26,6 +28,7 @@ import { MessageService } from 'primeng/api';
 export class TeacherAttendanceComponent {
   private svc = inject(AttendanceService);
   private msg = inject(MessageService);
+  readonly PERMS = ERP_PERMISSIONS;
 
   students = this.svc.filteredStudents;
   records  = this.svc.studentRecords;

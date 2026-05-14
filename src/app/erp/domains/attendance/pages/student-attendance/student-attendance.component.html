@@ -69,7 +69,8 @@
       { field: 'status', header: 'Status' }
     ]" [columnTemplates]="{ 'name': nameTmpl, 'status': statusTmpl }" [hasActions]="true"
     [actionTemplate]="quickMarkTmpl" (search)="onSearch($event)">
-    <div tableActions class="flex gap-2">
+    
+    <div tableActions class="flex gap-2" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
       <button pButton label="Mark All Present" icon="pi pi-check" class="p-button-sm p-button-success p-button-outlined"
         (click)="markAllPresent()"></button>
       <button pButton label="Mark All Absent" icon="pi pi-times" class="p-button-sm p-button-danger p-button-outlined"
@@ -97,7 +98,7 @@
     </ng-template>
 
     <ng-template #quickMarkTmpl let-student>
-      <div class="flex gap-1 flex-wrap">
+      <div class="flex gap-1 flex-wrap" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
         <button *ngFor="let opt of statusOptions" (click)="markStatus(student.id, opt.value)"
           class="border-round px-2 py-1 text-xs font-semibold border-1 cursor-pointer transition-all" [ngClass]="{
             'bg-green-500 border-green-500 text-white': getStatus(student.id) === opt.value && opt.value === 'present',
@@ -112,7 +113,7 @@
 
   <!-- Footer Actions -->
   <div class="mt-4 surface-card p-3 border-round-xl shadow-1 flex justify-content-end gap-2">
-    <button pButton label="Cancel" class="p-button-outlined p-button-secondary"></button>
-    <button pButton label="Save Attendance" icon="pi pi-save" [loading]="isSubmitting()" (click)="submit()"></button>
+    <button pButton label="Cancel" class="p-button-outlined p-button-secondary" routerLink="/erp/dashboard"></button>
+    <button *erpHasPermission="PERMS.ATTENDANCE.CREATE" pButton label="Save Attendance" icon="pi pi-save" [loading]="isSubmitting()" (click)="submit()"></button>
   </div>
 </div>

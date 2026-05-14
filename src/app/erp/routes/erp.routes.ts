@@ -3,6 +3,8 @@ import { AuthLayoutComponent } from '../layout/auth-layout/auth-layout.component
 import { DashboardLayoutComponent } from '../layout/dashboard-layout/dashboard-layout.component';
 import { authGuard } from '../domains/auth/guards/auth.guard';
 import { noAuthGuard } from '../domains/auth/guards/no-auth.guard';
+import { permissionGuard } from '../core/permissions/guards/permission.guard';
+import { ERP_PERMISSIONS } from '../core/permissions/constants/permission.constants';
 
 export const erpRoutes: Routes = [
   {
@@ -28,11 +30,19 @@ export const erpRoutes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('../domains/dashboard/home/home.component').then(m => m.HomeComponent)
+        loadComponent: () => import('../domains/dashboard/home/home.component').then(m => m.HomeComponent),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.DASHBOARD.VIEW }
       },
       {
         path: 'attendance',
-        loadChildren: () => import('../domains/attendance/routes/attendance.routes').then(m => m.attendanceRoutes)
+        loadChildren: () => import('../domains/attendance/routes/attendance.routes').then(m => m.attendanceRoutes),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.ATTENDANCE.VIEW }
+      },
+      {
+        path: 'unauthorized',
+        loadComponent: () => import('../pages/unauthorized/unauthorized-page.component').then(m => m.UnauthorizedPageComponent)
       }
     ]
   }

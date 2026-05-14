@@ -6,7 +6,7 @@
     title="Mark Attendance" 
     [subtitle]="today"
   >
-    <div actions class="flex align-items-center gap-2">
+    <div actions class="flex align-items-center gap-2" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
       <div class="surface-100 border-round-lg px-3 py-2 text-center mr-3">
         <div class="text-700 font-semibold text-sm">Class 10 — A</div>
         <div class="text-400 text-xs mt-1">Assigned class</div>
@@ -72,7 +72,7 @@
     </ng-template>
 
     <ng-template #quickMarkTmpl let-student>
-      <div class="flex gap-1">
+      <div class="flex gap-1" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
         <button *ngFor="let opt of statusOptions"
                 (click)="mark(student.id, opt.value)"
                 class="w-2rem h-2rem border-circle border-1 text-xs font-bold cursor-pointer transition-all flex align-items-center justify-content-center"
@@ -96,7 +96,7 @@
       <i class="pi pi-info-circle mr-1"></i>
       {{ summary().unmarked }} student(s) not yet marked
     </span>
-    <div class="flex gap-2">
+    <div class="flex gap-2" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
       <button pButton label="Reset" icon="pi pi-refresh" class="p-button-outlined p-button-secondary p-button-sm" (click)="reset()"></button>
       <button pButton label="Submit Attendance" icon="pi pi-save" class="p-button-sm" [loading]="isSubmitting" (click)="submit()"></button>
     </div>

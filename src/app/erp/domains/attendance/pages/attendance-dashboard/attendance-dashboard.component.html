@@ -6,10 +6,10 @@
     [subtitle]="today"
   >
     <div actions class="flex gap-2">
-      <a routerLink="/erp/attendance/students" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
+      <a *erpHasPermission="PERMS.ATTENDANCE.CREATE" routerLink="/erp/attendance/students" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
         <i class="pi pi-plus"></i> Mark Student Attendance
       </a>
-      <a routerLink="/erp/attendance/staff" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
+      <a *erpHasPermission="PERMS.STAFF.CREATE" routerLink="/erp/attendance/staff" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
         <i class="pi pi-id-card"></i> Mark Staff Attendance
       </a>
     </div>
@@ -131,25 +131,25 @@
       <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
         <h3 class="m-0 text-900 font-semibold text-lg mb-3">Quick Actions</h3>
         <div class="grid">
-          <div class="col-6">
+          <div class="col-6" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
             <a routerLink="/erp/attendance/students" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-blue-50 hover:bg-blue-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-users text-blue-500 text-2xl mb-2"></i>
               <span class="text-blue-700 font-medium text-sm">Student Attendance</span>
             </a>
           </div>
-          <div class="col-6">
+          <div class="col-6" *erpHasPermission="PERMS.STAFF.CREATE">
             <a routerLink="/erp/attendance/staff" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-purple-50 hover:bg-purple-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-id-card text-purple-500 text-2xl mb-2"></i>
               <span class="text-purple-700 font-medium text-sm">Staff Attendance</span>
             </a>
           </div>
-          <div class="col-6 mt-3">
+          <div class="col-6 mt-3" *erpHasPermission="PERMS.ATTENDANCE.REPORTS">
             <a routerLink="/erp/attendance/reports" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-teal-50 hover:bg-teal-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-chart-bar text-teal-500 text-2xl mb-2"></i>
               <span class="text-teal-700 font-medium text-sm">View Reports</span>
             </a>
           </div>
-          <div class="col-6 mt-3">
+          <div class="col-6 mt-3" *erpHasPermission="PERMS.ATTENDANCE.VIEW">
             <a routerLink="/erp/attendance/history" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-orange-50 hover:bg-orange-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-history text-orange-500 text-2xl mb-2"></i>
               <span class="text-orange-700 font-medium text-sm">View History</span>

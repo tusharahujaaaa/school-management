@@ -10,6 +10,8 @@ import { AttendanceService } from '../../services/attendance.service';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
 import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
 import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
+import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
+import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { AttendanceStatus } from '../../models/attendance.model';
 
 @Component({
@@ -17,7 +19,7 @@ import { AttendanceStatus } from '../../models/attendance.model';
   standalone: true,
   imports: [
     CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule,
-    PageHeaderComponent, StatusBadgeComponent, ErpTableComponent
+    PageHeaderComponent, StatusBadgeComponent, ErpTableComponent, HasPermissionDirective
   ],
   providers: [MessageService],
   templateUrl: './student-attendance.component.html',
@@ -26,6 +28,7 @@ import { AttendanceStatus } from '../../models/attendance.model';
 export class StudentAttendanceComponent {
   svc = inject(AttendanceService);
   private messageService = inject(MessageService);
+  readonly PERMS = ERP_PERMISSIONS;
 
   classOptions = this.svc.classes().map(c => ({ label: c, value: c }));
   sectionOptions = this.svc.sections().map(s => ({ label: `Section ${s}`, value: s }));

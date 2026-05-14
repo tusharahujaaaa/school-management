@@ -10,12 +10,14 @@ import { AttendanceService } from '../../services/attendance.service';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
 import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
 import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
+import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
+import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { StaffAttendanceStatus } from '../../models/attendance.model';
 
 @Component({
   selector: 'app-staff-attendance',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent, HasPermissionDirective],
   providers: [MessageService],
   templateUrl: './staff-attendance.component.html',
   styleUrls: ['./staff-attendance.component.scss']
@@ -23,6 +25,7 @@ import { StaffAttendanceStatus } from '../../models/attendance.model';
 export class StaffAttendanceComponent {
   svc = inject(AttendanceService);
   private messageService = inject(MessageService);
+  readonly PERMS = ERP_PERMISSIONS;
 
   searchQuery = signal('');
   isSubmitting = signal(false);

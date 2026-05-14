@@ -6,6 +6,8 @@ import { AttendanceService } from '../../services/attendance.service';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
 import { StatCardComponent } from '../../../../shared/ui/stats/stat-card.component';
 import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
+import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
+import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { AttendanceAlertCardComponent } from '../../components/attendance-alert-card/attendance-alert-card.component';
 
 @Component({
@@ -13,13 +15,14 @@ import { AttendanceAlertCardComponent } from '../../components/attendance-alert-
   standalone: true,
   imports: [
     CommonModule, RouterModule, ProgressBarModule,
-    PageHeaderComponent, StatCardComponent, ErpTableComponent, AttendanceAlertCardComponent
+    PageHeaderComponent, StatCardComponent, ErpTableComponent, HasPermissionDirective, AttendanceAlertCardComponent
   ],
   templateUrl: './attendance-dashboard.component.html',
   styleUrls: ['./attendance-dashboard.component.scss']
 })
 export class AttendanceDashboardComponent {
   private svc = inject(AttendanceService);
+  readonly PERMS = ERP_PERMISSIONS;
 
   stats = this.svc.dashboardStats;
   classSummaries = this.svc.classSummaries;
