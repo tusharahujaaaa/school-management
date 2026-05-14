@@ -4,12 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { AttendanceService } from '../../services/attendance.service';
+import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
+import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
+import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
 import { AttendanceHistoryRecord } from '../../models/attendance.model';
 
 @Component({
   selector: 'app-attendance-history',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, ButtonModule],
+  imports: [CommonModule, FormsModule, SelectModule, ButtonModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent],
   templateUrl: './attendance-history.component.html',
   styleUrls: ['./attendance-history.component.scss']
 })
@@ -32,6 +35,16 @@ export class AttendanceHistoryComponent {
       return matchClass && matchSection && matchDate;
     });
   }
+
+  tableCols = [
+    { field: 'date', header: 'Date', sortable: true },
+    { field: 'class', header: 'Class', sortable: true },
+    { field: 'section', header: 'Section', sortable: true },
+    { field: 'markedBy', header: 'Marked By', sortable: true },
+    { field: 'present', header: 'Present', sortable: true },
+    { field: 'absent', header: 'Absent', sortable: true },
+    { field: 'percentage', header: 'Percentage', sortable: true }
+  ];
 
   getPercentageClass(pct: number): string {
     if (pct >= 90) return 'text-green-600';

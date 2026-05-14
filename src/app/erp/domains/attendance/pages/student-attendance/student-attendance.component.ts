@@ -7,7 +7,9 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AttendanceService } from '../../services/attendance.service';
-import { AttendanceStatusBadgeComponent } from '../../components/attendance-status-badge/attendance-status-badge.component';
+import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
+import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
+import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
 import { AttendanceStatus } from '../../models/attendance.model';
 
 @Component({
@@ -15,7 +17,7 @@ import { AttendanceStatus } from '../../models/attendance.model';
   standalone: true,
   imports: [
     CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule,
-    AttendanceStatusBadgeComponent
+    PageHeaderComponent, StatusBadgeComponent, ErpTableComponent
   ],
   providers: [MessageService],
   templateUrl: './student-attendance.component.html',
@@ -27,7 +29,7 @@ export class StudentAttendanceComponent {
 
   classOptions = this.svc.classes().map(c => ({ label: c, value: c }));
   sectionOptions = this.svc.sections().map(s => ({ label: `Section ${s}`, value: s }));
-  
+
   selectedDate = signal(this.svc.selectedDate());
   selectedClass = signal(this.svc.selectedClass());
   selectedSection = signal(this.svc.selectedSection());
@@ -45,8 +47,23 @@ export class StudentAttendanceComponent {
     { label: 'Leave', value: 'leave' }
   ];
 
-  onSearch(event: Event) {
-    const val = (event.target as HTMLInputElement).value;
+  getStatusSeverity(status: AttendanceStatus | null): BadgeSeverity {
+    if (!status) return 'neutral';
+    const mapping: Record<AttendanceStatus, BadgeSeverity> = {
+      present: 'success',
+      absent: 'danger',
+      late: 'warning',
+      leave: 'info'
+    };
+    return mapping[status] || 'neutral';
+  }
+
+  getStatusLabel(status: AttendanceStatus | null): string {
+    if (!status) return 'Unmarked';
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+
+  onSearch(val: string) {
     this.searchQuery.set(val);
     this.svc.studentSearchQuery.set(val);
   }

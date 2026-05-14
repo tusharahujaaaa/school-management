@@ -7,13 +7,15 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AttendanceService } from '../../services/attendance.service';
-import { AttendanceStatusBadgeComponent } from '../../components/attendance-status-badge/attendance-status-badge.component';
+import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
+import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
+import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
 import { StaffAttendanceStatus } from '../../models/attendance.model';
 
 @Component({
   selector: 'app-staff-attendance',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule, AttendanceStatusBadgeComponent],
+  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent],
   providers: [MessageService],
   templateUrl: './staff-attendance.component.html',
   styleUrls: ['./staff-attendance.component.scss']
@@ -36,8 +38,32 @@ export class StaffAttendanceComponent {
     { label: 'Leave', value: 'leave' }
   ];
 
-  onSearch(event: Event) {
-    const val = (event.target as HTMLInputElement).value;
+  tableCols = [
+    { field: 'employeeId', header: 'ID', sortable: true },
+    { field: 'name', header: 'Staff Name', sortable: true },
+    { field: 'department', header: 'Department', sortable: true },
+    { field: 'status', header: 'Status' }
+  ];
+
+  getStatusSeverity(status: StaffAttendanceStatus | null): BadgeSeverity {
+    if (!status) return 'neutral';
+    const mapping: Record<StaffAttendanceStatus, BadgeSeverity> = {
+      present: 'success',
+      absent: 'danger',
+      late: 'warning',
+      'half-day': 'warning',
+      leave: 'info'
+    };
+    return mapping[status] || 'neutral';
+  }
+
+  getStatusLabel(status: StaffAttendanceStatus | null): string {
+    if (!status) return 'Unmarked';
+    return status.replace('-', ' ').charAt(0).toUpperCase() + status.replace('-', ' ').slice(1);
+  }
+
+  onSearch(val: string) {
+    this.searchQuery.set(val);
     this.svc.staffSearchQuery.set(val);
   }
 

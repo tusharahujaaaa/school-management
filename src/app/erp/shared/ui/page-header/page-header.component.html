@@ -1,0 +1,19 @@
+<div class="flex flex-column md:flex-row md:align-items-center justify-content-between mb-4 gap-3">
+  <div>
+    <p-breadcrumb 
+      *ngIf="breadcrumbs && breadcrumbs.length > 0" 
+      [model]="breadcrumbs" 
+      styleClass="bg-transparent border-none p-0 mb-2 text-xs"
+    ></p-breadcrumb>
+    
+    <h1 class="text-3xl font-bold text-900 m-0 line-height-2">
+      {{ title }}
+    </h1>
+    <p *ngIf="subtitle" class="text-600 mt-1 mb-0">{{ subtitle }}</p>
+  </div>
+  
+  <div class="flex align-items-center gap-2">
+    <!-- Content projected for action buttons -->
+    <ng-content select="[actions]"></ng-content>
+  </div>
+</div>

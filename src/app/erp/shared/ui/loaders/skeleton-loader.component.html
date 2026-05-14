@@ -1,0 +1,39 @@
+<div [ngClass]="containerClass">
+  <ng-container [ngSwitch]="type">
+    
+    <!-- Table Skeleton -->
+    <div *ngSwitchCase="'table'" class="surface-card p-4 border-round-xl">
+      <p-skeleton width="20%" height="2rem" styleClass="mb-4"></p-skeleton>
+      <div class="mb-3" *ngFor="let i of [1,2,3,4,5]">
+         <p-skeleton width="100%" height="3rem"></p-skeleton>
+      </div>
+    </div>
+
+    <!-- Card Skeleton -->
+    <div *ngSwitchCase="'card'" class="surface-card p-4 border-round-xl">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="8rem" height="2rem"></p-skeleton>
+        </div>
+        <p-skeleton shape="circle" size="3rem"></p-skeleton>
+      </div>
+      <p-skeleton width="60%"></p-skeleton>
+    </div>
+
+    <!-- List Skeleton -->
+    <div *ngSwitchCase="'list'" class="surface-card p-4 border-round-xl">
+      <div class="flex align-items-center mb-3" *ngFor="let i of [1,2,3]">
+         <p-skeleton shape="circle" size="3rem" styleClass="mr-3"></p-skeleton>
+         <div class="flex-grow-1">
+            <p-skeleton width="40%" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="70%"></p-skeleton>
+         </div>
+      </div>
+    </div>
+
+    <!-- Default -->
+    <p-skeleton *ngSwitchDefault [width]="width" [height]="height" [shape]="shape"></p-skeleton>
+
+  </ng-container>
+</div>
