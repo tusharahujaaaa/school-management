@@ -134,9 +134,7 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         route: '/erp/students',
         roles: ['admin', 'principal', 'teacher'],
         permissionKey: 'students.view',
-        moduleKey: 'students',
-        disabled: true,
-        badge: 'Soon'
+        moduleKey: 'students'
       },
       {
         type: 'link',

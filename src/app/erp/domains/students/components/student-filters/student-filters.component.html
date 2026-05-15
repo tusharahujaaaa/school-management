@@ -1,0 +1,50 @@
+<div class="surface-card p-4 border-round-xl shadow-1 mb-4">
+  <div [formGroup]="filterForm" class="grid p-fluid">
+    <!-- Search Field -->
+    <div class="col-12 md:col-3">
+      <label class="block text-900 font-medium mb-2 text-sm">Search</label>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText formControlName="searchTerm" placeholder="Name, Adm No, Roll No..." />
+      </span>
+    </div>
+
+    <!-- Class Filter -->
+    <div class="col-12 md:col-2">
+      <label class="block text-900 font-medium mb-2 text-sm">Class</label>
+      <p-select 
+        formControlName="class" 
+        [options]="classes" 
+        placeholder="Select Class"
+        [showClear]="true"
+      ></p-select>
+    </div>
+
+    <!-- Section Filter -->
+    <div class="col-12 md:col-2">
+      <label class="block text-900 font-medium mb-2 text-sm">Section</label>
+      <p-select 
+        formControlName="section" 
+        [options]="sections" 
+        placeholder="Select Section"
+        [showClear]="true"
+      ></p-select>
+    </div>
+
+    <!-- Status Filter -->
+    <div class="col-12 md:col-2">
+      <label class="block text-900 font-medium mb-2 text-sm">Status</label>
+      <p-select 
+        formControlName="status" 
+        [options]="statuses" 
+        placeholder="Select Status"
+        [showClear]="true"
+      ></p-select>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="col-12 md:col-3 flex align-items-end">
+       <button pButton label="Reset Filters" icon="pi pi-filter-slash" class="p-button-outlined" (click)="clearFilters()"></button>
+    </div>
+  </div>
+</div>

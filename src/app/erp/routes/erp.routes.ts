@@ -41,6 +41,12 @@ export const erpRoutes: Routes = [
         data: { permission: ERP_PERMISSIONS.ATTENDANCE.VIEW }
       },
       {
+        path: 'students',
+        loadChildren: () => import('../domains/students/routes/student.routes').then(m => m.studentRoutes),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.STUDENTS.VIEW }
+      },
+      {
         path: 'unauthorized',
         loadComponent: () => import('../pages/unauthorized/unauthorized-page.component').then(m => m.UnauthorizedPageComponent)
       }
