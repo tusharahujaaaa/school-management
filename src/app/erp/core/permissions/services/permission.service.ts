@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { AuthService } from '../../domains/auth/services/auth.service';
+import { AuthService } from '../../../domains/auth/services/auth.service';
 import { ErpPermission } from '../constants/permission.constants';
 import { ROLE_PERMISSIONS, UserRole } from '../models/permission.model';
 
@@ -13,8 +13,11 @@ export class PermissionService {
    * Permissions for the current user's role
    */
   readonly userPermissions = computed(() => {
-    const role = this.authService.currentUser()?.role as UserRole;
+    const role = (this.authService.currentUser()?.role.toUpperCase() as UserRole);
     if (!role) return [];
+
+    const formattedRole = role.toUpperCase() as UserRole
+
     return ROLE_PERMISSIONS[role] || [];
   });
 

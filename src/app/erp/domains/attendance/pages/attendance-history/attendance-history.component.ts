@@ -6,13 +6,13 @@ import { ButtonModule } from 'primeng/button';
 import { AttendanceService } from '../../services/attendance.service';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
 import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
-import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
+
 import { AttendanceHistoryRecord } from '../../models/attendance.model';
 
 @Component({
   selector: 'app-attendance-history',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, ButtonModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, SelectModule, ButtonModule, PageHeaderComponent, ErpTableComponent],
   templateUrl: './attendance-history.component.html',
   styleUrls: ['./attendance-history.component.scss']
 })

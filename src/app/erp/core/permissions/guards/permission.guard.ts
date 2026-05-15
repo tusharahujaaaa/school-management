@@ -23,10 +23,11 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =>
     return true;
   }
 
-  const hasAccess = requiredPermission 
+  const hasAccess = requiredPermission
     ? permissionService.hasPermission(requiredPermission)
     : permissionService.hasAnyPermission(requiredPermissions);
 
+  console.log(requiredPermission)
   if (hasAccess) {
     return true;
   }

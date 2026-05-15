@@ -1,13 +1,13 @@
-@import 'colors';
-@import 'variables';
-@import 'typography';
-@import 'spacing';
-@import 'responsive';
-@import 'primeng-overrides';
+@use 'colors';
+@use 'variables';
+@use 'typography';
+@use 'spacing';
+@use 'responsive';
+@use 'primeng-overrides';
 
 .erp-app {
-  background-color: $erp-bg-body;
-  font-family: $erp-font-family;
+  background-color: colors.$erp-bg-body;
+  font-family: typography.$erp-font-family;
   min-height: 100vh;
-  color: $erp-text-main;
+  color: colors.$erp-text-main;
 }
