@@ -1,24 +1,43 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '../../../core/api/base/base-api.service';
-import { Observable, of, delay } from 'rxjs';
-import { Student } from '../models/student.model';
-import { MOCK_STUDENTS } from '../mock-data/students.mock';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '../../../core/api/models/api-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class StudentService extends BaseApiService {
+  
   /**
-   * Fetch all students (mocked for now)
+   * Fetch students with backend filtering
    */
-  getStudents(): Observable<Student[]> {
-    // In a real implementation: return this.get<Student[]>('/students');
-    return of(MOCK_STUDENTS).pipe(delay(500));
+  getStudentsList(filters?: { classId?: string; status?: string; search?: string }): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/students', filters);
   }
 
   /**
-   * Fetch student by ID (mocked for now)
+   * Fetch detailed student profile by ID
    */
-  getStudentById(id: string): Observable<Student | undefined> {
-    const student = MOCK_STUDENTS.find(s => s.id === id);
-    return of(student).pipe(delay(300));
+  getStudentById(id: string): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>(`/students/${id}`);
+  }
+
+  /**
+   * Create a new student record
+   */
+  createStudent(data: any): Observable<ApiResponse<any>> {
+    return this.post<ApiResponse<any>>('/students', data);
+  }
+
+  /**
+   * Update student record
+   */
+  updateStudent(id: string, data: any): Observable<ApiResponse<any>> {
+    return this.put<ApiResponse<any>>(`/students/${id}`, data);
+  }
+
+  /**
+   * Fetch student setup options (classes & sections)
+   */
+  getSetupData(): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/attendance/students/setup');
   }
 }

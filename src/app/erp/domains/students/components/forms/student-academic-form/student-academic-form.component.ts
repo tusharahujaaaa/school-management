@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { ErpInputComponent } from '../../../../../shared/forms/controls/erp-input.component';
@@ -7,6 +7,7 @@ import { ErpDatepickerComponent } from '../../../../../shared/forms/controls/erp
 import { FormFieldComponent } from '../../../../../shared/forms/wrappers/form-field.component';
 import { STUDENT_STATUS_OPTIONS } from '../../../constants/student.constants';
 import { ACADEMIC_SESSION_OPTIONS } from '../../../constants/student-form.constants';
+import { StudentStore } from '../../../store/student.store';
 
 @Component({
   selector: 'app-student-academic-form',
@@ -24,19 +25,16 @@ import { ACADEMIC_SESSION_OPTIONS } from '../../../constants/student-form.consta
 export class StudentAcademicFormComponent {
   @Input({ required: true }) group!: FormGroup;
 
+  private store = inject(StudentStore);
+
   statusOptions = STUDENT_STATUS_OPTIONS;
   sessionOptions = ACADEMIC_SESSION_OPTIONS;
 
-  classes = [
-    { label: 'Class 9', value: '9' },
-    { label: 'Class 10', value: '10' },
-    { label: 'Class 11', value: '11' },
-    { label: 'Class 12', value: '12' }
-  ];
+  get classes() {
+    return this.store.classes().map(c => ({ label: c, value: c }));
+  }
 
-  sections = [
-    { label: 'Section A', value: 'A' },
-    { label: 'Section B', value: 'B' },
-    { label: 'Section C', value: 'C' }
-  ];
+  get sections() {
+    return this.store.sections().map(s => ({ label: `Section ${s}`, value: s }));
+  }
 }

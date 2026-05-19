@@ -61,20 +61,59 @@ export class StudentCreateEditComponent implements OnInit {
 
   onSave(studentData: any) {
     this.isLoading.set(true);
-    // Simulate save API with mock delay
-    setTimeout(() => {
-      this.isLoading.set(false);
+
+    const classId = this.store.getClassId(studentData.class, studentData.section);
+    if (!classId) {
       this.messageService.add({ 
-        severity: 'success', 
-        summary: 'Success', 
-        detail: `Student ${this.isEditMode() ? 'updated' : 'created'} successfully!` 
+        severity: 'error', 
+        summary: 'Error', 
+        detail: 'Selected class and section combination is invalid.' 
       });
-      
-      // Navigate back after success feedback
-      setTimeout(() => {
-        this.router.navigate(['/erp/students']);
-      }, 1000);
-    }, 1500);
+      this.isLoading.set(false);
+      return;
+    }
+
+    const payload = {
+      classId,
+      name: studentData.firstName + ' ' + (studentData.middleName ? studentData.middleName + ' ' : '') + studentData.lastName,
+      rollNumber: studentData.rollNumber,
+      dateOfBirth: studentData.dateOfBirth,
+      gender: studentData.gender.toUpperCase(),
+      parentName: studentData.parentName || 'Parent',
+      parentPhone: studentData.contactNumber,
+      parentEmail: studentData.email || null,
+      address: studentData.address || null,
+      admissionDate: studentData.admissionDate || null,
+      status: studentData.status.toUpperCase(),
+      photoUrl: studentData.photoUrl || null
+    };
+
+    const request = this.isEditMode() 
+      ? this.studentService.updateStudent(this.studentId()!, payload)
+      : this.studentService.createStudent(payload);
+
+    request.subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Success', 
+          detail: `Student ${this.isEditMode() ? 'updated' : 'created'} successfully!` 
+        });
+        
+        setTimeout(() => {
+          this.router.navigate(['/erp/students']);
+        }, 1000);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.messageService.add({ 
+          severity: 'error', 
+          summary: 'Error', 
+          detail: err?.error?.message || 'Failed to save student record.' 
+        });
+      }
+    });
   }
 
   onCancel() {

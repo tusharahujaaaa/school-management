@@ -26,18 +26,13 @@ export class StudentFiltersComponent {
     gender: [null]
   });
 
-  classes = [
-    { label: 'Class 9', value: '9' },
-    { label: 'Class 10', value: '10' },
-    { label: 'Class 11', value: '11' },
-    { label: 'Class 12', value: '12' }
-  ];
+  get classes() {
+    return this.store.classes().map(c => ({ label: c, value: c }));
+  }
 
-  sections = [
-    { label: 'Section A', value: 'A' },
-    { label: 'Section B', value: 'B' },
-    { label: 'Section C', value: 'C' }
-  ];
+  get sections() {
+    return this.store.sections().map(s => ({ label: `Section ${s}`, value: s }));
+  }
 
   statuses = STUDENT_STATUS_OPTIONS;
   genders = GENDER_OPTIONS;
