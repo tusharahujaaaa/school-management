@@ -1,0 +1,39 @@
+<div [formGroup]="group" class="grid p-fluid">
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Admission Number" [required]="true" [control]="group.get('admissionNumber')">
+            <app-erp-input formControlName="admissionNumber" placeholder="ADM-YYYY-XXX"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Roll Number" [required]="true" [control]="group.get('rollNumber')">
+            <app-erp-input formControlName="rollNumber" placeholder="Enter roll number"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Academic Session" [required]="true" [control]="group.get('academicSession')">
+            <app-erp-select formControlName="academicSession" [options]="sessionOptions" placeholder="Select session"></app-erp-select>
+        </app-erp-form-field>
+    </div>
+
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Class" [required]="true" [control]="group.get('class')">
+            <app-erp-select formControlName="class" [options]="classes" placeholder="Select class"></app-erp-select>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Section" [required]="true" [control]="group.get('section')">
+            <app-erp-select formControlName="section" [options]="sections" placeholder="Select section"></app-erp-select>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Admission Date" [required]="true" [control]="group.get('admissionDate')">
+            <app-erp-datepicker formControlName="admissionDate" placeholder="Select admission date"></app-erp-datepicker>
+        </app-erp-form-field>
+    </div>
+    
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Status" [required]="true" [control]="group.get('status')">
+            <app-erp-select formControlName="status" [options]="statusOptions" placeholder="Select status"></app-erp-select>
+        </app-erp-form-field>
+    </div>
+</div>

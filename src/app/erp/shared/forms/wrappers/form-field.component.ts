@@ -1,6 +1,6 @@
 import { Component, Input, ContentChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { ERP_VALIDATION_MESSAGES } from '../constants/validation-messages.constant';
 
 @Component({
@@ -44,10 +44,9 @@ export class FormFieldComponent {
   @Input() helperText?: string;
   
   /**
-   * We can pass the control to the field to automatically show errors,
-   * or rely on the control inside the ng-content.
+   * We can pass the control to the field to automatically show errors.
    */
-  @Input() control?: NgControl;
+  @Input() control?: AbstractControl | null;
 
   get errorMessage(): string | null {
     if (!this.control || !this.control.errors || !this.control.touched) {

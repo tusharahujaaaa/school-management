@@ -8,7 +8,7 @@ import { StatusBadgeComponent } from '../../../../shared/ui/badges/status-badge.
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 
@@ -16,15 +16,16 @@ import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permissi
   selector: 'app-student-list',
   standalone: true,
   imports: [
-    CommonModule, 
-    PageHeaderComponent, 
-    ErpTableComponent, 
-    StudentFiltersComponent, 
+    CommonModule,
+    PageHeaderComponent,
+    ErpTableComponent,
+    StudentFiltersComponent,
     StatusBadgeComponent,
     AvatarModule,
     ButtonModule,
     TooltipModule,
-    HasPermissionDirective
+    HasPermissionDirective,
+    RouterModule
   ],
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.scss'
@@ -32,7 +33,7 @@ import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permissi
 export class StudentListComponent implements OnInit {
   protected store = inject(StudentStore);
   private router = inject(Router);
-  
+
   readonly PERMISSIONS = ERP_PERMISSIONS;
 
   columns = [

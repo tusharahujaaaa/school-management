@@ -1,0 +1,33 @@
+<div [formGroup]="group" class="grid p-fluid">
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="First Name" [required]="true" [control]="group.get('firstName')">
+            <app-erp-input formControlName="firstName" placeholder="Enter first name"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Middle Name" [control]="group.get('middleName')">
+            <app-erp-input formControlName="middleName" placeholder="Enter middle name"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Last Name" [required]="true" [control]="group.get('lastName')">
+            <app-erp-input formControlName="lastName" placeholder="Enter last name"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Gender" [required]="true" [control]="group.get('gender')">
+            <app-erp-select formControlName="gender" [options]="genderOptions" placeholder="Select gender"></app-erp-select>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Date of Birth" [required]="true" [control]="group.get('dateOfBirth')">
+            <app-erp-datepicker formControlName="dateOfBirth" placeholder="Select date of birth"></app-erp-datepicker>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Blood Group" [control]="group.get('bloodGroup')">
+            <app-erp-select formControlName="bloodGroup" [options]="bloodGroupOptions" placeholder="Select blood group"></app-erp-select>
+        </app-erp-form-field>
+    </div>
+</div>

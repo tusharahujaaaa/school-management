@@ -4,7 +4,7 @@
     [breadcrumbs]="[{label: 'ERP'}, {label: 'Students'}]">
     <div actions>
         <button pButton label="Export" icon="pi pi-download" class="p-button-outlined p-button-sm mr-2"></button>
-        <button *erpHasPermission="PERMISSIONS.STUDENTS.CREATE" pButton label="Add Student" icon="pi pi-plus" class="p-button-sm"></button>
+        <button *erpHasPermission="PERMISSIONS.STUDENTS.CREATE" pButton label="Add Student" icon="pi pi-plus" class="p-button-sm" routerLink="create"></button>
     </div>
 </app-erp-page-header>
 
@@ -64,7 +64,8 @@
     <button *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" 
         pButton icon="pi pi-pencil" 
         class="p-button-rounded p-button-text p-button-sm"
-        pTooltip="Edit Student">
+        pTooltip="Edit Student"
+        [routerLink]="[student.id, 'edit']">
     </button>
     
     <button *erpHasPermission="PERMISSIONS.STUDENTS.DELETE" 

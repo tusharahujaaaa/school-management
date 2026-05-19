@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { BaseControlValueAccessor } from '../utils/base-control';
 
@@ -13,7 +13,7 @@ export interface ErpSelectOption {
 @Component({
   selector: 'app-erp-select',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SelectModule],
+  imports: [CommonModule, ReactiveFormsModule, SelectModule, FormsModule],
   template: `
     <div class="erp-select-wrapper">
       <p-select

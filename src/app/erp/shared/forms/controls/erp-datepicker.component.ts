@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { BaseControlValueAccessor } from '../utils/base-control';
 
 @Component({
   selector: 'app-erp-datepicker',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DatePickerModule],
   template: `
     <div class="erp-datepicker-wrapper">
       <p-datepicker

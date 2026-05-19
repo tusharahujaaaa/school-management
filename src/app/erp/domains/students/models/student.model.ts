@@ -3,21 +3,36 @@ export type Gender = 'Male' | 'Female' | 'Other';
 
 export interface Student {
   id: string;
+  // Basic Info
   photoUrl?: string;
-  admissionNumber: string;
-  rollNumber: string;
   firstName: string;
+  middleName?: string;
   lastName: string;
   fullName: string;
+  gender: Gender;
+  dateOfBirth?: string;
+  bloodGroup?: string;
+
+  // Academic Info
+  admissionNumber: string;
+  rollNumber: string;
+  academicSession: string;
   class: string;
   section: string;
-  gender: Gender;
-  status: StudentStatus;
-  contactNumber: string;
-  email?: string;
-  dateOfBirth?: string;
   admissionDate?: string;
+  status: StudentStatus;
+
+  // Contact Info
+  contactNumber: string; // Student Mobile
+  email?: string;
+  emergencyContact?: string;
+
+  // Address Info
   address?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+
   // Parent info (placeholder for now)
   parentName?: string;
   parentContact?: string;

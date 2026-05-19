@@ -12,7 +12,7 @@ export abstract class BaseControlValueAccessor<T> implements ControlValueAccesso
   onChange: (value: T | null) => void = () => {};
   onTouched: () => void = () => {};
 
-  constructor(@Optional() @Self() public controlDir: NgControl) {
+  constructor(@Optional() @Self() public controlDir: NgControl | null) {
     if (this.controlDir) {
       this.controlDir.valueAccessor = this;
     }

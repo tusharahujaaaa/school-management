@@ -3,7 +3,7 @@
     [subtitle]="store.selectedStudent() ? 'Admission No: ' + store.selectedStudent()?.admissionNumber : 'Loading...'"
     [breadcrumbs]="[{label: 'ERP'}, {label: 'Students', routerLink: '/erp/students'}, {label: 'Profile'}]">
     <div actions>
-        <button *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" pButton label="Edit Profile" icon="pi pi-pencil" class="p-button-sm mr-2"></button>
+        <button *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" pButton label="Edit Profile" icon="pi pi-pencil" class="p-button-sm mr-2" [routerLink]="['/erp/students', store.selectedStudent()?.id, 'edit']"></button>
         <button pButton label="Actions" icon="pi pi-chevron-down" class="p-button-outlined p-button-sm"></button>
     </div>
 </app-erp-page-header>

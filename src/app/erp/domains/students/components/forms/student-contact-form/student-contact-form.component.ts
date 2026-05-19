@@ -1,0 +1,20 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { ErpInputComponent } from '../../../../../shared/forms/controls/erp-input.component';
+import { FormFieldComponent } from '../../../../../shared/forms/wrappers/form-field.component';
+
+@Component({
+  selector: 'app-student-contact-form',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ErpInputComponent,
+    FormFieldComponent
+  ],
+  templateUrl: './student-contact-form.component.html'
+})
+export class StudentContactFormComponent {
+  @Input({ required: true }) group!: FormGroup;
+}
