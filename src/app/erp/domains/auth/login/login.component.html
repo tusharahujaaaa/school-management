@@ -1,5 +1,6 @@
 <div class="min-h-screen flex align-items-center justify-content-center surface-ground px-3">
-  <div class="grid w-full max-w-6xl shadow-2 border-round-3xl overflow-hidden surface-card">
+  <div class="grid w-full max-w-6xl shadow-2 border-round-3xl overflow-hidden surface-card relative">
+    <p-progressBar *ngIf="loading" mode="indeterminate" styleClass="absolute top-0 left-0 right-0 z-5" [style]="{'height': '4px'}"></p-progressBar>
 
     <!-- Left Section -->
     <div class="col-12 lg:col-6 p-6 lg:p-8 flex flex-column justify-content-center">
@@ -34,7 +35,7 @@
       </div>
 
       <!-- Login Form -->
-      <div class="flex flex-column gap-4">
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="flex flex-column gap-4">
 
         <div>
           <label class="block text-900 font-medium mb-2">
@@ -43,9 +44,18 @@
 
           <span class="p-input-icon-left w-full">
             <i class="pi pi-envelope"></i>
-
-            <input pInputText type="email" placeholder="Enter your email" class="w-full p-3 border-round-xl" />
+            <input pInputText type="email" placeholder="Enter your email" formControlName="email" 
+              class="w-full p-3 border-round-xl" 
+              [class.p-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
           </span>
+          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="mt-1 flex flex-column gap-1">
+            <small *ngIf="loginForm.get('email')?.errors?.['required']" class="p-error block">
+              Email is required.
+            </small>
+            <small *ngIf="loginForm.get('email')?.errors?.['email']" class="p-error block">
+              Please enter a valid email address.
+            </small>
+          </div>
         </div>
 
         <div>
@@ -55,15 +65,24 @@
 
           <span class="p-input-icon-left w-full">
             <i class="pi pi-lock"></i>
-
-            <input pInputText type="password" placeholder="Enter your password" class="w-full p-3 border-round-xl" />
+            <input pInputText type="password" placeholder="Enter your password" formControlName="password" 
+              class="w-full p-3 border-round-xl" 
+              [class.p-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
           </span>
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="mt-1 flex flex-column gap-1">
+            <small *ngIf="loginForm.get('password')?.errors?.['required']" class="p-error block">
+              Password is required.
+            </small>
+            <small *ngIf="loginForm.get('password')?.errors?.['minlength']" class="p-error block">
+              Password must be at least 6 characters long.
+            </small>
+          </div>
         </div>
 
         <!-- Options -->
         <div class="flex align-items-center justify-content-between">
           <div class="flex align-items-center gap-2">
-            <p-checkbox binary="true"></p-checkbox>
+            <p-checkbox formControlName="rememberMe" [binary]="true"></p-checkbox>
 
             <span class="text-600 text-sm">
               Remember me
@@ -75,12 +94,19 @@
           </a>
         </div>
 
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="p-3 border-round-xl bg-red-50 text-red-700 text-sm font-medium border-1 border-red-200">
+          <i class="pi pi-exclamation-circle mr-2 align-middle text-red-500"></i>
+          <span>{{ errorMessage }}</span>
+        </div>
+
         <!-- Login Button -->
-        <button pButton label="Sign In" icon="pi pi-arrow-right" iconPos="right"
+        <button pButton type="submit" label="Sign In" icon="pi pi-arrow-right" iconPos="right"
+          [loading]="loading" [disabled]="loading"
           class="w-full p-button-lg border-round-xl" style="
             background:#10b981;
             border:none;
-          " (click)="login()"></button>
+          "></button>
 
         <!-- Divider -->
         <div class="flex align-items-center my-2">
@@ -99,7 +125,7 @@
             © 2026 Enterprise School ERP
           </span>
         </div>
-      </div>
+      </form>
     </div>
 
     <!-- Right Section -->

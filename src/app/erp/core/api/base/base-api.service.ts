@@ -9,7 +9,7 @@ import { ApiResponse } from '../models/api-response.model';
 })
 export class BaseApiService {
   protected http = inject(HttpClient);
-  protected readonly baseUrl = `${API_CONFIG.baseUrl}/${API_CONFIG.version}`;
+  protected readonly baseUrl = API_CONFIG.version ? `${API_CONFIG.baseUrl}/${API_CONFIG.version}` : API_CONFIG.baseUrl;
 
   /**
    * Generic GET request

@@ -1,13 +1,14 @@
+import { environment } from '@/environments/environment';
+
 /**
  * API Environment Configuration
  */
 export const API_CONFIG = {
-  // Use current window.location for dynamic base if needed, 
-  // or hardcode for local dev
-  baseUrl: 'http://localhost:8080/api', 
-  version: 'v1',
+  baseUrl: environment.apiUrl, 
+  version: '',
   timeout: 30000, // 30 seconds
 };
+
 
 /**
  * Centralized API Endpoints

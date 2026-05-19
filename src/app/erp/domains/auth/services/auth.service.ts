@@ -1,6 +1,9 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ErpRole } from '../../../shared/types/erp.types';
+import { BaseApiService } from '../../../core/api/base/base-api.service';
+import { API_ENDPOINTS } from '../../../core/api/constants/api.constants';
+import { Observable, tap, throwError, catchError, map, finalize, shareReplay } from 'rxjs';
 
 export interface ErpUser {
   id: string;
@@ -14,6 +17,8 @@ export interface ErpUser {
 export class AuthService {
   private readonly AUTH_KEY = 'erp_temp_auth_state';
   private readonly ROLE_KEY = 'erp_temp_role';
+  private _accessToken: string | null = null;
+  private _refreshObservable: Observable<string> | null = null;
 
   // ─── Auth state ──────────────────────────────────────────
   readonly isAuthenticated = signal<boolean>(this.checkInitialState());
@@ -25,16 +30,32 @@ export class AuthService {
    * Defaults to 'admin' for development.
    */
   readonly currentRole = signal<ErpRole>(
-    (localStorage.getItem(this.ROLE_KEY) as ErpRole) ?? 'admin'
+    (sessionStorage.getItem(this.ROLE_KEY) as ErpRole) ?? 'admin'
   );
 
-  /** Derived: full user object — expand once real auth is integrated */
-  readonly currentUser = computed<ErpUser>(() => ({
-    id: 'usr_temp',
-    name: 'Administrator',
-    email: 'admin@school.erp',
-    role: this.currentRole()
-  }));
+  /** Derived: full user object — dynamically populated from login response */
+  readonly currentUser = computed<ErpUser>(() => {
+    const userStr = sessionStorage.getItem('erp_temp_user_data');
+    if (userStr) {
+      try {
+        const u = JSON.parse(userStr);
+        return {
+          id: u.id || 'usr_temp',
+          name: u.name || 'Administrator',
+          email: u.email || 'admin@school.erp',
+          role: this.currentRole()
+        };
+      } catch {
+        // fallback if parse fails
+      }
+    }
+    return {
+      id: 'usr_temp',
+      name: 'Administrator',
+      email: 'admin@school.erp',
+      role: this.currentRole()
+    };
+  });
 
   /** Convenience helpers for template role-checks */
   readonly isAdmin = computed(() => this.currentRole() === 'admin');
@@ -45,23 +66,87 @@ export class AuthService {
   readonly isHR = computed(() => this.currentRole() === 'hr');
   readonly isAccountant = computed(() => this.currentRole() === 'accountant');
 
+  private apiService = inject(BaseApiService);
+
   constructor(private router: Router) { }
 
   private checkInitialState(): boolean {
-    return localStorage.getItem(this.AUTH_KEY) === 'true';
+    return sessionStorage.getItem(this.AUTH_KEY) === 'true';
   }
 
-  login(role: ErpRole = 'admin') {
-    localStorage.setItem(this.AUTH_KEY, 'true');
-    localStorage.setItem(this.ROLE_KEY, role);
-    this.isAuthenticated.set(true);
-    this.currentRole.set(role);
-    this.router.navigate(['/erp/dashboard']);
+  getAccessToken(): string | null {
+    return this._accessToken;
+  }
+
+  silentRefresh(): Observable<string> {
+    if (this._refreshObservable) {
+      return this._refreshObservable;
+    }
+
+    const refreshToken = sessionStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      this.logout();
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    this._refreshObservable = this.apiService.post<any>(API_ENDPOINTS.AUTH.REFRESH, { refreshToken }).pipe(
+      map((res: any) => {
+        const newAccessToken = res?.data?.accessToken;
+        if (newAccessToken) {
+          this._accessToken = newAccessToken;
+          return newAccessToken;
+        }
+        throw new Error('Refresh failed');
+      }),
+      catchError((err) => {
+        this.logout();
+        return throwError(() => err);
+      }),
+      finalize(() => {
+        this._refreshObservable = null;
+      }),
+      shareReplay(1)
+    );
+
+    return this._refreshObservable;
+  }
+
+  login(email: string, password: string): Observable<any> {
+    return this.apiService.post<any>(API_ENDPOINTS.AUTH.LOGIN, { email, password }).pipe(
+      tap((res: any) => {
+        const apiData = res?.data;
+
+        // Store JWT tokens: Access Token strictly in-memory, Refresh Token in session storage
+        if (apiData && apiData.accessToken) {
+          this._accessToken = apiData.accessToken;
+          sessionStorage.setItem('refreshToken', apiData.refreshToken);
+        }
+
+        // Store user and authentication state
+        const rawRole = apiData?.user?.role || 'admin';
+        const role = rawRole.toLowerCase() as ErpRole;
+
+        sessionStorage.setItem(this.AUTH_KEY, 'true');
+        sessionStorage.setItem(this.ROLE_KEY, role);
+        if (apiData?.user) {
+          sessionStorage.setItem('erp_temp_user_data', JSON.stringify({
+            ...apiData.user,
+            role: role // Normalize to lowercase ErpRole
+          }));
+        }
+
+        this.isAuthenticated.set(true);
+        this.currentRole.set(role);
+      })
+    );
   }
 
   logout() {
-    localStorage.removeItem(this.AUTH_KEY);
-    localStorage.removeItem(this.ROLE_KEY);
+    this._accessToken = null;
+    sessionStorage.removeItem(this.AUTH_KEY);
+    sessionStorage.removeItem(this.ROLE_KEY);
+    sessionStorage.removeItem('erp_temp_user_data');
+    sessionStorage.removeItem('refreshToken');
     this.isAuthenticated.set(false);
     this.router.navigate(['/erp/login']);
   }
