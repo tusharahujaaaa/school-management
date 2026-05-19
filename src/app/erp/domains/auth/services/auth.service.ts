@@ -141,14 +141,42 @@ export class AuthService {
     );
   }
 
+  getMe(): Observable<any> {
+    return this.apiService.get<any>(API_ENDPOINTS.AUTH.ME).pipe(
+      tap((res: any) => {
+        const apiData = res?.data;
+        if (apiData) {
+          const rawRole = apiData.role || 'admin';
+          const role = rawRole.toLowerCase() as ErpRole;
+
+          // Sync local storage and reactive signals with latest user data from the server
+          sessionStorage.setItem('erp_temp_user_data', JSON.stringify({
+            ...apiData,
+            role: role // Normalize to lowercase ErpRole
+          }));
+
+          this.currentRole.set(role);
+        }
+      })
+    );
+  }
+
   logout() {
-    this._accessToken = null;
-    sessionStorage.removeItem(this.AUTH_KEY);
-    sessionStorage.removeItem(this.ROLE_KEY);
-    sessionStorage.removeItem('erp_temp_user_data');
-    sessionStorage.removeItem('refreshToken');
-    this.isAuthenticated.set(false);
-    this.router.navigate(['/erp/login']);
+    const cleanup = () => {
+      this._accessToken = null;
+      sessionStorage.removeItem(this.AUTH_KEY);
+      sessionStorage.removeItem(this.ROLE_KEY);
+      sessionStorage.removeItem('erp_temp_user_data');
+      sessionStorage.removeItem('refreshToken');
+      this.isAuthenticated.set(false);
+      this.router.navigate(['/erp/login']);
+    };
+
+    // Call server-side logout in background and ensure local session is cleared in either case
+    this.apiService.post<any>(API_ENDPOINTS.AUTH.LOGOUT, {}).subscribe({
+      next: () => cleanup(),
+      error: () => cleanup()
+    });
   }
 
   /** Used by SidebarComponent and guards for role checks */
