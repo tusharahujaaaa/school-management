@@ -30,12 +30,17 @@ export class StudentAttendanceComponent {
   private messageService = inject(MessageService);
   readonly PERMS = ERP_PERMISSIONS;
 
-  classOptions = this.svc.classes().map(c => ({ label: c, value: c }));
-  sectionOptions = this.svc.sections().map(s => ({ label: `Section ${s}`, value: s }));
+  get classOptions() {
+    return this.svc.classes().map(c => ({ label: c, value: c }));
+  }
 
-  selectedDate = signal(this.svc.selectedDate());
-  selectedClass = signal(this.svc.selectedClass());
-  selectedSection = signal(this.svc.selectedSection());
+  get sectionOptions() {
+    return this.svc.sections().map(s => ({ label: `Section ${s}`, value: s }));
+  }
+
+  selectedDate = this.svc.selectedDate;
+  selectedClass = this.svc.selectedClass;
+  selectedSection = this.svc.selectedSection;
   searchQuery = signal('');
   isSubmitting = signal(false);
 

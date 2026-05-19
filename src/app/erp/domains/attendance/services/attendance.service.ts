@@ -1,5 +1,5 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
-import { Observable, of, delay, tap } from 'rxjs';
+import { Injectable, signal, computed, inject, effect } from '@angular/core';
+import { Observable, of, tap } from 'rxjs';
 import { LoadingService } from '../../../core/api/services/loading.service';
 import { AttendanceHttpService } from './attendance-http.service';
 import {
@@ -8,9 +8,8 @@ import {
   LowAttendanceAlert, AttendanceReport, AttendanceStatus, StaffAttendanceStatus
 } from '../models/attendance.model';
 import {
-  MOCK_STUDENTS, MOCK_STAFF, MOCK_ATTENDANCE_STATS, MOCK_CLASS_SUMMARIES,
-  MOCK_ATTENDANCE_HISTORY, MOCK_LOW_ATTENDANCE, MOCK_REPORTS,
-  MOCK_CLASSES, MOCK_SECTIONS
+  MOCK_STAFF, MOCK_ATTENDANCE_STATS, MOCK_CLASS_SUMMARIES,
+  MOCK_ATTENDANCE_HISTORY, MOCK_LOW_ATTENDANCE, MOCK_REPORTS
 } from '../mock-data/attendance.mock';
 
 @Injectable({ providedIn: 'root' })
@@ -18,15 +17,13 @@ export class AttendanceService {
   private httpSvc = inject(AttendanceHttpService);
   private loadingSvc = inject(LoadingService);
 
-  /**
-   * Flag to toggle between MOCK and REAL API
-   * Currently set to true (MOCK) as per requirements
-   */
-  private readonly USE_MOCK = true;
+  private readonly USE_MOCK = false;
 
   // ─── Signals ──────────────────────────────────────
-  readonly classes = signal<string[]>(MOCK_CLASSES);
-  readonly sections = signal<string[]>(MOCK_SECTIONS);
+  readonly classes = signal<string[]>([]);
+  readonly sections = signal<string[]>([]);
+  private _allClasses = signal<any[]>([]);
+
   readonly dashboardStats = signal<AttendanceDashboardStats>(MOCK_ATTENDANCE_STATS);
   readonly classSummaries = signal<ClassAttendanceSummary[]>(MOCK_CLASS_SUMMARIES);
   readonly history = signal<AttendanceHistoryRecord[]>(MOCK_ATTENDANCE_HISTORY);
@@ -34,18 +31,17 @@ export class AttendanceService {
   readonly reports = signal<AttendanceReport[]>(MOCK_REPORTS);
 
   readonly selectedDate = signal<string>(new Date().toISOString().split('T')[0]);
-  readonly selectedClass = signal<string>('Class 10');
-  readonly selectedSection = signal<string>('A');
+  readonly selectedClass = signal<string>('');
+  readonly selectedSection = signal<string>('');
   readonly studentSearchQuery = signal<string>('');
   readonly staffSearchQuery = signal<string>('');
   
-  // Use core LoadingService signal
   readonly isGlobalLoading = this.loadingSvc.isLoading;
 
   private _studentRecords = signal<Map<string, StudentAttendanceRecord>>(new Map());
   private _staffRecords = signal<Map<string, StaffAttendanceRecord>>(new Map());
   
-  readonly students = signal<Student[]>(MOCK_STUDENTS);
+  readonly students = signal<Student[]>([]);
   readonly staff = signal<StaffMember[]>(MOCK_STAFF);
 
   // ─── Computed ─────────────────────────────────────
@@ -53,7 +49,7 @@ export class AttendanceService {
     const q = this.studentSearchQuery().toLowerCase();
     if (!q) return this.students();
     return this.students().filter(s =>
-      s.name.toLowerCase().includes(q) || s.rollNumber.includes(q)
+      s.name.toLowerCase().includes(q) || s.rollNumber.toLowerCase().includes(q)
     );
   });
 
@@ -82,20 +78,86 @@ export class AttendanceService {
     return { present, absent, late, leave, total, unmarked: total - records.size };
   });
 
+  constructor() {
+    // Load setup dropdown data on initialization
+    this.loadSetupData();
+
+    // Reactive effect: Automatically reload students when date, class, or section changes
+    effect(() => {
+      const classId = this.getClassId(this.selectedClass(), this.selectedSection());
+      const date = this.selectedDate();
+      if (classId && date) {
+        this.loadStudents();
+      } else {
+        this.students.set([]);
+        this._studentRecords.set(new Map());
+      }
+    }, { allowSignalWrites: true });
+  }
+
+  // ─── Setup Data Loading ────────────────────────────
+  loadSetupData() {
+    this.httpSvc.getSetupData().subscribe({
+      next: (res) => {
+        const data = res?.data;
+        if (data) {
+          this._allClasses.set(data.classes || []);
+          this.sections.set(data.sections || []);
+
+          const uniqueClasses = [...new Set((data.classes || []).map((c: any) => c.name))] as string[];
+          this.classes.set(uniqueClasses);
+
+          // Auto-select first class & section if available to improve onboarding UX
+          if (uniqueClasses.length > 0 && !this.selectedClass()) {
+            this.selectedClass.set(uniqueClasses[0]);
+          }
+          if (data.sections && data.sections.length > 0 && !this.selectedSection()) {
+            this.selectedSection.set(data.sections[0]);
+          }
+        }
+      }
+    });
+  }
+
+  getClassId(className: string, sectionName: string): string | null {
+    const cls = this._allClasses().find(c => c.name === className && c.section === sectionName);
+    return cls ? cls.id : null;
+  }
+
   // ─── Actions ──────────────────────────────────────
   
-  /**
-   * Loads students based on current filters.
-   * Demonstrates the switch between MOCK and HTTP.
-   */
   loadStudents() {
-    if (this.USE_MOCK) {
-      // Mock logic: Already handled by static signals for now
-      return;
-    }
+    const classId = this.getClassId(this.selectedClass(), this.selectedSection());
+    if (!classId) return;
 
-    this.httpSvc.getStudents(this.selectedClass(), this.selectedSection())
-      .subscribe(students => this.students.set(students));
+    this.httpSvc.getAttendanceByClassAndDate(classId, this.selectedDate()).subscribe({
+      next: (res) => {
+        const attendanceData = res?.data?.data || [];
+        
+        // Map backend list to frontend Student interface
+        const mappedStudents = attendanceData.map((item: any) => ({
+          id: item.studentId,
+          rollNumber: item.rollNumber || '',
+          name: item.name || 'Student',
+          class: this.selectedClass(),
+          section: this.selectedSection()
+        }));
+        this.students.set(mappedStudents);
+
+        // Pre-populate marked records
+        const recordsMap = new Map<string, StudentAttendanceRecord>();
+        attendanceData.forEach((item: any) => {
+          if (item.status) {
+            recordsMap.set(item.studentId, {
+              studentId: item.studentId,
+              status: item.status.toLowerCase() as AttendanceStatus,
+              remarks: item.remarks || ''
+            });
+          }
+        });
+        this._studentRecords.set(recordsMap);
+      }
+    });
   }
 
   markStudentAttendance(studentId: string, status: AttendanceStatus, remarks?: string) {
@@ -142,17 +204,23 @@ export class AttendanceService {
     return this._staffRecords()?.get(staffId)?.status ?? null;
   }
 
-  /**
-   * Submits attendance to the backend (or simulates it)
-   */
   submitAttendance(): Observable<any> {
-    if (this.USE_MOCK) {
-      return of({ success: true }).pipe(delay(800));
+    const classId = this.getClassId(this.selectedClass(), this.selectedSection());
+    if (!classId) {
+      throw new Error('Please select a valid class and section first.');
     }
 
-    const payload = Array.from(this._studentRecords().values());
-    return this.httpSvc.submitAttendance(payload).pipe(
-      tap(() => this.resetStudentAttendance())
+    const records = Array.from(this._studentRecords().values()).map(r => ({
+      studentId: r.studentId,
+      status: r.status.toUpperCase(),
+      remarks: r.remarks || ''
+    }));
+
+    return this.httpSvc.submitBulkAttendance(classId, this.selectedDate(), records).pipe(
+      tap(() => {
+        // Refresh statuses upon successful submission
+        this.loadStudents();
+      })
     );
   }
 }
