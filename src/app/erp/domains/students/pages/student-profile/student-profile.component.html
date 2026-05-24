@@ -1,0 +1,124 @@
+<app-erp-page-header 
+    [title]="store.selectedStudent()?.fullName || 'Student Profile'" 
+    [subtitle]="store.selectedStudent() ? 'Admission No: ' + store.selectedStudent()?.admissionNumber : 'Loading...'"
+    [breadcrumbs]="[{label: 'ERP'}, {label: 'Students', routerLink: '/erp/students'}, {label: 'Profile'}]">
+    <div actions>
+        <button *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" pButton label="Edit Profile" icon="pi pi-pencil" class="p-button-sm mr-2" [routerLink]="['/erp/students', store.selectedStudent()?.id, 'edit']"></button>
+        <button pButton label="Actions" icon="pi pi-chevron-down" class="p-button-outlined p-button-sm"></button>
+    </div>
+</app-erp-page-header>
+
+<div class="p-4" *ngIf="store.selectedStudent() as student">
+    <div class="grid">
+        <!-- Sidebar / Basic Info -->
+        <div class="col-12 md:col-3">
+            <div class="surface-card p-4 border-round-xl shadow-1 text-center mb-4">
+                <p-avatar 
+                    [image]="student.photoUrl" 
+                    shape="circle" 
+                    size="xlarge"
+                    [label]="!student.photoUrl ? student.firstName[0] : ''"
+                    styleClass="shadow-2 mb-3"
+                    [style]="{'width': '120px', 'height': '120px'}">
+                </p-avatar>
+                <h2 class="text-xl font-bold text-900 m-0">{{ student.fullName }}</h2>
+                <p class="text-600 mb-3">{{ student.admissionNumber }}</p>
+                <app-erp-status-badge [label]="student.status" [severity]="getSeverity(student.status)"></app-erp-status-badge>
+                
+                <div class="mt-4 text-left border-top-1 surface-border pt-4">
+                    <div class="flex align-items-center mb-3">
+                        <i class="pi pi-envelope text-600 mr-2"></i>
+                        <span class="text-900 text-sm overflow-hidden text-overflow-ellipsis">{{ student.email || 'N/A' }}</span>
+                    </div>
+                    <div class="flex align-items-center mb-3">
+                        <i class="pi pi-phone text-600 mr-2"></i>
+                        <span class="text-900 text-sm">{{ student.contactNumber }}</span>
+                    </div>
+                    <div class="flex align-items-center">
+                        <i class="pi pi-map-marker text-600 mr-2"></i>
+                        <span class="text-900 text-sm">{{ student.address || 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Quick Info -->
+            <div class="surface-card p-4 border-round-xl shadow-1">
+                <h3 class="text-900 font-bold mb-3 text-base">Academic Info</h3>
+                <div class="flex justify-content-between mb-2">
+                    <span class="text-600">Class:</span>
+                    <span class="text-900 font-medium">{{ student.class }}</span>
+                </div>
+                <div class="flex justify-content-between mb-2">
+                    <span class="text-600">Section:</span>
+                    <span class="text-900 font-medium">{{ student.section }}</span>
+                </div>
+                <div class="flex justify-content-between">
+                    <span class="text-600">Roll No:</span>
+                    <span class="text-900 font-medium">{{ student.rollNumber }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Content -->
+        <div class="col-12 md:col-9">
+            <div class="surface-card border-round-xl shadow-1 overflow-hidden">
+                <p-tabs value="0">
+                    <p-tablist>
+                        <p-tab value="0">General Information</p-tab>
+                        <p-tab value="1">Attendance</p-tab>
+                        <p-tab value="2">Fees</p-tab>
+                        <p-tab value="3">Activity</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0">
+                            <div class="grid p-2">
+                                <div class="col-12 md:col-6">
+                                    <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2">Basic Details</h4>
+                                    <div class="grid text-sm">
+                                        <div class="col-6 text-600">Gender</div>
+                                        <div class="col-6 text-900 font-medium">{{ student.gender }}</div>
+                                        <div class="col-6 text-600">Date of Birth</div>
+                                        <div class="col-6 text-900 font-medium">{{ student.dateOfBirth || 'N/A' }}</div>
+                                        <div class="col-6 text-600">Admission Date</div>
+                                        <div class="col-6 text-900 font-medium">{{ student.admissionDate || 'N/A' }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2">Parent Details</h4>
+                                    <div class="grid text-sm">
+                                        <div class="col-6 text-600">Father/Guardian</div>
+                                        <div class="col-6 text-900 font-medium">{{ student.parentName || 'N/A' }}</div>
+                                        <div class="col-6 text-600">Contact</div>
+                                        <div class="col-6 text-900 font-medium">{{ student.parentContact || 'N/A' }}</div>
+                                    </div>
+                                    <div class="mt-4 p-3 bg-blue-50 border-round text-blue-700 text-xs flex align-items-center">
+                                        <i class="pi pi-info-circle mr-2"></i>
+                                        <span>Parent management module integration pending.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-tabpanel>
+                        <p-tabpanel value="1">
+                             <div class="flex flex-column align-items-center justify-content-center p-8">
+                                <i class="pi pi-chart-bar text-4xl text-200 mb-3"></i>
+                                <span class="text-600">Attendance data will be integrated soon.</span>
+                            </div>
+                        </p-tabpanel>
+                        <p-tabpanel value="2">
+                             <div class="flex flex-column align-items-center justify-content-center p-8">
+                                <i class="pi pi-wallet text-4xl text-200 mb-3"></i>
+                                <span class="text-600">Fee management integration placeholder.</span>
+                            </div>
+                        </p-tabpanel>
+                        <p-tabpanel value="3">
+                             <div class="flex flex-column align-items-center justify-content-center p-8">
+                                <i class="pi pi-history text-4xl text-200 mb-3"></i>
+                                <span class="text-600">Activity logging will be available in next phase.</span>
+                            </div>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+            </div>
+        </div>
+    </div>
+</div>

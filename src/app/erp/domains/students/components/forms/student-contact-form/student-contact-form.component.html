@@ -1,0 +1,17 @@
+<div [formGroup]="group" class="grid p-fluid">
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Student Mobile" [required]="true" [control]="group.get('contactNumber')">
+            <app-erp-input formControlName="contactNumber" placeholder="Enter mobile number"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Email" [control]="group.get('email')">
+            <app-erp-input formControlName="email" type="email" placeholder="student@example.com"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+    <div class="col-12 md:col-4">
+        <app-erp-form-field label="Emergency Contact" [required]="true" [control]="group.get('emergencyContact')">
+            <app-erp-input formControlName="emergencyContact" placeholder="Enter emergency contact"></app-erp-input>
+        </app-erp-form-field>
+    </div>
+</div>

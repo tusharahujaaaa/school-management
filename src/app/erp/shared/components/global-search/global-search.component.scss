@@ -1,0 +1,30 @@
+.global-search-container {
+  .search-dropdown {
+    transform-origin: top;
+    animation: slideDown 0.2s ease-out;
+    
+    .search-results {
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: var(--surface-300);
+        border-radius: 10px;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

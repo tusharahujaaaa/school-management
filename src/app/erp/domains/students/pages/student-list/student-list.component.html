@@ -1,0 +1,76 @@
+<app-erp-page-header 
+    title="Student Management" 
+    subtitle="View and manage student records"
+    [breadcrumbs]="[{label: 'ERP'}, {label: 'Students'}]">
+    <div actions>
+        <button pButton label="Export" icon="pi pi-download" class="p-button-outlined p-button-sm mr-2"></button>
+        <button *erpHasPermission="PERMISSIONS.STUDENTS.CREATE" pButton label="Add Student" icon="pi pi-plus" class="p-button-sm" routerLink="create"></button>
+    </div>
+</app-erp-page-header>
+
+<div class="p-4">
+    <!-- Filter Section -->
+    <app-student-filters></app-student-filters>
+
+    <!-- Student Table -->
+    <app-erp-table
+        [data]="store.filteredStudents()"
+        [columns]="columns"
+        [loading]="store.loading()"
+        [hasActions]="true"
+        [columnTemplates]="{
+            'photoUrl': photoTemplate,
+            'fullName': nameTemplate,
+            'status': statusTemplate
+        }"
+        [actionTemplate]="actionTemplate"
+        (search)="onGlobalSearch($event)"
+    >
+    </app-erp-table>
+</div>
+
+<!-- Custom Column Templates -->
+<ng-template #photoTemplate let-student>
+    <p-avatar 
+        [image]="student.photoUrl" 
+        shape="circle" 
+        size="large"
+        [label]="!student.photoUrl ? student.firstName[0] : ''"
+        styleClass="shadow-1">
+    </p-avatar>
+</ng-template>
+
+<ng-template #nameTemplate let-student>
+    <div class="flex flex-column">
+        <span class="text-900 font-semibold">{{ student.fullName }}</span>
+        <span class="text-600 text-sm">{{ student.email }}</span>
+    </div>
+</ng-template>
+
+<ng-template #statusTemplate let-student>
+    <app-erp-status-badge 
+        [label]="student.status" 
+        [severity]="getSeverity(student.status)">
+    </app-erp-status-badge>
+</ng-template>
+
+<ng-template #actionTemplate let-student>
+    <button pButton icon="pi pi-eye" 
+        class="p-button-rounded p-button-text p-button-sm" 
+        pTooltip="View Profile"
+        (click)="viewProfile(student.id)">
+    </button>
+    
+    <button *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" 
+        pButton icon="pi pi-pencil" 
+        class="p-button-rounded p-button-text p-button-sm"
+        pTooltip="Edit Student"
+        [routerLink]="[student.id, 'edit']">
+    </button>
+    
+    <button *erpHasPermission="PERMISSIONS.STUDENTS.DELETE" 
+        pButton icon="pi pi-trash" 
+        class="p-button-rounded p-button-text p-button-sm p-button-danger"
+        pTooltip="Delete Student">
+    </button>
+</ng-template>

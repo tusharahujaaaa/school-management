@@ -1,0 +1,77 @@
+<nav class="erp-sidebar-nav h-full overflow-y-auto" role="navigation" aria-label="ERP Navigation">
+
+  <!-- Branding Header -->
+  <div class="sidebar-brand px-4 py-4 border-bottom-1 surface-border flex align-items-center gap-3">
+    <div class="brand-icon flex align-items-center justify-content-center border-round-lg"
+         style="width:2.25rem; height:2.25rem; background:var(--primary-color)">
+      <i class="pi pi-graduation-cap text-white"></i>
+    </div>
+    <div class="overflow-hidden">
+      <div class="text-900 font-bold text-sm line-height-1 white-space-nowrap text-overflow-ellipsis overflow-hidden">
+        {{ branding.schoolName }}
+      </div>
+      <div class="text-400 text-xs mt-1">School ERP</div>
+    </div>
+  </div>
+
+  <!-- Navigation Groups -->
+  <div class="sidebar-nav-content px-3 py-3">
+    <ng-container *ngFor="let group of filteredGroups()">
+
+      <!-- Group Section Label -->
+      <div *ngIf="group.groupLabel" class="sidebar-group-label px-2 mt-4 mb-1 first:mt-2">
+        <span class="text-400 text-xs font-semibold uppercase" style="letter-spacing: 0.06em">
+          {{ group.groupLabel }}
+        </span>
+      </div>
+
+      <!-- Nav Items -->
+      <ul class="list-none p-0 m-0">
+        <li *ngFor="let item of group.items" class="mb-1">
+
+          <!-- Active / Regular link -->
+          <a *ngIf="!item.disabled"
+             [routerLink]="item.route"
+             routerLinkActive="nav-item--active"
+             [routerLinkActiveOptions]="{ exact: item.exactMatch ?? false }"
+             class="nav-item flex align-items-center p-3 border-round-lg cursor-pointer no-underline transition-colors transition-duration-150"
+             role="menuitem">
+            <i *ngIf="item.icon" [class]="item.icon + ' nav-item__icon mr-2 text-base'"></i>
+            <span class="nav-item__label font-medium text-sm">{{ item.label }}</span>
+            <span *ngIf="item.badge" class="nav-item__badge ml-auto text-xs px-2 py-1 border-round font-semibold">
+              {{ item.badge }}
+            </span>
+          </a>
+
+          <!-- Disabled / Coming-soon item -->
+          <span *ngIf="item.disabled"
+                class="nav-item nav-item--disabled flex align-items-center p-3 border-round-lg cursor-not-allowed"
+                [title]="item.badge ?? 'Coming soon'"
+                role="menuitem" aria-disabled="true">
+            <i *ngIf="item.icon" [class]="item.icon + ' nav-item__icon mr-2 text-base'"></i>
+            <span class="nav-item__label font-medium text-sm">{{ item.label }}</span>
+            <span *ngIf="item.badge" class="nav-item__badge nav-item__badge--soon ml-auto text-xs px-2 py-1 border-round font-semibold">
+              {{ item.badge }}
+            </span>
+          </span>
+
+        </li>
+      </ul>
+
+    </ng-container>
+  </div>
+
+  <!-- Footer -->
+  <div class="sidebar-footer px-4 py-3 border-top-1 surface-border mt-auto">
+    <div class="flex align-items-center gap-2">
+      <div class="w-2rem h-2rem border-circle bg-primary-100 flex align-items-center justify-content-center">
+        <i class="pi pi-user text-primary text-xs"></i>
+      </div>
+      <div class="overflow-hidden flex-grow-1">
+        <div class="text-900 text-xs font-semibold white-space-nowrap overflow-hidden text-overflow-ellipsis">Administrator</div>
+        <div class="text-400 text-xs">admin&#64;school.erp</div>
+      </div>
+    </div>
+  </div>
+
+</nav>

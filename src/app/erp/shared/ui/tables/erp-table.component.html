@@ -1,0 +1,60 @@
+<div class="surface-card shadow-1 border-round-xl overflow-hidden">
+
+  <!-- Header / Search -->
+  <div *ngIf="showSearch || title"
+    class="flex flex-column md:flex-row md:align-items-center justify-content-between p-4 gap-3">
+    <h2 *ngIf="title" class="text-xl font-bold text-900 m-0">{{ title }}</h2>
+
+    <div *ngIf="showSearch" class="p-input-icon-left w-full md:w-20rem">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Search..." class="w-full" (input)="onSearch($event)" />
+    </div>
+
+    <div class="flex gap-2">
+      <ng-content select="[tableActions]"></ng-content>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <app-erp-skeleton-loader *ngIf="loading" type="table"></app-erp-skeleton-loader>
+
+  <!-- Table -->
+  <p-table *ngIf="!loading && data && data.length > 0" [value]="data" [rows]="rows" [paginator]="paginator"
+    [responsiveLayout]="responsiveLayout" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{ col.header }}
+          <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+        </th>
+        <th *ngIf="hasActions" class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td *ngFor="let col of columns">
+          <!-- Check if there is a custom template for this column -->
+          <ng-container *ngIf="columnTemplates[col.field]">
+            <ng-container
+              *ngTemplateOutlet="columnTemplates[col.field]; context: { $implicit: rowData }"></ng-container>
+          </ng-container>
+
+          <!-- Default text rendering -->
+          <span *ngIf="!columnTemplates[col.field]">{{ rowData[col.field] }}</span>
+        </td>
+
+        <td *ngIf="hasActions" class="text-center">
+          <div class="flex justify-content-center gap-2">
+            <ng-container *ngTemplateOutlet="actionTemplate; context: { $implicit: rowData }"></ng-container>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Empty State -->
+  <app-erp-empty-state *ngIf="!loading && (!data || data.length === 0)" [title]="emptyTitle"
+    [description]="emptyDescription" [icon]="emptyIcon"></app-erp-empty-state>
+
+</div>

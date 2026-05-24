@@ -1,0 +1,16 @@
+@use 'variables';
+@use 'colors';
+
+// ERP specific PrimeNG Overrides
+// Scoped to .erp-app to not affect Sakai layouts
+.erp-app {
+  .p-card {
+    border-radius: variables.$erp-border-radius;
+    box-shadow: variables.$erp-shadow-sm;
+    border: 1px solid colors.$erp-border-color;
+  }
+
+  .p-button {
+    border-radius: variables.$erp-border-radius;
+  }
+}

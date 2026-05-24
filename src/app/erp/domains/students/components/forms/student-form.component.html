@@ -1,0 +1,55 @@
+<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-column gap-4">
+        
+        <!-- Basic Information Section -->
+        <div class="surface-card p-4 border-round-xl shadow-1">
+            <h3 class="text-xl font-bold text-900 mb-4 border-bottom-1 surface-border pb-2">
+                <i class="pi pi-user mr-2 text-primary"></i>Basic Information
+            </h3>
+            <app-student-basic-info-form [group]="studentForm"></app-student-basic-info-form>
+        </div>
+
+        <!-- Academic Information Section -->
+        <div class="surface-card p-4 border-round-xl shadow-1">
+            <h3 class="text-xl font-bold text-900 mb-4 border-bottom-1 surface-border pb-2">
+                <i class="pi pi-book mr-2 text-primary"></i>Academic Information
+            </h3>
+            <app-student-academic-form [group]="studentForm"></app-student-academic-form>
+        </div>
+
+        <!-- Contact Information Section -->
+        <div class="surface-card p-4 border-round-xl shadow-1">
+            <h3 class="text-xl font-bold text-900 mb-4 border-bottom-1 surface-border pb-2">
+                <i class="pi pi-phone mr-2 text-primary"></i>Contact Information
+            </h3>
+            <app-student-contact-form [group]="studentForm"></app-student-contact-form>
+        </div>
+
+        <!-- Address Information Section -->
+        <div class="surface-card p-4 border-round-xl shadow-1">
+            <h3 class="text-xl font-bold text-900 mb-4 border-bottom-1 surface-border pb-2">
+                <i class="pi pi-map-marker mr-2 text-primary"></i>Address Information
+            </h3>
+            <app-student-address-form [group]="studentForm"></app-student-address-form>
+        </div>
+
+        <!-- Form Actions Footer -->
+        <div class="sticky bottom-0 surface-card p-3 border-round-xl shadow-4 flex justify-content-end gap-3 z-5 mb-4">
+            <button pButton type="button" label="Cancel" icon="pi pi-times" 
+                class="p-button-outlined p-button-secondary" 
+                (click)="cancel.emit()" 
+                [disabled]="loading">
+            </button>
+            <button pButton type="button" label="Reset" icon="pi pi-refresh" 
+                class="p-button-outlined" 
+                (click)="studentForm.reset()" 
+                [disabled]="loading || !studentForm.dirty">
+            </button>
+            <button pButton type="submit" [label]="loading ? 'Saving...' : 'Save Student'" 
+                icon="pi pi-check" 
+                [disabled]="studentForm.invalid || loading" 
+                [loading]="loading">
+            </button>
+        </div>
+    </div>
+</form>

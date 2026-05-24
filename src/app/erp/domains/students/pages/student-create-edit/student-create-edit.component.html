@@ -1,0 +1,18 @@
+<p-toast></p-toast>
+
+<app-erp-page-header 
+    [title]="pageTitle()" 
+    [subtitle]="isEditMode() ? 'Update existing student records' : 'Register a new student into the system'"
+    [breadcrumbs]="[{label: 'ERP'}, {label: 'Students', routerLink: '/erp/students'}, {label: pageTitle()}]">
+</app-erp-page-header>
+
+<div class="p-4">
+    <div class="max-w-5xl mx-auto">
+        <app-student-form
+            [student]="isEditMode() ? store.selectedStudent() : null"
+            [loading]="isLoading()"
+            (save)="onSave($event)"
+            (cancel)="onCancel()">
+        </app-student-form>
+    </div>
+</div>

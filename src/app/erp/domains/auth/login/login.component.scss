@@ -1,0 +1,16 @@
+:host ::ng-deep {
+  // Ensure invalid inputs stand out beautifully with a red border and subtle glow
+  .p-invalid {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.15) !important;
+  }
+
+  // Ensure validation error text is a clean, readable red
+  .p-error {
+    color: #ef4444 !important;
+    font-size: 0.775rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    display: block;
+  }
+}

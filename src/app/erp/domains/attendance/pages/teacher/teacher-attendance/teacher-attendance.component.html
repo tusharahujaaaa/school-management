@@ -1,0 +1,104 @@
+<p-toast></p-toast>
+<div class="teacher-attendance-page">
+
+  <!-- Header -->
+  <app-erp-page-header 
+    title="Mark Attendance" 
+    [subtitle]="today"
+  >
+    <div actions class="flex align-items-center gap-2" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
+      <div class="surface-100 border-round-lg px-3 py-2 text-center mr-3">
+        <div class="text-700 font-semibold text-sm">Class 10 — A</div>
+        <div class="text-400 text-xs mt-1">Assigned class</div>
+      </div>
+      <button pButton label="All Present" icon="pi pi-check" class="p-button-sm p-button-success p-button-outlined" (click)="markAllPresent()"></button>
+      <button pButton icon="pi pi-refresh" class="p-button-sm p-button-secondary p-button-outlined" (click)="reset()" title="Reset"></button>
+    </div>
+  </app-erp-page-header>
+
+  <!-- Summary Chips -->
+  <div class="surface-card shadow-1 border-round-xl px-4 py-3 mb-4">
+    <div class="flex flex-wrap gap-3 align-items-center">
+      <div class="flex align-items-center gap-2 bg-green-50 border-round-xl px-3 py-2">
+        <i class="pi pi-check-circle text-green-500"></i>
+        <span class="font-bold text-green-700">{{ summary().present }}</span>
+        <span class="text-400 text-sm">Present</span>
+      </div>
+      <div class="flex align-items-center gap-2 bg-red-50 border-round-xl px-3 py-2">
+        <i class="pi pi-times-circle text-red-500"></i>
+        <span class="font-bold text-red-700">{{ summary().absent }}</span>
+        <span class="text-400 text-sm">Absent</span>
+      </div>
+      <div class="flex align-items-center gap-2 bg-orange-50 border-round-xl px-3 py-2">
+        <i class="pi pi-clock text-orange-500"></i>
+        <span class="font-bold text-orange-700">{{ summary().late }}</span>
+        <span class="text-400 text-sm">Late</span>
+      </div>
+      <div class="flex align-items-center gap-2 bg-surface-100 border-round-xl px-3 py-2 ml-auto">
+        <i class="pi pi-minus-circle text-400"></i>
+        <span class="font-bold text-500">{{ summary().unmarked }}</span>
+        <span class="text-400 text-sm">Unmarked</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attendance Table -->
+  <app-erp-table
+    [data]="students()"
+    [columns]="tableCols"
+    [columnTemplates]="{ 'name': nameTmpl, 'status': statusTmpl }"
+    [hasActions]="true"
+    [actionTemplate]="quickMarkTmpl"
+    [showSearch]="false"
+  >
+    <!-- Custom Templates -->
+    <ng-template #nameTmpl let-student>
+      <div class="flex align-items-center gap-2">
+        <div class="border-circle bg-primary-50 text-primary font-bold flex align-items-center justify-content-center text-xs"
+             style="width:1.75rem; height:1.75rem; flex-shrink:0">
+          {{ student.name.charAt(0) }}
+        </div>
+        <span class="text-900 font-medium">{{ student.name }}</span>
+      </div>
+    </ng-template>
+
+    <ng-template #statusTmpl let-student>
+      <app-erp-status-badge 
+        *ngIf="getStatus(student.id)" 
+        [label]="getStatusLabel(getStatus(student.id))" 
+        [severity]="getStatusSeverity(getStatus(student.id))"
+      ></app-erp-status-badge>
+      <span *ngIf="!getStatus(student.id)" class="text-400 text-xs italic">—</span>
+    </ng-template>
+
+    <ng-template #quickMarkTmpl let-student>
+      <div class="flex gap-1" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
+        <button *ngFor="let opt of statusOptions"
+                (click)="mark(student.id, opt.value)"
+                class="w-2rem h-2rem border-circle border-1 text-xs font-bold cursor-pointer transition-all flex align-items-center justify-content-center"
+                [ngClass]="{
+                  'bg-green-500 border-green-500 text-white': getStatus(student.id) === opt.value && opt.value === 'present',
+                  'bg-red-500 border-red-500 text-white':   getStatus(student.id) === opt.value && opt.value === 'absent',
+                  'bg-orange-400 border-orange-400 text-white': getStatus(student.id) === opt.value && opt.value === 'late',
+                  'bg-blue-500 border-blue-500 text-white':   getStatus(student.id) === opt.value && opt.value === 'leave',
+                  'surface-0 border-surface-300 text-500 hover:surface-100': getStatus(student.id) !== opt.value
+                }"
+                [title]="opt.value | titlecase">
+          {{ opt.label }}
+        </button>
+      </div>
+    </ng-template>
+  </app-erp-table>
+
+  <!-- Submit Footer -->
+  <div class="mt-4 surface-card shadow-1 border-round-xl px-4 py-3 border-top-1 surface-border flex justify-content-between align-items-center">
+    <span class="text-500 text-sm">
+      <i class="pi pi-info-circle mr-1"></i>
+      {{ summary().unmarked }} student(s) not yet marked
+    </span>
+    <div class="flex gap-2" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
+      <button pButton label="Reset" icon="pi pi-refresh" class="p-button-outlined p-button-secondary p-button-sm" (click)="reset()"></button>
+      <button pButton label="Submit Attendance" icon="pi pi-save" class="p-button-sm" [loading]="isSubmitting" (click)="submit()"></button>
+    </div>
+  </div>
+</div>

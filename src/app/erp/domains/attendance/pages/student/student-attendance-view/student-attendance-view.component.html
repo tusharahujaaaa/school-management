@@ -1,0 +1,124 @@
+<div class="student-attendance-view">
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-3">
+    <div>
+      <div class="flex align-items-center gap-2 mb-1">
+        <i class="pi pi-graduation-cap text-primary"></i>
+        <span class="text-500 text-sm">My Attendance</span>
+      </div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Hello, {{ student().name }} 👋</h2>
+      <span class="text-500 text-sm">{{ student().class }} — Section {{ student().section }} &bull; Roll No. {{ student().rollNumber }}</span>
+    </div>
+  </div>
+
+  <!-- ── Main Layout ────────────────────────────────────── -->
+  <div class="grid">
+
+    <!-- Circular Percentage -->
+    <div class="col-12 md:col-4">
+      <app-attendance-percentage-widget
+        [percentage]="student().attendancePercentage"
+        label="Your Attendance"
+        [presentDays]="student().presentDays"
+        [totalDays]="student().totalDays">
+      </app-attendance-percentage-widget>
+    </div>
+
+    <!-- Status Summary -->
+    <div class="col-12 md:col-8">
+      <div class="surface-card shadow-1 border-round-xl p-4 h-full">
+        <h3 class="text-900 font-semibold text-lg m-0 mb-4">Attendance Status</h3>
+
+        <!-- Status bar -->
+        <div class="mb-4">
+          <div class="flex justify-content-between align-items-center mb-2">
+            <span class="text-700 font-medium">Overall</span>
+            <span class="font-bold text-xl"
+                  [ngClass]="student().attendancePercentage >= 90 ? 'text-green-500' : student().attendancePercentage >= 75 ? 'text-orange-500' : 'text-red-500'">
+              {{ student().attendancePercentage }}%
+            </span>
+          </div>
+          <div class="w-full bg-surface-200 border-round" style="height:10px">
+            <div class="h-full border-round"
+                 [ngClass]="student().attendancePercentage >= 90 ? 'bg-green-500' : student().attendancePercentage >= 75 ? 'bg-orange-400' : 'bg-red-500'"
+                 [style.width.%]="student().attendancePercentage"></div>
+          </div>
+        </div>
+
+        <!-- Stats chips -->
+        <div class="grid">
+          <div class="col-4">
+            <div class="surface-50 border-round-xl p-3 text-center">
+              <div class="text-900 font-bold text-2xl">{{ student().presentDays }}</div>
+              <div class="text-green-600 text-xs font-medium mt-1">Days Present</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="surface-50 border-round-xl p-3 text-center">
+              <div class="text-900 font-bold text-2xl">{{ student().totalDays - student().presentDays }}</div>
+              <div class="text-red-500 text-xs font-medium mt-1">Days Absent</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="surface-50 border-round-xl p-3 text-center">
+              <div class="text-900 font-bold text-2xl">{{ student().totalDays }}</div>
+              <div class="text-500 text-xs font-medium mt-1">Total Days</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eligibility notice -->
+        <div class="mt-4 flex align-items-center gap-2 p-3 border-round-lg"
+             [ngClass]="student().attendancePercentage >= 75 ? 'bg-green-50' : 'bg-red-50'">
+          <i class="pi" [ngClass]="student().attendancePercentage >= 75 ? 'pi-check-circle text-green-500' : 'pi-times-circle text-red-500'"></i>
+          <span class="text-sm font-medium"
+                [ngClass]="student().attendancePercentage >= 75 ? 'text-green-700' : 'text-red-700'">
+            {{ student().attendancePercentage >= 75 ? 'Eligible for examinations (≥75%)' : 'Not eligible — attendance below 75%' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Breakdown -->
+    <div class="col-12">
+      <div class="surface-card shadow-1 border-round-xl p-4">
+        <h3 class="text-900 font-semibold text-lg m-0 mb-4">
+          <i class="pi pi-chart-bar mr-2 text-primary"></i>Month-wise Breakdown
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full" style="border-collapse: collapse;">
+            <thead>
+              <tr class="surface-50">
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Month</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Total Days</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-green-600">Present</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-red-500">Absent</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Attendance %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of monthlyBreakdown()" class="border-bottom-1 surface-border hover:surface-50 transition-colors">
+                <td class="p-3 text-900 font-medium">{{ row.month }}</td>
+                <td class="p-3 text-700">{{ row.total }}</td>
+                <td class="p-3 text-green-600 font-semibold">{{ row.present }}</td>
+                <td class="p-3 text-red-500 font-semibold">{{ row.absent }}</td>
+                <td class="p-3">
+                  <div class="flex align-items-center gap-2">
+                    <div class="flex-grow-1 bg-surface-200 border-round" style="height:6px; min-width:60px">
+                      <div class="border-round h-full"
+                           [ngClass]="getPctClass(row.pct).replace('text-', 'bg-')"
+                           [style.width.%]="row.pct"></div>
+                    </div>
+                    <span class="text-sm font-semibold w-2rem text-right" [ngClass]="getPctClass(row.pct)">{{ row.pct }}%</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

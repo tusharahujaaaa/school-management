@@ -1,0 +1,10 @@
+<div class="flex flex-column align-items-center justify-content-center p-8 text-center surface-card border-round-xl border-1 border-300 border-dashed">
+  <div class="flex align-items-center justify-content-center bg-surface-100 border-circle mb-4" style="width: 5rem; height: 5rem">
+    <i [class]="icon + ' text-4xl text-500'"></i>
+  </div>
+  
+  <h3 class="text-xl font-bold text-900 m-0 mb-2">{{ title }}</h3>
+  <p class="text-600 m-0 mb-4 line-height-3 max-w-20rem">{{ description }}</p>
+  
+  <ng-content select="[actions]"></ng-content>
+</div>
