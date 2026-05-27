@@ -34,6 +34,9 @@ export const ERP_PERMISSIONS = {
   SETTINGS: {
     VIEW: 'settings.view',
     EDIT: 'settings.edit',
+  },
+  NOTIFICATIONS: {
+    VIEW: 'notifications.view',
   }
 } as const;
 
@@ -57,4 +60,5 @@ export type ErpPermission =
   | typeof ERP_PERMISSIONS.FEES.COLLECT
   | typeof ERP_PERMISSIONS.FEES.REPORTS
   | typeof ERP_PERMISSIONS.SETTINGS.VIEW
-  | typeof ERP_PERMISSIONS.SETTINGS.EDIT;
+  | typeof ERP_PERMISSIONS.SETTINGS.EDIT
+  | typeof ERP_PERMISSIONS.NOTIFICATIONS.VIEW;

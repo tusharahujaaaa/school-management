@@ -69,3 +69,64 @@
 .sidebar-footer {
   flex-shrink: 0;
 }
+
+// ─── Collapsed State Overrides ──────────────────────────
+.sidebar-collapsed {
+  .sidebar-brand {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    justify-content: center !important;
+
+    .brand-text {
+      display: none !important;
+    }
+  }
+
+  .sidebar-group-label {
+    padding: 0 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    display: flex;
+    justify-content: center;
+
+    span {
+      display: none !important;
+    }
+
+    .group-label-divider {
+      display: block !important;
+      width: 1.5rem;
+      border-top: 1px solid var(--surface-border);
+    }
+  }
+
+  .nav-item {
+    justify-content: center !important;
+    padding: 0.75rem 0 !important;
+
+    &__icon {
+      margin-right: 0 !important;
+      font-size: 1.25rem !important;
+    }
+
+    &__label, &__badge {
+      display: none !important;
+    }
+  }
+
+  .sidebar-footer {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    justify-content: center !important;
+
+    .flex {
+      justify-content: center !important;
+      width: 100%;
+    }
+
+    .footer-text {
+      display: none !important;
+    }
+  }
+}
+

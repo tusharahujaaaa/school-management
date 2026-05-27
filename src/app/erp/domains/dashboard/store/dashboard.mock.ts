@@ -4,7 +4,7 @@ export const MOCK_STATS: StatData[] = [
   { title: 'Total Students', value: '2,845', icon: 'pi pi-users', trend: '12 new this week', trendUp: true, colorClass: 'bg-blue-50 text-blue-600' },
   { title: 'Total Staff', value: '142', icon: 'pi pi-id-card', trend: '2 on leave', trendUp: false, colorClass: 'bg-purple-50 text-purple-600' },
   { title: 'Today Attendance', value: '94.5%', icon: 'pi pi-check-circle', trend: 'Up 1.2% from yesterday', trendUp: true, colorClass: 'bg-green-50 text-green-600' },
-  { title: 'Pending Fees', value: '$45,200', icon: 'pi pi-dollar', trend: '8% of total expected', trendUp: false, colorClass: 'bg-orange-50 text-orange-600' },
+  { title: 'Pending Fees', value: '₹45,200', icon: 'pi pi-indian-rupee', trend: '8% of total expected', trendUp: false, colorClass: 'bg-orange-50 text-orange-600' },
   { title: 'Active Classes', value: '48', icon: 'pi pi-building', trend: 'All running smoothly', trendUp: true, colorClass: 'bg-cyan-50 text-cyan-600' },
   { title: 'New Admissions', value: '124', icon: 'pi pi-user-plus', trend: '15% increase YoY', trendUp: true, colorClass: 'bg-teal-50 text-teal-600' },
 ];
@@ -31,9 +31,9 @@ export const MOCK_NOTIFICATIONS: NotificationData[] = [
 ];
 
 export const MOCK_QUICK_ACTIONS: QuickAction[] = [
-  { label: 'Add Student', icon: 'pi pi-user-plus', colorClass: 'bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200' },
-  { label: 'Mark Attendance', icon: 'pi pi-check-square', colorClass: 'bg-green-50 text-green-600 hover:bg-green-100 border-green-200' },
-  { label: 'Collect Fees', icon: 'pi pi-wallet', colorClass: 'bg-orange-50 text-orange-600 hover:bg-orange-100 border-orange-200' },
-  { label: 'Create Notice', icon: 'pi pi-bullhorn', colorClass: 'bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-200' },
-  { label: 'Generate ID', icon: 'pi pi-id-card', colorClass: 'bg-teal-50 text-teal-600 hover:bg-teal-100 border-teal-200' },
+  { label: 'Add Student', icon: 'pi pi-user-plus', route: '/erp/students/create', colorClass: 'bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200' },
+  { label: 'Mark Attendance', icon: 'pi pi-check-square', route: '/erp/attendance/students', colorClass: 'bg-green-50 text-green-600 hover:bg-green-100 border-green-200' },
+  { label: 'Collect Fees', icon: 'pi pi-wallet', route: '/erp/dashboard', colorClass: 'bg-orange-50 text-orange-600 hover:bg-orange-100 border-orange-200' },
+  { label: 'Create Notice', icon: 'pi pi-bullhorn', route: '/erp/dashboard', colorClass: 'bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-200' },
+  { label: 'Generate ID', icon: 'pi pi-id-card', route: '/erp/dashboard', colorClass: 'bg-teal-50 text-teal-600 hover:bg-teal-100 border-teal-200' },
 ];
