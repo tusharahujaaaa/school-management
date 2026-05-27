@@ -2,7 +2,7 @@ import { Injectable, signal, inject } from '@angular/core';
 import { BaseApiService } from '../../../core/api/base/base-api.service';
 import { StatData, ActivityData, EventData, NotificationData, QuickAction } from '../models/dashboard.model';
 import { MOCK_EVENTS, MOCK_NOTIFICATIONS, MOCK_QUICK_ACTIONS } from '../store/dashboard.mock';
-import { forkJoin, catchError, of } from 'rxjs';
+import { forkJoin, catchError, of, delay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,14 @@ import { forkJoin, catchError, of } from 'rxjs';
 export class DashboardService extends BaseApiService {
   
   // Writable Signals
+  loading = signal<boolean>(false);
   stats = signal<StatData[]>([]);
   activities = signal<ActivityData[]>([]);
   events = signal<EventData[]>(MOCK_EVENTS); // Dynamic placeholder fallback
   notifications = signal<NotificationData[]>(MOCK_NOTIFICATIONS); // Dynamic placeholder fallback
   quickActions = signal<QuickAction[]>(MOCK_QUICK_ACTIONS);
+  attendanceOverview = signal<any>(null);
+  feeOverview = signal<any>(null);
 
   constructor() {
     super();
@@ -25,12 +28,18 @@ export class DashboardService extends BaseApiService {
    * Load stats and recent activity logs from the backend API simultaneously
    */
   loadDashboardData() {
+    this.loading.set(true);
     forkJoin({
       stats: this.get<any>('/dashboard/admin/stats').pipe(catchError(() => of(null))),
       activities: this.get<any>('/dashboard/admin/recent-activities').pipe(catchError(() => of(null))),
       notifications: this.get<any>('/dashboard/admin/notifications').pipe(catchError(() => of(null))),
-      events: this.get<any>('/dashboard/admin/events').pipe(catchError(() => of(null)))
-    }).subscribe(({ stats, activities, notifications, events }) => {
+      events: this.get<any>('/dashboard/admin/events').pipe(catchError(() => of(null))),
+      attendanceOverview: this.get<any>('/dashboard/admin/attendance-overview').pipe(catchError(() => of(null))),
+      feeOverview: this.get<any>('/dashboard/admin/fee-overview').pipe(catchError(() => of(null)))
+    }).pipe(
+      delay(600) // Premium UX loading transition
+    ).subscribe({
+      next: ({ stats, activities, notifications, events, attendanceOverview, feeOverview }) => {
       
       // 1. Map dynamic admin stats cards
       if (stats && stats.success && stats.data) {
@@ -62,8 +71,8 @@ export class DashboardService extends BaseApiService {
           },
           { 
             title: 'Pending Fees', 
-            value: '$' + (d.pendingFees?.toLocaleString() || '0'), 
-            icon: 'pi pi-dollar', 
+            value: '₹' + (d.pendingFees?.toLocaleString() || '0'), 
+            icon: 'pi pi-indian-rupee', 
             trend: 'Total outstanding dues', 
             trendUp: false, 
             colorClass: 'bg-orange-50 text-orange-600' 
@@ -92,7 +101,7 @@ export class DashboardService extends BaseApiService {
           { title: 'Total Students', value: '0', icon: 'pi pi-users', trend: 'Offline data fallback', trendUp: false, colorClass: 'bg-blue-50 text-blue-600' },
           { title: 'Total Staff', value: '0', icon: 'pi pi-id-card', trend: 'Offline data fallback', trendUp: false, colorClass: 'bg-purple-50 text-purple-600' },
           { title: 'Today Attendance', value: '0%', icon: 'pi pi-check-circle', trend: 'Offline data fallback', trendUp: false, colorClass: 'bg-green-50 text-green-600' },
-          { title: 'Pending Fees', value: '$0', icon: 'pi pi-dollar', trend: 'Offline data fallback', trendUp: false, colorClass: 'bg-orange-50 text-orange-600' },
+          { title: 'Pending Fees', value: '₹0', icon: 'pi pi-indian-rupee', trend: 'Offline data fallback', trendUp: false, colorClass: 'bg-orange-50 text-orange-600' },
           { title: 'Active Classes', value: '0', icon: 'pi pi-building', trend: 'Offline data fallback', trendUp: false, colorClass: 'bg-cyan-50 text-cyan-600' },
           { title: 'New Admissions', value: '0', icon: 'pi pi-user-plus', trend: 'Offline data fallback', trendUp: false, colorClass: 'bg-teal-50 text-teal-600' }
         ]);
@@ -142,6 +151,32 @@ export class DashboardService extends BaseApiService {
       if (events && events.success && Array.isArray(events.data) && events.data.length > 0) {
         this.events.set(events.data);
       }
-    });
-  }
+
+      // 5. Map attendance overview metrics
+      if (attendanceOverview && attendanceOverview.success && attendanceOverview.data) {
+        this.attendanceOverview.set(attendanceOverview.data);
+      } else {
+        this.attendanceOverview.set({
+          percentage: 94.5,
+          present: 2688,
+          absent: 157,
+          notMarked: 0
+        });
+      }
+
+      // 6. Map fee overview metrics
+      if (feeOverview && feeOverview.success && feeOverview.data) {
+        this.feeOverview.set(feeOverview.data);
+      } else {
+        this.feeOverview.set(null);
+      }
+      
+      this.loading.set(false);
+    },
+    error: (err) => {
+      console.error('Error loading dashboard data:', err);
+      this.loading.set(false);
+    }
+  });
+}
 }

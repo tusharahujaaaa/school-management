@@ -7,7 +7,7 @@ import { NotificationData } from '../../models/dashboard.model';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="surface-card p-3 border-round-xl mb-3 flex align-items-start border-1 surface-border hover:surface-hover transition-colors">
+    <div class="surface-card p-3 border-round-xl mb-3 flex align-items-start border-1 surface-border hover:surface-100 transition-colors">
       <i class="pi mt-1 mr-3 text-xl"
          [ngClass]="{
            'pi-exclamation-triangle text-orange-500': notification.type === 'warning',

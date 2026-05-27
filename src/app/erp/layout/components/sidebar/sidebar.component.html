@@ -1,4 +1,4 @@
-<nav class="erp-sidebar-nav h-full overflow-y-auto" role="navigation" aria-label="ERP Navigation">
+<nav class="erp-sidebar-nav h-full overflow-y-auto flex flex-column" [class.sidebar-collapsed]="collapsed" role="navigation" aria-label="ERP Navigation">
 
   <!-- Branding Header -->
   <div class="sidebar-brand px-4 py-4 border-bottom-1 surface-border flex align-items-center gap-3">
@@ -6,7 +6,7 @@
          style="width:2.25rem; height:2.25rem; background:var(--primary-color)">
       <i class="pi pi-graduation-cap text-white"></i>
     </div>
-    <div class="overflow-hidden">
+    <div class="overflow-hidden brand-text">
       <div class="text-900 font-bold text-sm line-height-1 white-space-nowrap text-overflow-ellipsis overflow-hidden">
         {{ branding.schoolName }}
       </div>
@@ -23,6 +23,7 @@
         <span class="text-400 text-xs font-semibold uppercase" style="letter-spacing: 0.06em">
           {{ group.groupLabel }}
         </span>
+        <hr class="group-label-divider border-none border-top-1 surface-border m-0 hidden" />
       </div>
 
       <!-- Nav Items -->
@@ -34,6 +35,7 @@
              [routerLink]="item.route"
              routerLinkActive="nav-item--active"
              [routerLinkActiveOptions]="{ exact: item.exactMatch ?? false }"
+             [title]="collapsed ? item.label : ''"
              class="nav-item flex align-items-center p-3 border-round-lg cursor-pointer no-underline transition-colors transition-duration-150"
              role="menuitem">
             <i *ngIf="item.icon" [class]="item.icon + ' nav-item__icon mr-2 text-base'"></i>
@@ -46,7 +48,7 @@
           <!-- Disabled / Coming-soon item -->
           <span *ngIf="item.disabled"
                 class="nav-item nav-item--disabled flex align-items-center p-3 border-round-lg cursor-not-allowed"
-                [title]="item.badge ?? 'Coming soon'"
+                [title]="item.badge ?? (collapsed ? item.label : 'Coming soon')"
                 role="menuitem" aria-disabled="true">
             <i *ngIf="item.icon" [class]="item.icon + ' nav-item__icon mr-2 text-base'"></i>
             <span class="nav-item__label font-medium text-sm">{{ item.label }}</span>
@@ -67,7 +69,7 @@
       <div class="w-2rem h-2rem border-circle bg-primary-100 flex align-items-center justify-content-center">
         <i class="pi pi-user text-primary text-xs"></i>
       </div>
-      <div class="overflow-hidden flex-grow-1">
+      <div class="overflow-hidden flex-grow-1 footer-text">
         <div class="text-900 text-xs font-semibold white-space-nowrap overflow-hidden text-overflow-ellipsis">Administrator</div>
         <div class="text-400 text-xs">admin&#64;school.erp</div>
       </div>

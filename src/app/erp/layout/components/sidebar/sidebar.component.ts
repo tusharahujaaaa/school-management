@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ERP_SIDEBAR_CONFIG } from './sidebar.config';
@@ -15,6 +15,8 @@ import { ERP_BRANDING_CONFIG } from '../../../config/branding.config';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
+  @Input() collapsed = false;
+
   private authService = inject(AuthService);
   private permissionService = inject(PermissionService);
 

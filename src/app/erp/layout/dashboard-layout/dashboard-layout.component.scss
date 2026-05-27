@@ -27,11 +27,11 @@
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
   &--visible {
-    width: 15.5rem;
+    width: 18rem;
   }
 
   &--hidden {
-    width: 0;
+    width: 5rem;
   }
 }
 
@@ -41,9 +41,18 @@
   overflow-y: auto;
   background: var(--erp-bg-body, var(--surface-ground, #f4f6f8));
 
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-thumb { background: var(--surface-300); border-radius: 10px; }
-  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--surface-300);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 // ─── Mobile ───────────────────────────────────────────────
@@ -57,12 +66,87 @@
     box-shadow: none;
 
     &--visible {
-      width: 15.5rem;
+      width: 18rem;
       box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
     }
 
     &--hidden {
       width: 0;
     }
+  }
+}
+
+// ─── Notifications Dropdown Bell Modal ──────────────────────
+.notifications-dropdown-overlay {
+  position: absolute;
+  top: 2.75rem;
+  right: 0;
+  width: 30.5rem;
+  max-height: 380px;
+  z-index: 1000;
+  transform-origin: top right;
+  animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: var(--surface-card, #ffffff);
+  border: 1px solid var(--surface-border, #e5e7eb);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.notifications-list {
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--surface-300, #cbd5e1);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+// ─── Micro-animations ───────────────────────────────────────
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+// Pulse color background classes for skeleton loading
+.bg-gray-200 {
+  background-color: var(--surface-200, #e2e8f0);
+}
+
+// For mobile responsive positioning
+@media screen and (max-width: 480px) {
+  .notifications-dropdown-overlay {
+    right: -2rem;
+    width: calc(100vw - 2rem);
+    max-width: 20rem;
   }
 }
