@@ -16,19 +16,25 @@
 
   <!-- Navigation Groups -->
   <div class="sidebar-nav-content px-3 py-3">
-    <ng-container *ngFor="let group of filteredGroups()">
+    <ng-container *ngFor="let group of filteredGroups(); let last = last">
 
       <!-- Group Section Label -->
-      <div *ngIf="group.groupLabel" class="sidebar-group-label px-2 mt-4 mb-1 first:mt-2">
+      <div *ngIf="group.groupLabel"
+           (click)="toggleGroup(group.groupLabel)"
+           [class.cursor-pointer]="!collapsed"
+           class="sidebar-group-label px-2 mt-3 mb-1 flex align-items-center justify-content-between select-none">
         <span class="text-400 text-xs font-semibold uppercase" style="letter-spacing: 0.06em">
           {{ group.groupLabel }}
         </span>
+        <i *ngIf="!collapsed"
+           [class]="'text-400 text-xs pi ' + (isGroupCollapsed(group.groupLabel) ? 'pi-chevron-right' : 'pi-chevron-down')">
+        </i>
         <hr class="group-label-divider border-none border-top-1 surface-border m-0 hidden" />
       </div>
 
       <!-- Nav Items -->
-      <ul class="list-none p-0 m-0">
-        <li *ngFor="let item of group.items" class="mb-1">
+      <ul *ngIf="!isGroupCollapsed(group.groupLabel)" class="list-none p-0 m-0 nav-item-list">
+        <li *ngFor="let item of group.items; let lastItem = last" class="nav-item-row">
 
           <!-- Active / Regular link -->
           <a *ngIf="!item.disabled"
@@ -57,8 +63,14 @@
             </span>
           </span>
 
+          <!-- Hairline between child items (not after the last one) -->
+          <hr *ngIf="!lastItem" class="nav-item-divider" />
+
         </li>
       </ul>
+
+      <!-- Hairline between groups (not after the last group) -->
+      <hr *ngIf="!last" class="nav-group-divider" />
 
     </ng-container>
   </div>

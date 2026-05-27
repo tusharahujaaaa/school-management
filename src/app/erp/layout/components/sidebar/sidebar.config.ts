@@ -37,6 +37,58 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
     ]
   },
 
+  // ─── Admissions ───────────────────────────────────────
+  {
+    groupLabel: 'Admissions',
+    items: [
+      {
+        type: 'link',
+        label: 'Admit Student',
+        icon: 'pi pi-user-plus',
+        route: '/erp/admissions/admit',
+        roles: ['admin', 'principal'],
+        permissionKey: 'admissions.create',
+        moduleKey: 'admissions'
+      },
+      {
+        type: 'link',
+        label: 'Admit Bulk Students',
+        icon: 'pi pi-upload',
+        route: '/erp/admissions/bulk',
+        roles: ['admin', 'principal'],
+        permissionKey: 'admissions.bulk_import',
+        moduleKey: 'admissions'
+      },
+      {
+        type: 'link',
+        label: 'Admission Requests',
+        icon: 'pi pi-inbox',
+        route: '/erp/admissions/requests',
+        roles: ['admin', 'principal'],
+        permissionKey: 'admissions.view',
+        moduleKey: 'admissions'
+      },
+      {
+        type: 'link',
+        label: 'Admission Inquiry',
+        icon: 'pi pi-question-circle',
+        route: '/erp/admissions/inquiry',
+        roles: ['admin', 'principal'],
+        permissionKey: 'admissions.view',
+        moduleKey: 'admissions'
+      },
+      {
+        type: 'link',
+        label: 'Print Admission Form',
+        icon: 'pi pi-print',
+        route: '/erp/admissions/print',
+        roles: ['admin', 'principal'],
+        permissionKey: 'admissions.print',
+        moduleKey: 'admissions'
+      }
+    ]
+  },
+
   // ─── Attendance Module ────────────────────────────────────
   {
     groupLabel: 'Attendance',
@@ -256,3 +308,4 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
     ]
   }
 ];
+
