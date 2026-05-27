@@ -19,16 +19,77 @@
 
     <!-- Right: Actions -->
     <div class="topbar-actions flex align-items-center gap-2">
+      <!-- Calendar Date (Desktop) -->
+      <span class="text-600 font-semibold text-sm hidden lg:flex align-items-center gap-2 mr-3 px-3 py-2 bg-gray-50 border-round-xl border-1 surface-border">
+        <i class="pi pi-calendar text-primary"></i>
+        <span>{{ currentDate }}</span>
+      </span>
+
       <!-- Mobile search trigger -->
       <button class="p-link sm:hidden w-2rem h-2rem flex align-items-center justify-content-center" title="Search">
         <i class="pi pi-search text-700"></i>
       </button>
 
-      <!-- Notifications placeholder -->
-      <button class="p-link relative w-2rem h-2rem flex align-items-center justify-content-center hover:surface-100 border-round transition-colors" title="Notifications">
-        <i class="pi pi-bell text-700"></i>
-        <span class="absolute top-0 right-0 w-1rem h-1rem bg-red-500 border-circle flex align-items-center justify-content-center text-white border-2 surface-card" style="font-size:0.55rem; transform: translate(25%, -25%)">3</span>
-      </button>
+      <!-- Notifications Dropdown Trigger and Modal -->
+      <div class="relative bell-trigger-container">
+        <button class="p-link relative w-2rem h-2rem flex align-items-center justify-content-center hover:surface-100 border-round transition-colors" 
+                (click)="toggleBell()" title="Notifications" [class.bg-blue-50]="bellOpen()">
+          <i class="pi pi-bell text-700" [class.text-primary]="bellOpen()"></i>
+          <span class="absolute top-0 right-0 w-0.5rem h-0.5rem bg-red-500 border-circle border-1 surface-card" style="transform: translate(25%, -25%)"></span>
+        </button>
+
+        <!-- Dropdown Card -->
+        <div *ngIf="bellOpen()" class="notifications-dropdown-overlay surface-card shadow-5 border-round-xl border-1 surface-border p-3 flex flex-column">
+          <!-- Dropdown Header -->
+          <div class="flex justify-content-between align-items-center pb-2 border-bottom-1 surface-border mb-3">
+            <span class="text-900 font-bold text-base">Notifications</span>
+            <button class="p-link text-primary font-bold text-xs hover:underline flex align-items-center gap-1" (click)="viewAll()">
+              <span>View All</span>
+              <i class="pi pi-arrow-right text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Dropdown Body -->
+          <div class="notifications-list flex-grow-1 overflow-y-auto pr-1" style="max-height: 280px;" (scroll)="onDropdownScroll($event)">
+            <!-- Loading state Skeletons -->
+            <div *ngIf="notificationService.loading() && notificationService.notifications().length === 0" class="flex flex-column gap-3 py-2">
+              <div *ngFor="let i of [1,2,3]" class="flex align-items-start gap-3 p-3 border-round-xl surface-50 border-1 surface-border">
+                <div class="w-2rem h-2rem border-circle bg-gray-200 flex-shrink-0 animate-pulse"></div>
+                <div class="flex-grow-1 flex flex-column gap-2">
+                  <div class="h-1rem bg-gray-200 border-round animate-pulse w-90"></div>
+                  <div class="h-0.5rem bg-gray-200 border-round animate-pulse w-40"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div *ngIf="!notificationService.loading() && notificationService.notifications().length === 0" class="flex flex-column align-items-center justify-content-center py-5 text-center">
+              <div class="w-3rem h-3rem border-circle bg-gray-100 flex align-items-center justify-content-center mb-3">
+                <i class="pi pi-bell-slash text-400 text-xl"></i>
+              </div>
+              <span class="text-700 font-semibold text-sm">No notifications yet</span>
+              <span class="text-500 text-xs mt-1">We'll alert you when something happens.</span>
+            </div>
+
+            <!-- Notification cards -->
+            <div *ngIf="notificationService.notifications().length > 0" class="flex flex-column">
+              <app-notification-card *ngFor="let notif of notificationService.notifications()" [notification]="notif"></app-notification-card>
+            </div>
+
+            <!-- Loading more spinner -->
+            <div *ngIf="notificationService.loading() && notificationService.notifications().length > 0" class="text-center py-2 text-500 text-xs">
+              <i class="pi pi-spin pi-spinner mr-2 text-primary"></i>Loading more...
+            </div>
+
+            <!-- Scroll load trigger fallback (if user doesn't scroll) -->
+            <div *ngIf="notificationService.hasMore() && !notificationService.loading()" class="text-center mt-2 pb-1">
+              <button class="p-link text-primary text-xs font-semibold hover:underline py-1" (click)="loadMore()">
+                Load More
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Logout -->
       <button class="p-link w-2rem h-2rem flex align-items-center justify-content-center hover:surface-100 border-round transition-colors" (click)="logout()" title="Sign out">
@@ -45,7 +106,7 @@
            [class.erp-sidebar--visible]="sidebarVisible()"
            [class.erp-sidebar--hidden]="!sidebarVisible()"
            role="complementary" aria-label="Navigation sidebar">
-      <app-erp-sidebar></app-erp-sidebar>
+      <app-erp-sidebar [collapsed]="!sidebarVisible()"></app-erp-sidebar>
     </aside>
 
     <!-- Main Content -->

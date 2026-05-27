@@ -35,6 +35,12 @@ export const erpRoutes: Routes = [
         data: { permission: ERP_PERMISSIONS.DASHBOARD.VIEW }
       },
       {
+        path: 'notifications',
+        loadComponent: () => import('../pages/notifications/notifications.component').then(m => m.NotificationsComponent),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.NOTIFICATIONS.VIEW }
+      },
+      {
         path: 'attendance',
         loadChildren: () => import('../domains/attendance/routes/attendance.routes').then(m => m.attendanceRoutes),
         canActivate: [permissionGuard],

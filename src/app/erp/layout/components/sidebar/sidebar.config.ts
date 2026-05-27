@@ -24,6 +24,15 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         roles: ['admin', 'principal', 'teacher', 'accountant', 'hr'],
         permissionKey: 'dashboard.view',
         moduleKey: 'core'
+      },
+      {
+        type: 'link',
+        label: 'Notifications',
+        icon: 'pi pi-bell',
+        route: '/erp/notifications',
+        roles: ['admin', 'principal', 'teacher', 'accountant', 'hr'],
+        permissionKey: 'notifications.view',
+        moduleKey: 'core'
       }
     ]
   },
