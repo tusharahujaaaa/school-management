@@ -19,6 +19,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, ErpPermission[]> = {
     ...Object.values(ERP_PERMISSIONS.STAFF),
     ...Object.values(ERP_PERMISSIONS.FEES),
     ...Object.values(ERP_PERMISSIONS.SETTINGS),
+    ...Object.values(ERP_PERMISSIONS.ADMISSIONS),
     ERP_PERMISSIONS.NOTIFICATIONS.VIEW,
   ] as ErpPermission[],
 
