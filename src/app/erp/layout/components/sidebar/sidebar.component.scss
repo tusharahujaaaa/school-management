@@ -22,6 +22,16 @@
 // ─── Group Label ─────────────────────────────────────────
 .sidebar-group-label {
   &:first-of-type { margin-top: 0.5rem; }
+
+  &:hover:not(.sidebar-collapsed *) {
+    span, i {
+      color: var(--text-color) !important;
+    }
+  }
+
+  span, i {
+    transition: color 0.15s ease;
+  }
 }
 
 // ─── Nav Item ────────────────────────────────────────────
@@ -64,6 +74,24 @@
     color: var(--text-color-secondary);
   }
 }
+
+// ─── Hairlines ───────────────────────────────────────────
+// Between child nav items inside an expanded group
+.nav-item-divider {
+  border: none;
+  border-top: 1px solid var(--surface-border);
+  opacity: 0.6;
+  margin: 0;
+}
+
+// Between sibling groups in the nav content area
+.nav-group-divider {
+  border: none;
+  border-top: 1px solid var(--surface-border);
+  opacity: 0.5;
+  margin: 0.5rem 0.25rem 0;
+}
+
 
 // ─── Footer ──────────────────────────────────────────────
 .sidebar-footer {
