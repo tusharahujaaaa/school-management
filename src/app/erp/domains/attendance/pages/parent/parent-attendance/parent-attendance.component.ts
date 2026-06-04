@@ -39,6 +39,7 @@ export class ParentAttendanceComponent implements OnInit {
 
   // Low attendance alert for this child (computed dynamically from stats)
   alert = computed(() => {
+    
     const childVal = this.child();
     const pct = childVal.attendancePercentage;
     const total = childVal.totalDays;
