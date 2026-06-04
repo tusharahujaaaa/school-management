@@ -37,6 +37,12 @@ export const ERP_PERMISSIONS = {
   },
   NOTIFICATIONS: {
     VIEW: 'notifications.view',
+  },
+  ADMISSIONS: {
+    VIEW: 'admissions.view',
+    CREATE: 'admissions.create',
+    BULK_IMPORT: 'admissions.bulk_import',
+    PRINT: 'admissions.print',
   }
 } as const;
 
@@ -61,4 +67,8 @@ export type ErpPermission =
   | typeof ERP_PERMISSIONS.FEES.REPORTS
   | typeof ERP_PERMISSIONS.SETTINGS.VIEW
   | typeof ERP_PERMISSIONS.SETTINGS.EDIT
-  | typeof ERP_PERMISSIONS.NOTIFICATIONS.VIEW;
+  | typeof ERP_PERMISSIONS.NOTIFICATIONS.VIEW
+  | typeof ERP_PERMISSIONS.ADMISSIONS.VIEW
+  | typeof ERP_PERMISSIONS.ADMISSIONS.CREATE
+  | typeof ERP_PERMISSIONS.ADMISSIONS.BULK_IMPORT
+  | typeof ERP_PERMISSIONS.ADMISSIONS.PRINT;

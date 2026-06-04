@@ -1,6 +1,7 @@
-import { Component, inject, computed, Input } from '@angular/core';
+import { Component, inject, computed, Input, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 import { ERP_SIDEBAR_CONFIG } from './sidebar.config';
 import { SidebarGroup, SidebarNavItem } from './sidebar.model';
 import { AuthService } from '../../../domains/auth/services/auth.service';
@@ -14,41 +15,26 @@ import { ERP_BRANDING_CONFIG } from '../../../config/branding.config';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
   @Input() collapsed = false;
 
   private authService = inject(AuthService);
   private permissionService = inject(PermissionService);
+  private router = inject(Router);
+  private routerSub?: Subscription;
 
   branding = ERP_BRANDING_CONFIG;
 
-  /**
-   * Reads the current role directly from AuthService signal.
-   */
   readonly currentRole = this.authService.currentRole;
 
-  /**
-   * Filtered navigation groups — items are filtered by permissions and roles.
-   * Priority: permissionKey > roles > visible to all.
-   */
   readonly filteredGroups = computed<SidebarGroup[]>(() => {
     const role = this.currentRole();
-    
     return ERP_SIDEBAR_CONFIG
       .map(group => ({
         ...group,
         items: group.items.filter(item => {
-          // 1. Check by Permission Key (Primary)
-          if (item.permissionKey) {
-            return this.permissionService.hasPermission(item.permissionKey);
-          }
-
-          // 2. Check by Roles (Legacy/Fallback)
-          if (item.roles && item.roles.length > 0) {
-            return item.roles.includes(role);
-          }
-
-          // 3. Visible to all if no constraints
+          if (item.permissionKey) return this.permissionService.hasPermission(item.permissionKey);
+          if (item.roles && item.roles.length > 0) return item.roles.includes(role);
           return true;
         })
       }))
@@ -58,4 +44,50 @@ export class SidebarComponent {
   isLink(item: SidebarNavItem): boolean {
     return item.type === 'link';
   }
+
+  // Tracks which groups are explicitly expanded (all collapsed by default)
+  expandedGroups = signal<Record<string, boolean>>({});
+
+  ngOnInit() {
+    // Expand the active group immediately on load (handles reloads / direct URL access)
+    this.expandActiveGroup(this.router.url);
+
+    // Re-expand whenever navigation completes (handles in-app navigation)
+    this.routerSub = this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: any) => this.expandActiveGroup(e.urlAfterRedirects ?? e.url));
+  }
+
+  ngOnDestroy() {
+    this.routerSub?.unsubscribe();
+  }
+
+  /**
+   * Walks filtered groups and expands the one whose items include a route
+   * that matches the beginning of the given URL.
+   */
+  private expandActiveGroup(url: string) {
+    const cleanUrl = url.split('?')[0]; // strip query params
+    for (const group of this.filteredGroups()) {
+      if (!group.groupLabel) continue;
+      const hasActive = group.items.some(item => item.route && cleanUrl.startsWith(item.route));
+      if (hasActive) {
+        this.expandedGroups.update(s => ({ ...s, [group.groupLabel!]: true }));
+      }
+    }
+  }
+
+  toggleGroup(label?: string) {
+    if (!label || this.collapsed) return;
+    this.expandedGroups.update((states: Record<string, boolean>) => ({
+      ...states,
+      [label]: !states[label]
+    }));
+  }
+
+  isGroupCollapsed(label?: string): boolean {
+    if (!label || this.collapsed) return false;
+    return !this.expandedGroups()[label];
+  }
 }
+
