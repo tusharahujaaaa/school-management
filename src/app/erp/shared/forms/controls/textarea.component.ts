@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { FormFieldComponent } from '../wrappers/form-field.component';
 import { BaseControlValueAccessor } from './base-control';
 
 @Component({
   selector: 'erp-textarea',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextareaModule, FormFieldComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TextareaModule, FormFieldComponent],
   template: `
     <app-erp-form-field 
       [label]="label" 
@@ -17,7 +17,7 @@ import { BaseControlValueAccessor } from './base-control';
       [control]="ngControl">
       
       <textarea
-        pInputTextarea
+        pTextarea
         [(ngModel)]="value"
         (ngModelChange)="onModelChange($event)"
         (blur)="onTouched()"

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { FormFieldComponent } from '../wrappers/form-field.component';
 import { BaseControlValueAccessor } from './base-control';
 import { ERPFormOption } from '../models/form.models';
@@ -9,7 +9,7 @@ import { ERPFormOption } from '../models/form.models';
 @Component({
   selector: 'erp-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, DropdownModule, FormFieldComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectModule, FormFieldComponent],
   template: `
     <app-erp-form-field 
       [label]="label" 
@@ -17,7 +17,7 @@ import { ERPFormOption } from '../models/form.models';
       [helperText]="helperText" 
       [control]="ngControl">
       
-      <p-dropdown
+      <p-select
         [(ngModel)]="value"
         (ngModelChange)="onModelChange($event)"
         (onBlur)="onTouched()"
@@ -37,7 +37,7 @@ import { ERPFormOption } from '../models/form.models';
             <span>{{ option.label }}</span>
           </div>
         </ng-template>
-      </p-dropdown>
+      </p-select>
 
     </app-erp-form-field>
   `

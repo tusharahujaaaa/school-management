@@ -1,113 +1,267 @@
-<div class="attendance-reports-page">
+<p-toast></p-toast>
+
+<div class="attendance-reports-page animation-duration-200 fadein">
 
   <!-- Header -->
-  <div class="surface-card p-4 border-round-xl shadow-1 mb-4">
-    <div class="flex flex-column md:flex-row justify-content-between align-items-md-center">
+  <div class="surface-card p-4 border-round-xl shadow-1 mb-4 border-1 surface-border">
+    <div class="flex flex-column md:flex-row justify-content-between align-items-md-center gap-3">
       <div>
         <h2 class="text-900 font-bold text-2xl m-0 mb-1">Attendance Reports</h2>
-        <span class="text-500">Generate, view and export attendance reports</span>
+        <span class="text-500">Generate, filter, and export school-wide attendance metrics</span>
       </div>
-      <button pButton label="Export All" icon="pi pi-download" class="p-button-outlined mt-3 md:mt-0"></button>
+      <button pButton label="Export Active Report" icon="pi pi-download" 
+        class="p-button-outlined border-round-lg shadow-sm" (click)="exportCSV()"></button>
     </div>
   </div>
 
   <!-- Summary Stats -->
   <div class="grid mb-4">
-    <div class="col-12 md:col-3">
-      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-green-500">
+    <div class="col-12 sm:col-6 lg:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-green-500 border-1 border-300">
         <div class="text-green-500 font-bold text-4xl mb-1">{{ stats().overallPercentage }}%</div>
-        <span class="text-500 font-medium">Overall Attendance</span>
+        <span class="text-600 font-semibold text-sm">Overall Attendance</span>
       </div>
     </div>
-    <div class="col-12 md:col-3">
-      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-blue-500">
+    <div class="col-12 sm:col-6 lg:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-blue-500 border-1 border-300">
         <div class="text-blue-600 font-bold text-4xl mb-1">{{ stats().presentToday }}</div>
-        <span class="text-500 font-medium">Students Present Today</span>
+        <span class="text-600 font-semibold text-sm">Students Present Today</span>
       </div>
     </div>
-    <div class="col-12 md:col-3">
-      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-red-500">
+    <div class="col-12 sm:col-6 lg:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-red-500 border-1 border-300">
         <div class="text-red-500 font-bold text-4xl mb-1">{{ stats().absentToday }}</div>
-        <span class="text-500 font-medium">Students Absent Today</span>
+        <span class="text-600 font-semibold text-sm">Students Absent Today</span>
       </div>
     </div>
-    <div class="col-12 md:col-3">
-      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-top-orange-500">
+    <div class="col-12 sm:col-6 lg:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-orange-500 border-1 border-300">
         <div class="text-orange-500 font-bold text-4xl mb-1">{{ alerts().length }}</div>
-        <span class="text-500 font-medium">Low Attendance Alerts</span>
+        <span class="text-600 font-semibold text-sm">Low Attendance Alerts</span>
       </div>
     </div>
   </div>
 
-  <!-- Report Cards Grid -->
-  <div class="grid mb-4">
-    <div class="col-12 md:col-6 lg:col-4" *ngFor="let report of reports()">
-      <div class="surface-card shadow-1 border-round-xl p-4 h-full hover:shadow-2 transition-all cursor-pointer group">
-        <div class="flex align-items-start justify-content-between mb-3">
-          <div class="flex align-items-center justify-content-center border-round-xl w-3rem h-3rem" [ngClass]="report.colorClass">
+  <!-- Interactive Filters Card -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border">
+    <h3 class="m-0 text-900 font-semibold text-lg mb-3 flex align-items-center gap-2">
+      <i class="pi pi-filter text-primary text-xl"></i> Filter Criteria
+    </h3>
+    <div class="grid">
+      <div class="col-12 md:col-3">
+        <label class="block text-700 font-medium mb-2">Report Type</label>
+        <p-select [options]="reportOptions" [ngModel]="selectedReportType()" (ngModelChange)="selectedReportType.set($event)"
+          styleClass="w-full border-round-lg" placeholder="Select Report"></p-select>
+      </div>
+      <div class="col-12 md:col-3">
+        <label class="block text-700 font-medium mb-2">Class</label>
+        <p-select [options]="classOptions" [ngModel]="selectedClass()" (ngModelChange)="selectedClass.set($event)"
+          styleClass="w-full border-round-lg" placeholder="Select Class"></p-select>
+      </div>
+      <div class="col-12 md:col-3">
+        <label class="block text-700 font-medium mb-2">Section</label>
+        <p-select [options]="sectionOptions" [ngModel]="selectedSection()" (ngModelChange)="selectedSection.set($event)"
+          styleClass="w-full border-round-lg" placeholder="Select Section"></p-select>
+      </div>
+      <div class="col-12 md:col-3">
+        <label class="block text-700 font-medium mb-2">Month</label>
+        <p-select [options]="monthOptions" [ngModel]="selectedMonth()" (ngModelChange)="selectedMonth.set($event)"
+          styleClass="w-full border-round-lg" placeholder="Select Month"></p-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Cards Grid (Available templates) -->
+  <div class="grid mb-4" *ngIf="selectedReportType() === 'daily'">
+    <div class="col-12" *ngFor="let report of reports()">
+      <div class="surface-card shadow-1 border-round-xl p-4 mb-3 border-1 surface-border flex flex-column md:flex-row justify-content-between align-items-md-center gap-3">
+        <div class="flex align-items-start gap-3">
+          <div class="flex align-items-center justify-content-center border-round-xl w-3rem h-3rem shadow-sm" [ngClass]="report.colorClass">
             <i [class]="report.icon + ' text-xl'"></i>
           </div>
-          <button pButton icon="pi pi-download" class="p-button-text p-button-sm" title="Export report"></button>
+          <div>
+            <h4 class="text-900 font-semibold m-0 mb-1 text-md">{{ report.title }}</h4>
+            <p class="text-500 m-0 text-sm line-height-3">{{ report.description }}</p>
+          </div>
         </div>
-        <h3 class="text-900 font-semibold m-0 mb-2">{{ report.title }}</h3>
-        <p class="text-500 m-0 text-sm line-height-3 mb-4">{{ report.description }}</p>
         <div class="flex gap-2">
-          <button pButton label="Generate" icon="pi pi-chart-bar" class="p-button-sm p-button-outlined flex-grow-1"></button>
-          <button pButton icon="pi pi-download" class="p-button-sm p-button-outlined" title="Export"></button>
+          <button pButton label="Generate" icon="pi pi-chart-bar" class="p-button-sm p-button-outlined border-round-lg" (click)="generateReport(report.id === 'r5' ? 'low' : report.id === 'r4' ? 'staff' : 'logs')"></button>
+          <button pButton icon="pi pi-download" class="p-button-sm p-button-outlined border-round-lg" (click)="exportCSV()"></button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Low Attendance Students Section -->
-  <div class="surface-card shadow-1 border-round-xl p-4">
+  <!-- Report View: Daily & Monthly Class summaries -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border" *ngIf="selectedReportType() === 'daily' || selectedReportType() === 'monthly'">
     <div class="flex justify-content-between align-items-center mb-4">
-      <div class="flex align-items-center gap-2">
-        <i class="pi pi-exclamation-triangle text-orange-500 text-xl"></i>
-        <h3 class="m-0 text-900 font-bold text-lg">Students Below 75% Attendance</h3>
-        <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 border-round">{{ alerts().length }} students</span>
-      </div>
-      <button pButton label="Export List" icon="pi pi-download" class="p-button-sm p-button-outlined p-button-danger"></button>
+      <h3 class="m-0 text-900 font-bold text-lg">Class-wise Roster Summaries ({{ selectedMonth() }})</h3>
+      <span class="text-sm font-semibold text-500">Filtered: {{ selectedClass() }}</span>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full" style="border-collapse: collapse;">
         <thead>
-          <tr class="surface-50">
-            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Student</th>
-            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Class</th>
-            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Present Days</th>
-            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Attendance %</th>
-            <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Severity</th>
+          <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
+            <th class="p-3 text-left">Class Unit</th>
+            <th class="p-3 text-center">Total Students</th>
+            <th class="p-3 text-center text-green-700 bg-green-50 border-round-top-lg">Present</th>
+            <th class="p-3 text-center text-red-700 bg-red-50 border-round-top-lg">Absent</th>
+            <th class="p-3 text-center text-orange-700 bg-orange-50 border-round-top-lg">Late</th>
+            <th class="p-3 text-center">Attendance %</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let alert of alerts()" class="hover:surface-50 transition-colors border-bottom-1 surface-border">
+          <tr *ngFor="let summary of filteredSummaries()" class="hover:surface-50 transition-all border-bottom-1 surface-border">
+            <td class="p-3 font-semibold text-900">{{ summary.class }} — {{ summary.section }}</td>
+            <td class="p-3 text-center text-700">{{ summary.totalStudents }}</td>
+            <td class="p-3 text-center text-green-800 bg-green-50 font-bold">{{ summary.present }}</td>
+            <td class="p-3 text-center text-red-800 bg-red-50 font-bold">{{ summary.absent }}</td>
+            <td class="p-3 text-center text-orange-800 bg-orange-50 font-bold">{{ summary.late }}</td>
             <td class="p-3">
-              <div class="flex align-items-center gap-2">
-                <div class="border-circle flex align-items-center justify-content-center text-xs font-bold"
-                     [ngClass]="alert.severity === 'critical' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600'"
-                     style="width:2rem;height:2rem">
-                  {{ alert.studentName.charAt(0) }}
+              <div class="flex align-items-center justify-content-center gap-3">
+                <div class="w-6rem bg-surface-200 border-round hidden md:block" style="height: 6px;">
+                  <div class="border-round h-full"
+                    [ngClass]="summary.percentage >= 90 ? 'bg-green-500' : 'bg-orange-500'"
+                    [style.width.%]="summary.percentage"></div>
                 </div>
-                <span class="text-900 font-medium">{{ alert.studentName }}</span>
+                <span class="font-bold text-sm" [ngClass]="summary.percentage >= 90 ? 'text-green-600' : 'text-orange-600'">
+                  {{ summary.percentage }}%
+                </span>
               </div>
             </td>
-            <td class="p-3 text-700">{{ alert.class }}-{{ alert.section }}</td>
-            <td class="p-3 text-700">{{ alert.presentDays }}/{{ alert.totalDays }}</td>
+          </tr>
+          <tr *ngIf="filteredSummaries().length === 0">
+            <td colspan="6" class="p-8 text-center text-500 italic">No class summaries matched your filter. Try changing class options.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Report View: Low Attendance Alerts -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border" *ngIf="selectedReportType() === 'low'">
+    <div class="flex justify-content-between align-items-center mb-4">
+      <div class="flex align-items-center gap-2">
+        <i class="pi pi-exclamation-triangle text-orange-500 text-xl animate-pulse"></i>
+        <h3 class="m-0 text-900 font-bold text-lg">Students Under 75% Attendance</h3>
+        <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 border-round-md shadow-sm">{{ filteredAlerts().length }} Student(s)</span>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full" style="border-collapse: collapse;">
+        <thead>
+          <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
+            <th class="p-3 text-left">Student</th>
+            <th class="p-3 text-left">Class</th>
+            <th class="p-3 text-center">Present Days</th>
+            <th class="p-3 text-center">Attendance %</th>
+            <th class="p-3 text-center">Severity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alert of filteredAlerts()" class="hover:surface-50 transition-colors border-bottom-1 surface-border">
             <td class="p-3">
+              <div class="flex align-items-center gap-3">
+                <div class="border-circle flex align-items-center justify-content-center text-sm font-bold shadow-sm"
+                     [ngClass]="alert.severity === 'critical' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600'"
+                     style="width:2.5rem;height:2.5rem">
+                  {{ alert.studentName.charAt(0) }}
+                </div>
+                <div>
+                  <span class="text-900 font-semibold block">{{ alert.studentName }}</span>
+                  <span class="text-400 text-xs">ID: s_0{{ alert.studentId }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="p-3 text-700 font-semibold">{{ alert.class }}-{{ alert.section }}</td>
+            <td class="p-3 text-center text-700">{{ alert.presentDays }}/{{ alert.totalDays }} days</td>
+            <td class="p-3 text-center">
               <span class="font-bold text-lg" [ngClass]="alert.severity === 'critical' ? 'text-red-500' : 'text-orange-500'">
                 {{ alert.attendancePercentage }}%
               </span>
             </td>
-            <td class="p-3">
-              <span class="px-2 py-1 border-round text-xs font-bold"
-                    [ngClass]="alert.severity === 'critical' ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'">
+            <td class="p-3 text-center">
+              <span class="px-3 py-1 border-round-lg text-xs font-bold shadow-sm"
+                    [ngClass]="alert.severity === 'critical' ? 'bg-red-100 text-red-700 border-1 border-red-200' : 'bg-orange-100 text-orange-700 border-1 border-orange-200'">
                 {{ alert.severity | titlecase }}
               </span>
+            </td>
+          </tr>
+          <tr *ngIf="filteredAlerts().length === 0">
+            <td colspan="5" class="p-8 text-center text-500 italic">No low attendance students flagged for this class filter unit. Good standing!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Report View: Staff Attendance -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border" *ngIf="selectedReportType() === 'staff'">
+    <div class="flex justify-content-between align-items-center mb-4">
+      <h3 class="m-0 text-900 font-bold text-lg">Staff & Faculty Attendance</h3>
+      <span class="text-sm font-semibold text-500">Academic Term: 2026-27</span>
+    </div>
+    <div class="grid">
+      <div class="col-12 md:col-6 lg:col-4" *ngFor="let member of svc.staff()">
+        <div class="border-round-xl p-4 surface-card border-1 border-300 shadow-1 hover:shadow-2 transition-all flex flex-column gap-3">
+          <div class="flex justify-content-between align-items-start">
+            <div class="flex align-items-center gap-3">
+              <div class="border-circle bg-purple-100 text-purple-700 font-bold flex align-items-center justify-content-center text-sm shadow-sm" style="width: 2.5rem; height: 2.5rem;">
+                {{ member.name.charAt(0) }}
+              </div>
+              <div>
+                <h5 class="text-900 font-bold m-0 text-md">{{ member.name }}</h5>
+                <span class="text-500 text-xs">{{ member.employeeId }}</span>
+              </div>
+            </div>
+            <app-erp-status-badge label="Present" severity="success"></app-erp-status-badge>
+          </div>
+          <div class="flex justify-content-between text-sm text-600 border-top-1 surface-border pt-3">
+            <span>Department: <strong>{{ member.department }}</strong></span>
+            <span>Role: <strong>{{ member.role }}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report View: Logs -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border" *ngIf="selectedReportType() === 'logs'">
+    <div class="flex justify-content-between align-items-center mb-4">
+      <h3 class="m-0 text-900 font-bold text-lg">System Attendance Logs</h3>
+      <span class="text-sm font-semibold text-500">Historical logs</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full" style="border-collapse: collapse;">
+        <thead>
+          <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
+            <th class="p-3 text-left">Date</th>
+            <th class="p-3 text-left">Class Unit</th>
+            <th class="p-3 text-center">Total Students</th>
+            <th class="p-3 text-center">Present / Absent</th>
+            <th class="p-3 text-center">Attendance %</th>
+            <th class="p-3 text-left">Marked By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of svc.history()" class="hover:surface-50 transition-colors border-bottom-1 surface-border">
+            <td class="p-3 text-900 font-semibold">{{ log.date }}</td>
+            <td class="p-3 text-700 font-semibold">{{ log.class }} — {{ log.section }}</td>
+            <td class="p-3 text-center text-700">{{ log.totalStudents }}</td>
+            <td class="p-3 text-center">
+              <span class="text-green-600 font-bold">{{ log.present }}</span> / 
+              <span class="text-red-500 font-bold">{{ log.absent }}</span>
+            </td>
+            <td class="p-3 text-center">
+              <span class="font-bold text-green-600">{{ log.percentage }}%</span>
+            </td>
+            <td class="p-3 text-600 font-medium">
+              <i class="pi pi-user text-xs mr-1 text-primary"></i> {{ log.markedBy }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
+
 </div>

@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { FormFieldComponent } from '../wrappers/form-field.component';
 import { BaseControlValueAccessor } from './base-control';
 
 @Component({
   selector: 'erp-date-picker',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, CalendarModule, FormFieldComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DatePickerModule, FormFieldComponent],
   template: `
     <app-erp-form-field 
       [label]="label" 
@@ -16,7 +16,7 @@ import { BaseControlValueAccessor } from './base-control';
       [helperText]="helperText" 
       [control]="ngControl">
       
-      <p-calendar
+      <p-datepicker
         [(ngModel)]="value"
         (ngModelChange)="onModelChange($event)"
         (onBlur)="onTouched()"
@@ -27,9 +27,8 @@ import { BaseControlValueAccessor } from './base-control';
         [showTime]="showTime"
         [selectionMode]="selectionMode"
         styleClass="w-full"
-        inputStyleClass="w-full"
         [ngClass]="{'p-invalid': ngControl?.invalid && ngControl?.touched}"
-      ></p-calendar>
+      ></p-datepicker>
 
     </app-erp-form-field>
   `

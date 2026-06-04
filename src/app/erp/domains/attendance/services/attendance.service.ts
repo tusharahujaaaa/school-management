@@ -19,13 +19,107 @@ export class AttendanceService {
 
   private readonly USE_MOCK = false;
 
+  private safeGetItem(key: string): string | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem(key);
+    }
+    return null;
+  }
+
+  private safeSetItem(key: string, value: string): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(key, value);
+    }
+  }
+
+  private loadSheetStatuses(): Map<string, 'DRAFT' | 'SUBMITTED' | 'LOCKED' | 'EDITED'> {
+    const data = this.safeGetItem('erp_attendance_sheet_statuses');
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        return new Map(Object.entries(parsed));
+      } catch (e) {
+        console.error('Error parsing sheet statuses from localStorage:', e);
+      }
+    }
+    return new Map();
+  }
+
+  private saveSheetStatuses(map: Map<string, 'DRAFT' | 'SUBMITTED' | 'LOCKED' | 'EDITED'>) {
+    const obj = Object.fromEntries(map.entries());
+    this.safeSetItem('erp_attendance_sheet_statuses', JSON.stringify(obj));
+  }
+
   // ─── Signals ──────────────────────────────────────
   readonly classes = signal<string[]>([]);
   readonly sections = signal<string[]>([]);
   private _allClasses = signal<any[]>([]);
 
-  readonly dashboardStats = signal<AttendanceDashboardStats>(MOCK_ATTENDANCE_STATS);
-  readonly classSummaries = signal<ClassAttendanceSummary[]>(MOCK_CLASS_SUMMARIES);
+  readonly sheetStatuses = signal<Map<string, 'DRAFT' | 'SUBMITTED' | 'LOCKED' | 'EDITED'>>(this.loadSheetStatuses());
+
+  readonly classSummaries = computed(() => {
+    const summaries = [...MOCK_CLASS_SUMMARIES];
+    const activeClass = this.selectedClass();
+    const activeSec = this.selectedSection();
+    const summary = this.attendanceSummary();
+
+    if (activeClass && activeSec) {
+      const idx = summaries.findIndex(s => s.class === activeClass && s.section === activeSec);
+      if (idx >= 0) {
+        const total = summary.total;
+        if (total > 0) {
+          const present = summary.present;
+          const absent = summary.absent;
+          const late = summary.late;
+          const leave = summary.leave;
+          const pct = Math.round((present / total) * 1000) / 10;
+          
+          summaries[idx] = {
+            class: activeClass,
+            section: activeSec,
+            totalStudents: total,
+            present,
+            absent,
+            late,
+            leave,
+            percentage: pct
+          };
+        }
+      }
+    }
+    return summaries;
+  });
+
+  readonly dashboardStats = computed(() => {
+    const base = { ...MOCK_ATTENDANCE_STATS };
+    const activeSummaries = this.classSummaries();
+    
+    let totalStudents = 0;
+    let present = 0;
+    let absent = 0;
+    let late = 0;
+    let leave = 0;
+    
+    activeSummaries.forEach(s => {
+      totalStudents += s.totalStudents;
+      present += s.present;
+      absent += s.absent;
+      late += s.late;
+      leave += s.leave;
+    });
+
+    if (totalStudents > 0) {
+      base.totalStudents = totalStudents;
+      base.presentToday = present;
+      base.absentToday = absent;
+      base.lateToday = late;
+      base.onLeave = leave;
+      base.overallPercentage = Math.round((present / totalStudents) * 1000) / 10;
+    }
+    
+    return base;
+  });
+
   readonly history = signal<AttendanceHistoryRecord[]>(MOCK_ATTENDANCE_HISTORY);
   readonly lowAttendanceAlerts = signal<LowAttendanceAlert[]>(MOCK_LOW_ATTENDANCE);
   readonly reports = signal<AttendanceReport[]>(MOCK_REPORTS);
@@ -45,6 +139,22 @@ export class AttendanceService {
   readonly staff = signal<StaffMember[]>(MOCK_STAFF);
 
   // ─── Computed ─────────────────────────────────────
+  readonly currentClassId = computed(() => {
+    return this.getClassId(this.selectedClass(), this.selectedSection());
+  });
+
+  readonly currentClassIdAndDateKey = computed(() => {
+    const classId = this.currentClassId();
+    const date = this.selectedDate();
+    return classId && date ? `${classId}_${date}` : null;
+  });
+
+  readonly currentSheetStatus = computed(() => {
+    const key = this.currentClassIdAndDateKey();
+    if (!key) return 'DRAFT';
+    return this.sheetStatuses().get(key) || 'DRAFT';
+  });
+
   readonly filteredStudents = computed(() => {
     const q = this.studentSearchQuery().toLowerCase();
     if (!q) return this.students();
@@ -93,6 +203,16 @@ export class AttendanceService {
         this._studentRecords.set(new Map());
       }
     }, { allowSignalWrites: true });
+  }
+
+  // ─── Helpers & Validations ────────────────────────
+  isFutureDate(dateStr: string): boolean {
+    if (!dateStr) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(dateStr);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate.getTime() > today.getTime();
   }
 
   // ─── Setup Data Loading ────────────────────────────
@@ -146,8 +266,10 @@ export class AttendanceService {
 
         // Pre-populate marked records
         const recordsMap = new Map<string, StudentAttendanceRecord>();
+        let hasMarked = false;
         attendanceData.forEach((item: any) => {
           if (item.status) {
+            hasMarked = true;
             recordsMap.set(item.studentId, {
               studentId: item.studentId,
               status: item.status.toLowerCase() as AttendanceStatus,
@@ -156,26 +278,84 @@ export class AttendanceService {
           }
         });
         this._studentRecords.set(recordsMap);
+
+        // Initialize sheet status dynamically
+        const key = this.currentClassIdAndDateKey();
+        if (key && !this.sheetStatuses().has(key)) {
+          this.sheetStatuses.update(map => {
+            const updated = new Map(map);
+            updated.set(key, hasMarked ? 'SUBMITTED' : 'DRAFT');
+            this.saveSheetStatuses(updated);
+            return updated;
+          });
+        }
       }
     });
   }
 
   markStudentAttendance(studentId: string, status: AttendanceStatus, remarks?: string) {
+    if (this.currentSheetStatus() === 'LOCKED') {
+      throw new Error('This attendance session is locked and cannot be modified.');
+    }
+    if (this.isFutureDate(this.selectedDate())) {
+      throw new Error('Cannot mark attendance for future dates.');
+    }
+
     this._studentRecords.update(map => {
       const updated = new Map(map);
       updated.set(studentId, { studentId, status, remarks });
       return updated;
     });
+
+    const key = this.currentClassIdAndDateKey();
+    if (key && this.currentSheetStatus() === 'SUBMITTED') {
+      this.sheetStatuses.update(map => {
+        const updated = new Map(map);
+        updated.set(key, 'EDITED');
+        this.saveSheetStatuses(updated);
+        return updated;
+      });
+    }
   }
 
   markAllStudents(status: AttendanceStatus) {
+    if (this.currentSheetStatus() === 'LOCKED') {
+      throw new Error('This attendance session is locked and cannot be modified.');
+    }
+    if (this.isFutureDate(this.selectedDate())) {
+      throw new Error('Cannot mark attendance for future dates.');
+    }
+
     const map = new Map<string, StudentAttendanceRecord>();
     this.students().forEach(s => map.set(s.id, { studentId: s.id, status }));
     this._studentRecords.set(map);
+
+    const key = this.currentClassIdAndDateKey();
+    if (key && this.currentSheetStatus() === 'SUBMITTED') {
+      this.sheetStatuses.update(map => {
+        const updated = new Map(map);
+        updated.set(key, 'EDITED');
+        this.saveSheetStatuses(updated);
+        return updated;
+      });
+    }
   }
 
   resetStudentAttendance() {
+    if (this.currentSheetStatus() === 'LOCKED') {
+      throw new Error('This attendance session is locked and cannot be modified.');
+    }
     this._studentRecords.set(new Map());
+
+    const key = this.currentClassIdAndDateKey();
+    if (key && this.currentSheetStatus() === 'SUBMITTED') {
+      this.sheetStatuses.update(map => {
+        const updated = new Map(map);
+        updated.set(key, 'EDITED');
+        this.saveSheetStatuses(updated);
+        return updated;
+      });
+    }
   }
 
   getStudentStatus(studentId: string): AttendanceStatus | null {
@@ -204,10 +384,60 @@ export class AttendanceService {
     return this._staffRecords()?.get(staffId)?.status ?? null;
   }
 
+  saveDraft(): Observable<any> {
+    if (this.currentSheetStatus() === 'LOCKED') {
+      throw new Error('This attendance session is locked and cannot be modified.');
+    }
+    if (this.isFutureDate(this.selectedDate())) {
+      throw new Error('Cannot save attendance draft for future dates.');
+    }
+
+    const key = this.currentClassIdAndDateKey();
+    if (key) {
+      this.sheetStatuses.update(map => {
+        const updated = new Map(map);
+        updated.set(key, 'DRAFT');
+        this.saveSheetStatuses(updated);
+        return updated;
+      });
+    }
+    return of({ success: true, message: 'Draft saved successfully' });
+  }
+
+  lockAttendance() {
+    const key = this.currentClassIdAndDateKey();
+    if (!key) return;
+    this.sheetStatuses.update(map => {
+      const updated = new Map(map);
+      updated.set(key, 'LOCKED');
+      this.saveSheetStatuses(updated);
+      return updated;
+    });
+  }
+
+  reopenAttendance() {
+    const key = this.currentClassIdAndDateKey();
+    if (!key) return;
+    this.sheetStatuses.update(map => {
+      const updated = new Map(map);
+      updated.set(key, 'DRAFT'); // reopen shifts status back to draft/editable
+      this.saveSheetStatuses(updated);
+      return updated;
+    });
+  }
+
   submitAttendance(): Observable<any> {
     const classId = this.getClassId(this.selectedClass(), this.selectedSection());
     if (!classId) {
       throw new Error('Please select a valid class and section first.');
+    }
+
+    if (this.isFutureDate(this.selectedDate())) {
+      throw new Error('Cannot submit attendance for future dates.');
+    }
+
+    if (this.currentSheetStatus() === 'LOCKED') {
+      throw new Error('This attendance session is locked and cannot be modified.');
     }
 
     const records = Array.from(this._studentRecords().values()).map(r => ({
@@ -218,6 +448,15 @@ export class AttendanceService {
 
     return this.httpSvc.submitBulkAttendance(classId, this.selectedDate(), records).pipe(
       tap(() => {
+        const key = this.currentClassIdAndDateKey();
+        if (key) {
+          this.sheetStatuses.update(map => {
+            const updated = new Map(map);
+            updated.set(key, 'SUBMITTED');
+            this.saveSheetStatuses(updated);
+            return updated;
+          });
+        }
         // Refresh statuses upon successful submission
         this.loadStudents();
       })
