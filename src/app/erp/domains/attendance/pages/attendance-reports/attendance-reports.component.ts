@@ -21,7 +21,7 @@ import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badge
   styleUrls: ['./attendance-reports.component.scss']
 })
 export class AttendanceReportsComponent {
-  private svc = inject(AttendanceService);
+  svc = inject(AttendanceService);
   private msg = inject(MessageService);
 
   // Signals for reports & filters

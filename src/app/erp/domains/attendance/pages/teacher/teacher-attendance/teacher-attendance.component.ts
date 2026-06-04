@@ -32,7 +32,7 @@ import { AttendanceStatus } from '../../../models/attendance.model';
   styleUrls: ['./teacher-attendance.component.scss']
 })
 export class TeacherAttendanceComponent {
-  private svc = inject(AttendanceService);
+  svc = inject(AttendanceService);
   private msg = inject(MessageService);
   private confirmSvc = inject(ConfirmationService);
   auth = inject(AuthService);
