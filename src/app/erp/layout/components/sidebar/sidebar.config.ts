@@ -215,9 +215,7 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         route: '/erp/fees',
         roles: ['admin', 'principal', 'accountant'],
         permissionKey: 'fees.view',
-        moduleKey: 'fees',
-        disabled: true,
-        badge: 'Soon'
+        moduleKey: 'fees'
       },
       {
         type: 'link',

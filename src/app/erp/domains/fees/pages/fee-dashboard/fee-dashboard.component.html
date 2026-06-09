@@ -1,0 +1,184 @@
+<div class="fee-dashboard-container">
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-3">
+    <div>
+      <div class="flex align-items-center gap-2 mb-1">
+        <i class="pi pi-wallet text-primary"></i>
+        <span class="text-500 text-sm">Finance Portal</span>
+      </div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Fees & Collections Dashboard</h2>
+      <span class="text-500 text-sm">Manage fee structures, invoices, and manual receipts</span>
+    </div>
+    <div class="flex gap-2">
+      <button pButton label="Define Structure" icon="pi pi-plus" class="p-button-outlined p-button-sm" (click)="navigateTo('structures')"></button>
+      <button pButton label="Collect Fees" icon="pi pi-indian-rupee" class="p-button-sm" (click)="navigateTo('records')"></button>
+    </div>
+  </div>
+
+  <!-- ── Loading Skeleton State ────────────────────────── -->
+  <div *ngIf="feesService.loading()" class="grid mb-4">
+    <div class="col-12 md:col-4 animate-pulse" *ngFor="let i of [1,2,3]">
+      <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border">
+        <div class="h-1rem bg-gray-200 border-round w-6rem mb-3"></div>
+        <div class="h-2.5rem bg-gray-200 border-round w-10rem"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Stats Cards Grid ──────────────────────────────── -->
+  <div *ngIf="!feesService.loading()" class="grid mb-4">
+    
+    <!-- Total Collected -->
+    <div class="col-12 md:col-4">
+      <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border flex align-items-center justify-content-between">
+        <div>
+          <span class="text-500 font-medium text-sm block mb-2">Total Paid Collections</span>
+          <div class="text-900 font-bold text-3xl">₹{{ feesService.totalCollected() | number:'1.2-2' }}</div>
+          <span class="text-green-600 text-xs font-semibold mt-2 inline-flex align-items-center gap-1">
+            <i class="pi pi-arrow-up-right"></i> Completed transactions
+          </span>
+        </div>
+        <div class="w-4rem h-4rem border-round bg-green-50 text-green-500 flex align-items-center justify-content-center flex-shrink-0">
+          <i class="pi pi-check-circle text-2xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outstanding Dues -->
+    <div class="col-12 md:col-4">
+      <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border flex align-items-center justify-content-between">
+        <div>
+          <span class="text-500 font-medium text-sm block mb-2">Outstanding Dues</span>
+          <div class="text-900 font-bold text-3xl">₹{{ feesService.pendingDues() | number:'1.2-2' }}</div>
+          <span class="text-orange-500 text-xs font-semibold mt-2 inline-flex align-items-center gap-1">
+            <i class="pi pi-clock"></i> Awaiting reconciliation
+          </span>
+        </div>
+        <div class="w-4rem h-4rem border-round bg-orange-50 text-orange-500 flex align-items-center justify-content-center flex-shrink-0">
+          <i class="pi pi-hourglass text-2xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overdue Accounts -->
+    <div class="col-12 md:col-4">
+      <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border flex align-items-center justify-content-between">
+        <div>
+          <span class="text-500 font-medium text-sm block mb-2">Overdue Invoices</span>
+          <div class="text-900 font-bold text-3xl">₹{{ feesService.overdueFees() | number:'1.2-2' }}</div>
+          <span class="text-red-500 text-xs font-semibold mt-2 inline-flex align-items-center gap-1">
+            <i class="pi pi-exclamation-triangle"></i> Action required
+          </span>
+        </div>
+        <div class="w-4rem h-4rem border-round bg-red-50 text-red-500 flex align-items-center justify-content-center flex-shrink-0">
+          <i class="pi pi-times-circle text-2xl"></i>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Detailed Section ──────────────────────────────── -->
+  <div class="grid">
+    
+    <!-- Recent Transaction Lists -->
+    <div class="col-12 lg:col-8">
+      <div class="surface-card shadow-1 border-round-xl p-4 h-full">
+        <div class="flex justify-content-between align-items-center mb-4">
+          <h3 class="text-900 font-semibold text-lg m-0">Recent Payments</h3>
+          <button pButton label="View All Records" icon="pi pi-list" class="p-button-text p-button-sm" (click)="navigateTo('records')"></button>
+        </div>
+
+        <div *ngIf="feesService.loading()" class="flex flex-column gap-3">
+          <div class="h-4rem bg-gray-100 border-round-xl animate-pulse" *ngFor="let i of [1,2,3]"></div>
+        </div>
+
+        <div *ngIf="!feesService.loading() && feesService.recentPayments().length === 0" class="text-center py-5">
+          <i class="pi pi-wallet text-200 text-5xl block mb-3"></i>
+          <p class="text-500 m-0">No payment logs found.</p>
+        </div>
+
+        <div *ngIf="!feesService.loading() && feesService.recentPayments().length > 0" class="flex flex-column gap-3">
+          <div *ngFor="let record of feesService.recentPayments()" 
+               class="p-3 border-round-xl border-1 surface-border flex justify-content-between align-items-center hover:bg-surface-50 transition-colors">
+            
+            <div class="flex align-items-center gap-3">
+              <!-- Payment Icon Wrapper -->
+              <div class="w-2.5rem h-2.5rem border-circle bg-surface-100 flex align-items-center justify-content-center flex-shrink-0">
+                <i [class]="getPaymentModeIcon(record.paymentMode)"></i>
+              </div>
+              
+              <div>
+                <div class="text-900 font-bold text-sm">{{ record.student?.name || 'Student' }}</div>
+                <div class="text-500 text-xs mt-0.5">
+                  Roll: {{ record.student?.rollNumber || 'N/A' }}
+                  <span *ngIf="record.student?.class">&bull; {{ record.student?.class?.name }} {{ record.student?.class?.section }}</span>
+                  &bull; {{ record.feeType }}
+                </div>
+              </div>
+            </div>
+
+            <div class="text-right">
+              <div class="text-900 font-bold text-sm">₹{{ record.amount | number:'1.2-2' }}</div>
+              <div class="text-500 text-xs mt-0.5">{{ record.paidDate | date:'dd MMM yyyy' }}</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Quick Navigation Card -->
+    <div class="col-12 lg:col-4">
+      <div class="surface-card shadow-1 border-round-xl p-4 h-full flex flex-column justify-content-between">
+        <div>
+          <h3 class="text-900 font-semibold text-lg m-0 mb-4">Financial Actions</h3>
+          
+          <div class="flex flex-column gap-3">
+            
+            <div (click)="navigateTo('structures')" 
+                 class="p-3 border-round-xl border-1 surface-border hover:border-primary flex align-items-center justify-content-between cursor-pointer hover:bg-primary-50 transition-all">
+              <div class="flex align-items-center gap-3">
+                <div class="w-3rem h-3rem bg-blue-50 text-blue-500 border-round-xl flex align-items-center justify-content-center">
+                  <i class="pi pi-building text-xl"></i>
+                </div>
+                <div>
+                  <div class="text-900 font-bold text-sm">Fee Configurations</div>
+                  <div class="text-500 text-xs mt-0.5">Map tuition, transport to classes</div>
+                </div>
+              </div>
+              <i class="pi pi-chevron-right text-400"></i>
+            </div>
+
+            <div (click)="navigateTo('records')" 
+                 class="p-3 border-round-xl border-1 surface-border hover:border-primary flex align-items-center justify-content-between cursor-pointer hover:bg-primary-50 transition-all">
+              <div class="flex align-items-center gap-3">
+                <div class="w-3rem h-3rem bg-green-50 text-green-500 border-round-xl flex align-items-center justify-content-center">
+                  <i class="pi pi-book text-xl"></i>
+                </div>
+                <div>
+                  <div class="text-900 font-bold text-sm">Billing Ledger</div>
+                  <div class="text-500 text-xs mt-0.5">Search invoices and mark collections</div>
+                </div>
+              </div>
+              <i class="pi pi-chevron-right text-400"></i>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-blue-50 border-round-xl border-1 border-blue-100 flex align-items-center gap-2">
+          <i class="pi pi-info-circle text-blue-500"></i>
+          <span class="text-blue-700 text-xs font-semibold line-height-2">
+            Tip: Run invoice batch generation from the Configurations screen to generate billing for new classes.
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

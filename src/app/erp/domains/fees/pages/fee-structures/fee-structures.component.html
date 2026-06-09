@@ -1,0 +1,177 @@
+<div class="fee-structures-container">
+  <p-toast></p-toast>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div
+    class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-3">
+    <div>
+      <div class="flex align-items-center gap-2 mb-1">
+        <i class="pi pi-cog text-primary"></i>
+        <span class="text-500 text-sm">Finance Portal</span>
+      </div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Fee Configuration Profiles</h2>
+      <span class="text-500 text-sm">Define billing templates and run batch billing invoices across classes</span>
+    </div>
+    <div>
+      <button pButton label="Define Structure" icon="pi pi-plus" class="p-button-primary p-button-sm"
+        (click)="openNewDialog()"></button>
+    </div>
+  </div>
+
+  <!-- ── Skeleton Loader ────────────────────────────────── -->
+  <div *ngIf="feesService.loading() && feesService.feeStructures().length === 0" class="grid">
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-3 animate-pulse" *ngFor="let i of [1,2,3,4]">
+      <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border">
+        <div class="h-1.5rem bg-gray-200 border-round w-8rem mb-3"></div>
+        <div class="h-1rem bg-gray-200 border-round w-12rem mb-4"></div>
+        <div class="h-2.5rem bg-gray-200 border-round w-6rem mb-3"></div>
+        <div class="h-2.5rem bg-gray-200 border-round w-full"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── No Data Fallback ──────────────────────────────── -->
+  <div *ngIf="!feesService.loading() && feesService.feeStructures().length === 0"
+    class="text-center py-6 surface-card shadow-1 border-round-xl border-1 surface-border">
+    <i class="pi pi-folder-open text-200 text-6xl block mb-3"></i>
+    <h3 class="text-900 font-semibold text-lg m-0 mb-2">No Configurations Found</h3>
+    <p class="text-500 m-0 mb-4">Create your first fee structure template to start issuing student billing invoices.</p>
+    <button pButton label="Define Structure" icon="pi pi-plus" class="p-button-sm p-button-outlined"
+      (click)="openNewDialog()"></button>
+  </div>
+
+  <!-- ── Fee Structures Grid ────────────────────────────── -->
+  <div *ngIf="feesService.feeStructures().length > 0" class="grid">
+
+    <div class="col-12 sm:col-6 lg:col-4 xl:col-3" *ngFor="let struct of feesService.feeStructures()">
+      <div
+        class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border hover:shadow-3 transition-all flex flex-column justify-content-between h-full">
+
+        <div>
+          <!-- Header info -->
+          <div class="flex justify-content-between align-items-start mb-3">
+            <span
+              class="px-2 py-1 bg-blue-50 text-blue-700 border-1 border-blue-100 border-round-md text-xs font-bold uppercase tracking-wider">
+              {{ getFeeTypeLabel(struct.feeType) }}
+            </span>
+            <span class="text-500 text-xs font-semibold">
+              Due: Day {{ struct.dueDay }}
+            </span>
+          </div>
+
+          <!-- Label -->
+          <h3 class="text-900 font-bold text-xl m-0 mb-1 line-height-2">{{ struct.label || 'Fee Profile' }}</h3>
+
+          <!-- Class mapping -->
+          <div class="flex align-items-center gap-1.5 text-500 text-sm mb-4">
+            <i class="pi pi-building text-xs"></i>
+            <span>{{ struct.class ? (struct.class.name + ' ' + struct.class.section) : 'All Enrolled Classes (Global)'
+              }}</span>
+          </div>
+
+          <!-- Amount -->
+          <div class="mb-4">
+            <span class="text-500 text-xs block mb-1">Billing Amount</span>
+            <div class="flex align-items-baseline gap-1">
+              <span class="text-900 font-extrabold text-3xl">₹{{ struct.amount | number:'1.2-2' }}</span>
+              <span class="text-500 text-xs font-semibold">/ {{ struct.frequency | lowercase }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Button: Run Billing Invoices -->
+        <div>
+          <button pButton label="Generate Billing Run" icon="pi pi-refresh" class="p-button-outlined p-button-sm w-full"
+            (click)="runInvoice(struct.id)">
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── New Structure Dialog Overlay ────────────────── -->
+  <p-dialog header="Define Fee Structure Profile" [(visible)]="displayDialog" [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '450px' }" [draggable]="false"
+    [resizable]="false" styleClass="p-fluid border-round-xl shadow-4 overflow-hidden">
+
+    <form [formGroup]="structureForm" (ngSubmit)="onSubmit()" class="py-2 flex flex-column gap-3">
+
+      <!-- Label -->
+      <div>
+        <label for="label" class="text-700 font-semibold text-sm block mb-1.5">Profile Label <span
+            class="text-red-500">*</span></label>
+        <input id="label" pInputText formControlName="label" placeholder="e.g. Q1 Tuition Term"
+          class="p-inputtext-sm border-round-md" />
+        <small class="text-red-500 mt-1 block"
+          *ngIf="structureForm.get('label')?.touched && structureForm.get('label')?.invalid">
+          Please enter a profile label name (min 3 characters).
+        </small>
+      </div>
+
+      <!-- Fee Category -->
+      <div>
+        <label for="feeType" class="text-700 font-semibold text-sm block mb-1.5">Fee Category <span
+            class="text-red-500">*</span></label>
+        <p-select id="feeType" [options]="feeTypes" formControlName="feeType" optionLabel="label" optionValue="value"
+          class="w-full border-round-md" placeholder="Select type"></p-select>
+      </div>
+
+      <!-- Class Mapping -->
+      <div>
+        <label for="classId" class="text-700 font-semibold text-sm block mb-1.5">Target Academic Class</label>
+        <p-select id="classId" [options]="classesList()" formControlName="classId" optionLabel="label"
+          optionValue="value" class="w-full border-round-md" placeholder="Select class filter"></p-select>
+        <span class="text-500 text-xs block mt-1.5"><i class="pi pi-info-circle mr-1"></i>Leaving empty generates this
+          structure globally for all students.</span>
+      </div>
+
+      <!-- Amount -->
+      <div>
+        <label for="amount" class="text-700 font-semibold text-sm block mb-1.5">Billing Amount (INR) <span
+            class="text-red-500">*</span></label>
+        <input id="amount" type="number" pInputText formControlName="amount" placeholder="e.g. 5000"
+          class="p-inputtext-sm border-round-md" />
+        <small class="text-red-500 mt-1 block"
+          *ngIf="structureForm.get('amount')?.touched && structureForm.get('amount')?.invalid">
+          Please enter a valid billing amount (> 0).
+        </small>
+      </div>
+
+      <!-- Frequency -->
+      <div>
+        <label for="frequency" class="text-700 font-semibold text-sm block mb-1.5">Billing Cycle Frequency <span
+            class="text-red-500">*</span></label>
+        <p-select id="frequency" [options]="frequencies" formControlName="frequency" optionLabel="label"
+          optionValue="value" class="w-full border-round-md" placeholder="Select frequency"></p-select>
+      </div>
+
+      <!-- Due Day -->
+      <div>
+        <label for="dueDay" class="text-700 font-semibold text-sm block mb-1.5">Payment Due Day of Cycle <span
+            class="text-red-500">*</span></label>
+        <input id="dueDay" type="number" pInputText formControlName="dueDay" placeholder="e.g. 10"
+          class="p-inputtext-sm border-round-md" />
+        <small class="text-red-500 mt-1 block"
+          *ngIf="structureForm.get('dueDay')?.touched && structureForm.get('dueDay')?.invalid">
+          Please specify a valid cycle day (1 to 28).
+        </small>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="flex gap-2 justify-content-end mt-4">
+        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+          (click)="displayDialog.set(false)"></button>
+        <button pButton type="submit" [disabled]="structureForm.invalid || feesService.loading()"
+          class="p-button-sm px-4">
+          <i *ngIf="feesService.loading()" class="pi pi-spin pi-spinner mr-2"></i>
+          <span>{{ feesService.loading() ? 'Saving...' : 'Save Profile' }}</span>
+        </button>
+      </div>
+
+    </form>
+
+  </p-dialog>
+
+</div>
