@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
+import { SkeletonLoaderComponent } from '@/app/erp/shared/ui/loaders/skeleton-loader.component';
 
 @Component({
   selector: 'app-student-profile',
@@ -26,7 +27,8 @@ import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permissi
     CardModule,
     ButtonModule,
     TableModule,
-    HasPermissionDirective
+    HasPermissionDirective,
+    SkeletonLoaderComponent
   ],
   templateUrl: './student-profile.component.html',
   styleUrl: './student-profile.component.scss'
