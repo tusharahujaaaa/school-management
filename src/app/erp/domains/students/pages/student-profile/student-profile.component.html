@@ -105,9 +105,91 @@
                             </div>
                         </p-tabpanel>
                         <p-tabpanel value="2">
-                             <div class="flex flex-column align-items-center justify-content-center p-8">
-                                <i class="pi pi-wallet text-4xl text-200 mb-3"></i>
-                                <span class="text-600">Fee management integration placeholder.</span>
+                            <!-- Loading State -->
+                            <div *ngIf="loadingLedger()" class="flex flex-column gap-3 py-4">
+                                <app-erp-skeleton-loader type="table"></app-erp-skeleton-loader>
+                            </div>
+
+                            <!-- Ledger Content (when loaded and not empty) -->
+                            <div *ngIf="!loadingLedger() && studentLedger()">
+                                <!-- Summary Cards -->
+                                <div class="grid mb-4">
+                                    <div class="col-12 md:col-4">
+                                        <div class="surface-card p-3 border-round-lg border-1 surface-border border-left-3 border-green-500 shadow-1 flex align-items-center justify-content-between">
+                                            <div>
+                                                <span class="text-500 text-xs font-semibold block mb-1">TOTAL PAID</span>
+                                                <span class="text-xl font-bold text-green-700">₹{{ ledgerSummary().paid | number:'1.2-2' }}</span>
+                                            </div>
+                                            <i class="pi pi-check-circle text-green-500 text-2xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 md:col-4">
+                                        <div class="surface-card p-3 border-round-lg border-1 surface-border border-left-3 border-orange-500 shadow-1 flex align-items-center justify-content-between">
+                                            <div>
+                                                <span class="text-500 text-xs font-semibold block mb-1">PENDING DUES</span>
+                                                <span class="text-xl font-bold text-orange-700">₹{{ ledgerSummary().pending | number:'1.2-2' }}</span>
+                                            </div>
+                                            <i class="pi pi-exclamation-circle text-orange-500 text-2xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 md:col-4">
+                                        <div class="surface-card p-3 border-round-lg border-1 surface-border border-left-3 border-red-500 shadow-1 flex align-items-center justify-content-between">
+                                            <div>
+                                                <span class="text-500 text-xs font-semibold block mb-1">OVERDUE FEES</span>
+                                                <span class="text-xl font-bold text-red-700">₹{{ ledgerSummary().overdue | number:'1.2-2' }}</span>
+                                            </div>
+                                            <i class="pi pi-times-circle text-red-500 text-2xl"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- No Data Fallback -->
+                                <div *ngIf="allRecords().length === 0" class="text-center py-6">
+                                    <i class="pi pi-wallet text-200 text-5xl block mb-3"></i>
+                                    <h3 class="text-900 font-semibold text-lg m-0 mb-1">No Ledger Records</h3>
+                                    <p class="text-500 m-0">This student does not have any generated invoices or payment logs.</p>
+                                </div>
+
+                                <!-- Ledger Table Grid -->
+                                <div *ngIf="allRecords().length > 0" class="overflow-x-auto">
+                                    <table class="w-full text-sm" style="border-collapse: collapse; min-width: 650px;">
+                                        <thead>
+                                            <tr class="surface-50 border-bottom-1 surface-border text-left">
+                                                <th class="p-3 text-500 font-semibold">Fee Particulars</th>
+                                                <th class="p-3 text-500 font-semibold">Invoice Date</th>
+                                                <th class="p-3 text-500 font-semibold">Due Date</th>
+                                                <th class="p-3 text-500 font-semibold text-right">Amount</th>
+                                                <th class="p-3 text-500 font-semibold">Status</th>
+                                                <th class="p-3 text-500 font-semibold">Paid Date & Mode</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let record of allRecords()" class="border-bottom-1 surface-border hover:surface-50 transition-colors">
+                                                <td class="p-3">
+                                                    <div class="font-bold text-900">{{ record.feeType | titlecase }}</div>
+                                                    <div class="text-500 text-xs mt-0.5">{{ record.feeStructure?.label || 'Direct Charge' }}</div>
+                                                </td>
+                                                <td class="p-3 text-600">{{ record.createdAt | date:'dd MMM yyyy' }}</td>
+                                                <td class="p-3 text-600">{{ record.dueDate | date:'dd MMM yyyy' }}</td>
+                                                <td class="p-3 text-900 font-bold text-right">₹{{ record.amount | number:'1.2-2' }}</td>
+                                                <td class="p-3">
+                                                    <span [class]="'px-2 py-1 border-round-xl border-1 text-xs font-semibold ' + getFeeStatusClass(record.status)">
+                                                        {{ record.status }}
+                                                    </span>
+                                                </td>
+                                                <td class="p-3 text-600">
+                                                    <div *ngIf="record.status === 'PAID'">
+                                                        <span class="font-medium text-900">{{ record.paidDate | date:'dd MMM yyyy' }}</span>
+                                                        <span class="text-500 text-xs block mt-0.5">Mode: {{ record.paymentMode || 'N/A' }}</span>
+                                                    </div>
+                                                    <div *ngIf="record.status !== 'PAID'" class="text-400 text-xs italic">
+                                                        Unpaid
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </p-tabpanel>
                         <p-tabpanel value="3">
