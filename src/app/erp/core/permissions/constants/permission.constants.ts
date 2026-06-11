@@ -13,6 +13,15 @@ export const ERP_PERMISSIONS = {
     DELETE: 'attendance.delete',
     EXPORT: 'attendance.export',
     REPORTS: 'attendance.reports',
+    DASHBOARD: 'attendance.dashboard',
+    STUDENTS_MARK: 'attendance.students.mark',
+    STAFF_MARK: 'attendance.staff.mark',
+    HISTORY_VIEW: 'attendance.history.view',
+    REPORTS_VIEW: 'attendance.reports.view',
+    TEACHER_MARK: 'attendance.teacher.mark',
+    TEACHER_HISTORY: 'attendance.teacher.history',
+    PARENT_VIEW: 'attendance.parent.view',
+    STUDENT_VIEW: 'attendance.student.view',
   },
   STUDENTS: {
     VIEW: 'students.view',
@@ -43,6 +52,10 @@ export const ERP_PERMISSIONS = {
     CREATE: 'admissions.create',
     BULK_IMPORT: 'admissions.bulk_import',
     PRINT: 'admissions.print',
+  },
+  ACADEMICS: {
+    VIEW: 'academics.view',
+    EDIT: 'academics.edit',
   }
 } as const;
 
@@ -54,6 +67,15 @@ export type ErpPermission =
   | typeof ERP_PERMISSIONS.ATTENDANCE.DELETE
   | typeof ERP_PERMISSIONS.ATTENDANCE.EXPORT
   | typeof ERP_PERMISSIONS.ATTENDANCE.REPORTS
+  | typeof ERP_PERMISSIONS.ATTENDANCE.DASHBOARD
+  | typeof ERP_PERMISSIONS.ATTENDANCE.STUDENTS_MARK
+  | typeof ERP_PERMISSIONS.ATTENDANCE.STAFF_MARK
+  | typeof ERP_PERMISSIONS.ATTENDANCE.HISTORY_VIEW
+  | typeof ERP_PERMISSIONS.ATTENDANCE.REPORTS_VIEW
+  | typeof ERP_PERMISSIONS.ATTENDANCE.TEACHER_MARK
+  | typeof ERP_PERMISSIONS.ATTENDANCE.TEACHER_HISTORY
+  | typeof ERP_PERMISSIONS.ATTENDANCE.PARENT_VIEW
+  | typeof ERP_PERMISSIONS.ATTENDANCE.STUDENT_VIEW
   | typeof ERP_PERMISSIONS.STUDENTS.VIEW
   | typeof ERP_PERMISSIONS.STUDENTS.CREATE
   | typeof ERP_PERMISSIONS.STUDENTS.EDIT
@@ -71,4 +93,6 @@ export type ErpPermission =
   | typeof ERP_PERMISSIONS.ADMISSIONS.VIEW
   | typeof ERP_PERMISSIONS.ADMISSIONS.CREATE
   | typeof ERP_PERMISSIONS.ADMISSIONS.BULK_IMPORT
-  | typeof ERP_PERMISSIONS.ADMISSIONS.PRINT;
+  | typeof ERP_PERMISSIONS.ADMISSIONS.PRINT
+  | typeof ERP_PERMISSIONS.ACADEMICS.VIEW
+  | typeof ERP_PERMISSIONS.ACADEMICS.EDIT;

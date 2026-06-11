@@ -1,0 +1,217 @@
+<div class="admission-requests-container">
+  <p-toast></p-toast>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-3">
+    <div>
+      <div class="flex align-items-center gap-2 mb-1">
+        <i class="pi pi-inbox text-primary"></i>
+        <span class="text-500 text-sm">Admissions Pipeline</span>
+      </div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Inquiry Requests (CRM)</h2>
+      <span class="text-500 text-sm">Manage admissions pipeline, coordinate contact schedules, and track leads conversion</span>
+    </div>
+  </div>
+
+  <!-- ── Pipeline Summary Cards ─────────────────────────── -->
+  <div class="grid mb-4">
+    <!-- Total Leads -->
+    <div class="col-12 sm:col-6 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-3 border-left-3 border-blue-500 flex align-items-center justify-content-between">
+        <div>
+          <span class="text-500 text-xs font-semibold block mb-1">TOTAL INQUIRIES</span>
+          <span class="text-xl font-bold text-900">{{ admissionsService.totalLeads() }}</span>
+        </div>
+        <i class="pi pi-users text-blue-500 text-2xl"></i>
+      </div>
+    </div>
+
+    <!-- New Leads -->
+    <div class="col-12 sm:col-6 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-3 border-left-3 border-orange-500 flex align-items-center justify-content-between">
+        <div>
+          <span class="text-500 text-xs font-semibold block mb-1">NEW INBOX</span>
+          <span class="text-xl font-bold text-orange-700">{{ newLeadsCount() }}</span>
+        </div>
+        <i class="pi pi-envelope text-orange-500 text-2xl"></i>
+      </div>
+    </div>
+
+    <!-- Active Follow Ups -->
+    <div class="col-12 sm:col-6 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-3 border-left-3 border-purple-500 flex align-items-center justify-content-between">
+        <div>
+          <span class="text-500 text-xs font-semibold block mb-1">FOLLOW UPS</span>
+          <span class="text-xl font-bold text-purple-700">{{ followUpLeadsCount() }}</span>
+        </div>
+        <i class="pi pi-phone text-purple-500 text-2xl"></i>
+      </div>
+    </div>
+
+    <!-- Admitted Leads -->
+    <div class="col-12 sm:col-6 md:col-3">
+      <div class="surface-card shadow-1 border-round-xl p-3 border-left-3 border-green-500 flex align-items-center justify-content-between">
+        <div>
+          <span class="text-500 text-xs font-semibold block mb-1">ADMITTED</span>
+          <span class="text-xl font-bold text-green-700">{{ admittedLeadsCount() }}</span>
+        </div>
+        <i class="pi pi-check-circle text-green-500 text-2xl"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Filter & Search Control Panel ─────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column md:flex-row gap-3 align-items-md-center justify-content-between">
+    <!-- Search -->
+    <div class="flex-grow-1 relative" style="max-width: 320px;">
+      <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base" style="transform: translateY(-50%);"></i>
+      <input type="text" pInputText placeholder="Search student name or phone..." (input)="onSearch($event)" class="w-full pl-5 p-inputtext-sm border-round-md" style="padding-left: 2.2rem;" />
+    </div>
+
+    <!-- Pipeline Filter -->
+    <div class="flex flex-wrap gap-2">
+      <div style="min-width: 180px;">
+        <p-select [options]="statusFilters" [(ngModel)]="selectedStatusFilter" (onChange)="onFilterChange()" optionLabel="label" optionValue="value" placeholder="Filter Status" class="w-full border-round-md"></p-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CRM Inquiries Grid Table ──────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4">
+    <!-- Loading State Skeletons -->
+    <div *ngIf="admissionsService.loading() && admissionsService.leads().length === 0" class="flex flex-column gap-3 py-4">
+      <div class="h-3rem bg-gray-100 border-round animate-pulse" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!admissionsService.loading() && admissionsService.leads().length === 0" class="text-center py-6">
+      <i class="pi pi-inbox text-200 text-5xl block mb-3"></i>
+      <h3 class="text-900 font-semibold text-lg m-0 mb-1">No Inquiries Found</h3>
+      <p class="text-500 m-0">There are no admission leads matching the selected query filters.</p>
+    </div>
+
+    <!-- Table data -->
+    <div *ngIf="admissionsService.leads().length > 0" class="overflow-x-auto">
+      <table class="w-full text-sm" style="border-collapse: collapse; min-width: 900px;">
+        <thead>
+          <tr class="surface-50 border-bottom-1 surface-border text-left">
+            <th class="p-3 text-500 font-semibold">Student Particulars</th>
+            <th class="p-3 text-500 font-semibold">Parent Contact Details</th>
+            <th class="p-3 text-500 font-semibold">Message</th>
+            <th class="p-3 text-500 font-semibold">Status</th>
+            <th class="p-3 text-500 font-semibold">Coordinating Notes</th>
+            <th class="p-3 text-500 font-semibold text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let lead of admissionsService.leads()" class="border-bottom-1 surface-border hover:surface-50 transition-colors align-top">
+            
+            <!-- Student Details -->
+            <td class="p-3">
+              <div class="font-bold text-900">{{ lead.studentName }}</div>
+              <div class="text-500 text-xs mt-1">
+                Applying: <span class="font-medium text-700">{{ lead.classApplying || 'N/A' }}</span>
+              </div>
+              <div class="text-500 text-2xs mt-0.5">
+                DOB: {{ lead.dateOfBirth ? (lead.dateOfBirth | date:'dd MMM yyyy') : 'N/A' }} &bull; {{ lead.gender || 'N/A' }}
+              </div>
+            </td>
+
+            <!-- Parent Details -->
+            <td class="p-3">
+              <div class="font-medium text-800">{{ lead.parentName || 'N/A' }}</div>
+              <div class="text-600 text-xs mt-0.5"><i class="pi pi-phone text-400 text-2xs mr-1"></i>{{ lead.parentPhone }}</div>
+              <div class="text-600 text-2xs mt-0.5" *ngIf="lead.parentEmail"><i class="pi pi-envelope text-400 text-2xs mr-1"></i>{{ lead.parentEmail }}</div>
+              <div class="text-500 text-2xs mt-1 text-overflow-ellipsis overflow-hidden" *ngIf="lead.address" style="max-width: 200px;">
+                <i class="pi pi-map-marker text-400 text-2xs mr-1"></i>{{ lead.address }}
+              </div>
+            </td>
+
+            <!-- Message -->
+            <td class="p-3">
+              <div class="text-700 text-xs line-height-3" style="max-width: 250px;">
+                {{ lead.message || 'No submission message.' }}
+              </div>
+              <div class="text-400 text-3xs mt-2">
+                Submitted: {{ lead.createdAt | date:'dd MMM yyyy, h:mm a' }}
+              </div>
+            </td>
+
+            <!-- Status Badge -->
+            <td class="p-3">
+              <span [class]="'px-2 py-1 border-round-xl border-1 text-2xs font-semibold ' + getStatusClass(lead.status)">
+                {{ lead.status }}
+              </span>
+            </td>
+
+            <!-- Coordinating Notes -->
+            <td class="p-3 text-xs text-800">
+              <div *ngIf="lead.notes" class="bg-surface-50 p-2 border-round border-1 surface-border italic" style="max-width: 220px; word-break: break-word;">
+                "{{ lead.notes }}"
+              </div>
+              <div *ngIf="!lead.notes" class="text-400 text-xs italic">
+                No logged follow-up notes.
+              </div>
+            </td>
+
+            <!-- Actions button -->
+            <td class="p-3 text-center">
+              <div class="flex gap-1 justify-content-center">
+                <button pButton label="Manage" icon="pi pi-cog" class="p-button-outlined p-button-sm p-button-secondary px-2" (click)="openStatusModal(lead)"></button>
+                <button *ngIf="lead.status === 'ADMITTED'" pButton label="Enroll" icon="pi pi-user-plus" class="p-button-outlined p-button-sm p-button-success px-2" (click)="convertToStudent(lead)"></button>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex align-items-center justify-content-between mt-4 border-top-1 surface-border pt-3" *ngIf="admissionsService.leads().length > 0">
+      <span class="text-500 text-xs">
+        Page {{ admissionsService.currentPage() }} of {{ admissionsService.totalPages() }} ({{ admissionsService.totalLeads() }} total leads)
+      </span>
+      <div class="flex gap-1">
+        <button pButton icon="pi pi-chevron-left" class="p-button-text p-button-sm" [disabled]="admissionsService.currentPage() === 1" (click)="admissionsService.loadLeads(admissionsService.currentPage() - 1)"></button>
+        <button pButton icon="pi pi-chevron-right" class="p-button-text p-button-sm" [disabled]="admissionsService.currentPage() === admissionsService.totalPages()" (click)="admissionsService.loadLeads(admissionsService.currentPage() + 1)"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Manage Status Modal Overlay ────────────────────── -->
+  <p-dialog header="Manage Admission Lead Status" [(visible)]="statusDialog" [modal]="true" [style]="{ width: '450px' }" [draggable]="false" [resizable]="false" styleClass="p-fluid border-round-xl shadow-4 overflow-hidden">
+    <div *ngIf="selectedLead()" class="py-2 flex flex-column gap-3">
+      
+      <!-- Lead Details Header Widget -->
+      <div class="p-3 bg-surface-50 border-round-xl border-1 surface-border">
+        <span class="text-500 text-xs block mb-1">PROSPECTIVE STUDENT</span>
+        <div class="text-900 font-bold text-base mb-1">{{ selectedLead().studentName }}</div>
+        <div class="text-500 text-xs">
+          Applying: <strong>{{ selectedLead().classApplying || 'N/A' }}</strong> &bull; Parent: {{ selectedLead().parentName || 'N/A' }} ({{ selectedLead().parentPhone }})
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="statusForm" (ngSubmit)="saveStatusChange()" class="flex flex-column gap-3">
+        <!-- Pipeline Status -->
+        <div>
+          <label for="pipelineStatus" class="text-700 font-semibold text-sm block mb-1.5">Pipeline State <span class="text-red-500">*</span></label>
+          <p-select id="pipelineStatus" [options]="pipelineStates" formControlName="status" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select state"></p-select>
+        </div>
+
+        <!-- Follow-up Notes -->
+        <div>
+          <label for="coordinatorNotes" class="text-700 font-semibold text-sm block mb-1.5">Follow-up Notes / Activity Logs</label>
+          <textarea id="coordinatorNotes" pTextarea formControlName="notes" rows="4" placeholder="Log call notes, scheduling updates, or reasons for status transitions..." class="w-full border-round-md p-2"></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2 justify-content-end mt-4">
+          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm" (click)="statusDialog.set(false)" [disabled]="admissionsService.loading()"></button>
+          <button pButton type="submit" label="Save Status Update" class="p-button-sm px-4" [disabled]="statusForm.invalid || admissionsService.loading()"></button>
+        </div>
+      </form>
+    </div>
+  </p-dialog>
+</div>

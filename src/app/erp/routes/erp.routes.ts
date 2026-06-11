@@ -24,6 +24,14 @@ export const erpRoutes: Routes = [
     ]
   },
   {
+    path: 'admission-inquiry/:domain',
+    loadComponent: () => import('../domains/admissions/pages/admission-inquiry/admission-inquiry.component').then(m => m.AdmissionInquiryComponent)
+  },
+  {
+    path: 'admission-inquiry',
+    loadComponent: () => import('../domains/admissions/pages/admission-inquiry/admission-inquiry.component').then(m => m.AdmissionInquiryComponent)
+  },
+  {
     path: '',
     component: DashboardLayoutComponent,
     canActivate: [authGuard],
@@ -63,6 +71,24 @@ export const erpRoutes: Routes = [
         loadChildren: () => import('../domains/admissions/routes/admissions.routes').then(m => m.admissionsRoutes),
         canActivate: [permissionGuard],
         data: { permission: ERP_PERMISSIONS.ADMISSIONS.VIEW }
+      },
+      {
+        path: 'teachers',
+        loadChildren: () => import('../domains/teachers/routes/teachers.routes').then(m => m.teachersRoutes),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.STAFF.VIEW }
+      },
+      {
+        path: 'academics',
+        loadChildren: () => import('../domains/academics/routes/academics.routes').then(m => m.academicsRoutes),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.ACADEMICS.VIEW }
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('../domains/settings/routes/settings.routes').then(m => m.settingsRoutes),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.SETTINGS.VIEW }
       },
       {
         path: 'unauthorized',

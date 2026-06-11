@@ -203,10 +203,8 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         icon: 'pi pi-book',
         route: '/erp/teachers',
         roles: ['admin', 'principal', 'hr'],
-        permissionKey: 'teachers.view',
-        moduleKey: 'teachers',
-        disabled: true,
-        badge: 'Soon'
+        permissionKey: 'staff.view',
+        moduleKey: 'teachers'
       },
       {
         type: 'link',
@@ -224,9 +222,7 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         route: '/erp/academics',
         roles: ['admin', 'principal', 'teacher'],
         permissionKey: 'academics.view',
-        moduleKey: 'academics',
-        disabled: true,
-        badge: 'Soon'
+        moduleKey: 'academics'
       }
     ]
   },
@@ -299,9 +295,7 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         route: '/erp/settings',
         roles: ['admin'],
         permissionKey: 'settings.view',
-        moduleKey: 'settings',
-        disabled: true,
-        badge: 'Soon'
+        moduleKey: 'settings'
       }
     ]
   }

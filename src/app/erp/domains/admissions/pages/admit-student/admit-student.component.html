@@ -1,0 +1,122 @@
+<div class="admit-student-container">
+  <p-toast></p-toast>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-3">
+    <div>
+      <div class="flex align-items-center gap-2 mb-1">
+        <i class="pi pi-user-plus text-primary"></i>
+        <span class="text-500 text-sm">Admissions Pipeline</span>
+      </div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Admit New Student</h2>
+      <span class="text-500 text-sm">Manually enroll a new student into the active directory directory</span>
+    </div>
+  </div>
+
+  <!-- ── Enrollment Form Card ───────────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-5" style="max-width: 900px; margin: 0 auto;">
+    <h3 class="text-900 font-semibold text-lg border-bottom-1 surface-border pb-3 mb-4">
+      <i class="pi pi-id-card text-primary mr-2"></i>Official Registration Form
+    </h3>
+
+    <form [formGroup]="admitForm" (ngSubmit)="onSubmit()" class="p-fluid">
+      
+      <!-- Section 1: Student Particulars -->
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">Student Particulars</h4>
+      <div class="grid mb-4">
+        <!-- Student Name -->
+        <div class="col-12 md:col-6 field mb-3">
+          <label for="name" class="text-700 font-semibold text-sm block mb-1.5">Student Full Name <span class="text-red-500">*</span></label>
+          <input id="name" type="text" pInputText formControlName="name" placeholder="Enter student full name" class="p-inputtext-sm border-round-md" />
+          <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('name')?.invalid && admitForm.get('name')?.touched">
+            Student name is required (min 3 characters).
+          </small>
+        </div>
+
+        <!-- Class & Section Selection -->
+        <div class="col-12 md:col-6 field mb-3">
+          <label for="classId" class="text-700 font-semibold text-sm block mb-1.5">Assign Class & Section <span class="text-red-500">*</span></label>
+          <p-select id="classId" [options]="classesList()" formControlName="classId" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select class group"></p-select>
+          <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('classId')?.invalid && admitForm.get('classId')?.touched">
+            Please assign a class.
+          </small>
+        </div>
+
+        <!-- Roll Number / Admission Number -->
+        <div class="col-12 md:col-4 field mb-3">
+          <label for="rollNumber" class="text-700 font-semibold text-sm block mb-1.5">Roll / Admission Number</label>
+          <input id="rollNumber" type="text" pInputText formControlName="rollNumber" placeholder="e.g. 101" class="p-inputtext-sm border-round-md" />
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="col-12 md:col-4 field mb-3">
+          <label for="dateOfBirth" class="text-700 font-semibold text-sm block mb-1.5">Date of Birth</label>
+          <input id="dateOfBirth" type="date" pInputText formControlName="dateOfBirth" class="p-inputtext-sm border-round-md" />
+        </div>
+
+        <!-- Gender -->
+        <div class="col-12 md:col-4 field mb-3">
+          <label for="gender" class="text-700 font-semibold text-sm block mb-1.5">Gender</label>
+          <p-select id="gender" [options]="genderOptions" formControlName="gender" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select gender"></p-select>
+        </div>
+      </div>
+
+      <!-- Section 2: Parent / Guardian Details -->
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">Parent / Guardian Details</h4>
+      <div class="grid mb-4">
+        <!-- Parent Name -->
+        <div class="col-12 md:col-6 field mb-3">
+          <label for="parentName" class="text-700 font-semibold text-sm block mb-1.5">Parent / Guardian Name</label>
+          <input id="parentName" type="text" pInputText formControlName="parentName" placeholder="Enter parent full name" class="p-inputtext-sm border-round-md" />
+        </div>
+
+        <!-- Parent Phone -->
+        <div class="col-12 md:col-6 field mb-3">
+          <label for="parentPhone" class="text-700 font-semibold text-sm block mb-1.5">Contact Number <span class="text-red-500">*</span></label>
+          <input id="parentPhone" type="text" pInputText formControlName="parentPhone" placeholder="e.g. +919876543210" class="p-inputtext-sm border-round-md" />
+          <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('parentPhone')?.invalid && admitForm.get('parentPhone')?.touched">
+            Valid contact number is required.
+          </small>
+        </div>
+
+        <!-- Parent Email -->
+        <div class="col-12 field mb-3">
+          <label for="parentEmail" class="text-700 font-semibold text-sm block mb-1.5">Email Address</label>
+          <input id="parentEmail" type="email" pInputText formControlName="parentEmail" placeholder="e.g. parent@example.com" class="p-inputtext-sm border-round-md" />
+          <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('parentEmail')?.invalid && admitForm.get('parentEmail')?.touched">
+            Please enter a valid email address.
+          </small>
+        </div>
+      </div>
+
+      <!-- Section 3: Extra Info -->
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">Address & Status</h4>
+      <div class="grid mb-4">
+        <!-- Address -->
+        <div class="col-12 field mb-3">
+          <label for="address" class="text-700 font-semibold text-sm block mb-1.5">Residential Address</label>
+          <textarea id="address" pTextarea formControlName="address" rows="3" placeholder="Enter complete home address" class="w-full border-round-md p-2"></textarea>
+        </div>
+
+        <!-- Photo URL -->
+        <div class="col-12 md:col-6 field mb-3">
+          <label for="photoUrl" class="text-700 font-semibold text-sm block mb-1.5">Photo URL</label>
+          <input id="photoUrl" type="text" pInputText formControlName="photoUrl" placeholder="Paste student image URL" class="p-inputtext-sm border-round-md" />
+        </div>
+
+        <!-- Enrollment Status -->
+        <div class="col-12 md:col-6 field mb-3">
+          <label for="status" class="text-700 font-semibold text-sm block mb-1.5">Initial Status</label>
+          <p-select id="status" [options]="statusOptions" formControlName="status" optionLabel="label" optionValue="value" class="w-full border-round-md"></p-select>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-column sm:flex-row gap-2 justify-content-end mt-4 pt-3 border-top-1 surface-border">
+        <button pButton type="button" label="Reset Form" class="p-button-outlined p-button-secondary sm:w-8rem" (click)="resetForm()" [disabled]="isLoading()"></button>
+        <button pButton type="submit" [label]="isLoading() ? 'Enrolling...' : 'Admit Student'" icon="pi pi-check" class="sm:w-12rem px-4" [disabled]="admitForm.invalid || isLoading()"></button>
+      </div>
+
+    </form>
+  </div>
+</div>

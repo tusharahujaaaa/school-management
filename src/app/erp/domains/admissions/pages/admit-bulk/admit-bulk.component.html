@@ -1,0 +1,127 @@
+<div class="admit-bulk-container">
+  <p-toast></p-toast>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-3">
+    <div>
+      <div class="flex align-items-center gap-2 mb-1">
+        <i class="pi pi-upload text-primary"></i>
+        <span class="text-500 text-sm">Admissions Pipeline</span>
+      </div>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Bulk Admissions</h2>
+      <span class="text-500 text-sm">Upload a CSV template to admit multiple students into their classes simultaneously</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- ── Left Side: Upload Control Widget ──────────────── -->
+    <div class="col-12 lg:col-4">
+      <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-file text-primary mr-2"></i>1. Download Template</h3>
+        <p class="text-500 text-xs line-height-3 mb-3">Download our structured template containing pre-formatted headers to align your student registry records.</p>
+        <button pButton type="button" label="Download Template CSV" icon="pi pi-download" class="p-button-outlined p-button-sm w-full" (click)="downloadTemplate()"></button>
+      </div>
+
+      <div class="surface-card shadow-1 border-round-xl p-4">
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-cloud-upload text-primary mr-2"></i>2. Upload Registry</h3>
+        <p class="text-500 text-xs line-height-3 mb-4">Select or drop a CSV file containing your student records list. Make sure headers exactly match the template guidelines.</p>
+
+        <!-- Dropzone -->
+        <div class="border-2 border-dashed border-300 border-round-lg text-center p-5 cursor-pointer hover:border-primary transition-colors mb-4" (click)="fileInput.click()">
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept=".csv" style="display: none;" />
+          <i class="pi pi-file-excel text-400 text-4xl block mb-2"></i>
+          <span class="text-800 text-sm font-semibold block mb-1">Choose CSV File</span>
+          <span class="text-500 text-2xs block">Max size: 5MB</span>
+        </div>
+
+        <div *ngIf="selectedFileName()" class="p-3 bg-surface-50 border-round-md border-1 surface-border flex align-items-center justify-content-between mb-4">
+          <div class="overflow-hidden mr-2">
+            <span class="text-900 text-xs font-semibold block overflow-hidden text-overflow-ellipsis">{{ selectedFileName() }}</span>
+            <span class="text-500 text-3xs">{{ parsedStudents().length }} rows identified</span>
+          </div>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm" (click)="clearFile()"></button>
+        </div>
+
+        <!-- Import Button / Progress -->
+        <div *ngIf="parsedStudents().length > 0">
+          <button pButton type="button" [label]="isImporting() ? 'Importing...' : 'Start Bulk Import'" icon="pi pi-play" class="p-button-success w-full mb-3" [disabled]="isImporting() || hasErrors()" (click)="startBulkImport()"></button>
+          <small class="text-red-500 text-xs block text-center mb-3" *ngIf="hasErrors()">Fix validation errors in the preview list to begin import.</small>
+        </div>
+
+        <!-- Import Progress Widget -->
+        <div *ngIf="isImporting() || importCompleted()" class="border-t-1 surface-border pt-4 mt-3">
+          <span class="text-700 text-xs font-semibold block mb-2">Import Progress: {{ importProgress() }}%</span>
+          <div class="w-full bg-gray-100 border-round-md mb-3 overflow-hidden" style="height: 8px;">
+            <div class="bg-success h-full transition-all duration-300" [style.width.%]="importProgress()"></div>
+          </div>
+          <div class="flex justify-content-between text-2xs font-semibold">
+            <span class="text-green-600">Succeeded: {{ importSuccessCount() }}</span>
+            <span class="text-red-600">Failed: {{ importFailCount() }}</span>
+            <span class="text-500">Remaining: {{ parsedStudents().length - (importSuccessCount() + importFailCount()) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Right Side: Registry Preview & Logs ───────────── -->
+    <div class="col-12 lg:col-8">
+      <!-- Preview Table -->
+      <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-eye text-primary mr-2"></i>In-memory Registry Preview</h3>
+        
+        <div *ngIf="parsedStudents().length === 0" class="text-center py-6 border-round-lg border-2 border-dashed border-200">
+          <i class="pi pi-table text-200 text-5xl block mb-3"></i>
+          <h4 class="text-600 font-medium m-0">No File Uploaded</h4>
+          <span class="text-400 text-xs block mt-1">Upload a CSV on the left panel to review rows before enrollment runs.</span>
+        </div>
+
+        <div *ngIf="parsedStudents().length > 0" class="overflow-x-auto" style="max-height: 400px;">
+          <table class="w-full text-xs" style="border-collapse: collapse; min-width: 800px;">
+            <thead>
+              <tr class="surface-100 border-bottom-1 surface-border text-left">
+                <th class="p-2 text-600 font-semibold">Row</th>
+                <th class="p-2 text-600 font-semibold">Student Name</th>
+                <th class="p-2 text-600 font-semibold">Target Class</th>
+                <th class="p-2 text-600 font-semibold">Gender</th>
+                <th class="p-2 text-600 font-semibold">Parent Phone</th>
+                <th class="p-2 text-600 font-semibold">Status/Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of parsedStudents(); let i = index" class="border-bottom-1 surface-border" [ngClass]="{'bg-red-50': row.error, 'bg-green-50': row.status === 'SUCCESS', 'bg-orange-50': row.status === 'ERROR'}">
+                <td class="p-2 text-500">{{ i + 1 }}</td>
+                <td class="p-2">
+                  <div class="font-bold text-900">{{ row.data.name }}</div>
+                  <div class="text-500 text-3xs" *ngIf="row.data.rollNumber">Roll: {{ row.data.rollNumber }}</div>
+                </td>
+                <td class="p-2 text-700">
+                  <span *ngIf="row.classResolved" class="font-medium text-900">{{ row.data.className }} {{ row.data.section }}</span>
+                  <span *ngIf="!row.classResolved" class="text-red-600 font-bold">Class Not Found</span>
+                </td>
+                <td class="p-2 text-600">{{ row.data.gender }}</td>
+                <td class="p-2 text-600">{{ row.data.parentPhone }}</td>
+                <td class="p-2">
+                  <span *ngIf="!row.error && row.status === 'PENDING'" class="text-600 font-medium"><i class="pi pi-hourglass mr-1"></i>Pending</span>
+                  <span *ngIf="row.error" class="text-red-700 font-bold"><i class="pi pi-exclamation-triangle mr-1"></i>{{ row.error }}</span>
+                  <span *ngIf="row.status === 'SUCCESS'" class="text-green-700 font-bold"><i class="pi pi-check-circle mr-1"></i>Enrolled</span>
+                  <span *ngIf="row.status === 'ERROR'" class="text-red-700 font-bold"><i class="pi pi-times-circle mr-1"></i>Failed: {{ row.errorMsg }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Import Logs -->
+      <div class="surface-card shadow-1 border-round-xl p-4" *ngIf="isImporting() || importLogs().length > 0">
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-list text-primary mr-2"></i>Execution Logs</h3>
+        <div class="bg-gray-900 border-round-lg p-3 overflow-y-auto text-green-400 font-mono text-xs flex flex-column gap-1.5" style="height: 180px; line-height: 1.5;">
+          <div *ngIf="importLogs().length === 0" class="text-500 italic">Initializing runner...</div>
+          <div *ngFor="let log of importLogs()" [ngClass]="{'text-red-400': log.includes('Failed'), 'text-green-400': log.includes('successfully')}">
+            {{ log }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
