@@ -3,11 +3,13 @@ import { BaseApiService } from '../../../core/api/base/base-api.service';
 import { StatData, ActivityData, EventData, NotificationData, QuickAction } from '../models/dashboard.model';
 import { MOCK_EVENTS, MOCK_NOTIFICATIONS, MOCK_QUICK_ACTIONS } from '../store/dashboard.mock';
 import { forkJoin, catchError, of, delay } from 'rxjs';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService extends BaseApiService {
+  private authService = inject(AuthService);
   
   // Writable Signals
   loading = signal<boolean>(false);
@@ -19,6 +21,16 @@ export class DashboardService extends BaseApiService {
   attendanceOverview = signal<any>(null);
   feeOverview = signal<any>(null);
 
+  // Student dashboard signals
+  studentAttendancePercentage = signal<number | null>(null);
+  upcomingExams = signal<any[]>([]);
+  studentNotices = signal<any[]>([]);
+
+  // Teacher dashboard signals
+  assignedClasses = signal<any[]>([]);
+  pendingAttendance = signal<any[]>([]);
+  teacherAnnouncements = signal<any[]>([]);
+
   constructor() {
     super();
     this.loadDashboardData();
@@ -28,17 +40,64 @@ export class DashboardService extends BaseApiService {
    * Load stats and recent activity logs from the backend API simultaneously
    */
   loadDashboardData() {
+    const role = this.authService.currentRole();
     this.loading.set(true);
-    forkJoin({
-      stats: this.get<any>('/dashboard/admin/stats').pipe(catchError(() => of(null))),
-      activities: this.get<any>('/dashboard/admin/recent-activities').pipe(catchError(() => of(null))),
-      notifications: this.get<any>('/dashboard/admin/notifications').pipe(catchError(() => of(null))),
-      events: this.get<any>('/dashboard/admin/events').pipe(catchError(() => of(null))),
-      attendanceOverview: this.get<any>('/dashboard/admin/attendance-overview').pipe(catchError(() => of(null))),
-      feeOverview: this.get<any>('/dashboard/admin/fee-overview').pipe(catchError(() => of(null)))
-    }).pipe(
-      delay(600) // Premium UX loading transition
-    ).subscribe({
+
+    if (role === 'student') {
+      this.get<any>('/dashboard/student').pipe(
+        delay(600),
+        catchError(() => of(null))
+      ).subscribe({
+        next: (res) => {
+          if (res && res.success && res.data) {
+            this.studentAttendancePercentage.set(res.data.attendancePercentage);
+            this.upcomingExams.set(res.data.upcomingExams || []);
+            this.studentNotices.set(res.data.notices || []);
+          } else {
+            this.studentAttendancePercentage.set(null);
+            this.upcomingExams.set([]);
+            this.studentNotices.set([]);
+          }
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error('Error loading student dashboard:', err);
+          this.loading.set(false);
+        }
+      });
+    } else if (role === 'teacher') {
+      this.get<any>('/dashboard/teacher').pipe(
+        delay(600),
+        catchError(() => of(null))
+      ).subscribe({
+        next: (res) => {
+          if (res && res.success && res.data) {
+            this.assignedClasses.set(res.data.assignedClasses || []);
+            this.pendingAttendance.set(res.data.pendingAttendance || []);
+            this.teacherAnnouncements.set(res.data.announcements || []);
+          } else {
+            this.assignedClasses.set([]);
+            this.pendingAttendance.set([]);
+            this.teacherAnnouncements.set([]);
+          }
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error('Error loading teacher dashboard:', err);
+          this.loading.set(false);
+        }
+      });
+    } else {
+      forkJoin({
+        stats: this.get<any>('/dashboard/admin/stats').pipe(catchError(() => of(null))),
+        activities: this.get<any>('/dashboard/admin/recent-activities').pipe(catchError(() => of(null))),
+        notifications: this.get<any>('/dashboard/admin/notifications').pipe(catchError(() => of(null))),
+        events: this.get<any>('/dashboard/admin/events').pipe(catchError(() => of(null))),
+        attendanceOverview: this.get<any>('/dashboard/admin/attendance-overview').pipe(catchError(() => of(null))),
+        feeOverview: this.get<any>('/dashboard/admin/fee-overview').pipe(catchError(() => of(null)))
+      }).pipe(
+        delay(600) // Premium UX loading transition
+      ).subscribe({
       next: ({ stats, activities, notifications, events, attendanceOverview, feeOverview }) => {
       
       // 1. Map dynamic admin stats cards
@@ -178,5 +237,6 @@ export class DashboardService extends BaseApiService {
       this.loading.set(false);
     }
   });
+  }
 }
 }

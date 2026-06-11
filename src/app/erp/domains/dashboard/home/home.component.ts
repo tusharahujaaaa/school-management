@@ -1,8 +1,9 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DashboardService } from '../services/dashboard.service';
 import { ERP_BRANDING_CONFIG } from '../../../config/branding.config';
+import { AuthService } from '../../auth/services/auth.service';
 
 import { SectionHeaderComponent } from '../components/section-header/section-header.component';
 import { StatCardComponent } from '../components/stat-card/stat-card.component';
@@ -30,17 +31,37 @@ import { TooltipModule } from 'primeng/tooltip';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   branding = ERP_BRANDING_CONFIG;
   dashboardService = inject(DashboardService);
+  authService = inject(AuthService);
   router = inject(Router);
 
+  isStudent = this.authService.isStudent;
+  isTeacher = this.authService.isTeacher;
+  isAdmin = this.authService.isAdmin;
+
+  // Admin dashboard signals
   stats = this.dashboardService.stats;
   activities = this.dashboardService.activities;
   events = this.dashboardService.events;
   quickActions = this.dashboardService.quickActions;
   attendanceOverview = this.dashboardService.attendanceOverview;
   feeOverview = this.dashboardService.feeOverview;
+
+  // Student dashboard signals
+  studentAttendancePercentage = this.dashboardService.studentAttendancePercentage;
+  upcomingExams = this.dashboardService.upcomingExams;
+  studentNotices = this.dashboardService.studentNotices;
+
+  // Teacher dashboard signals
+  assignedClasses = this.dashboardService.assignedClasses;
+  pendingAttendance = this.dashboardService.pendingAttendance;
+  teacherAnnouncements = this.dashboardService.teacherAnnouncements;
+
+  ngOnInit() {
+    this.dashboardService.loadDashboardData();
+  }
 
   navigateToAction(route?: string) {
     if (route) {
