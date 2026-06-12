@@ -79,11 +79,16 @@
           </div>
         </div>
 
-        <!-- Action Button: Run Billing Invoices -->
+        <!-- Action Buttons: Run Billing Invoices & Delete -->
         <div>
-          <button pButton label="Generate Billing Run" icon="pi pi-refresh" class="p-button-outlined p-button-sm w-full"
-            (click)="runInvoice(struct.id)">
-          </button>
+          <div class="flex gap-2">
+            <button pButton label="Generate Run" icon="pi pi-refresh" class="p-button-outlined p-button-sm flex-grow-1"
+              (click)="runInvoice(struct)">
+            </button>
+            <button pButton icon="pi pi-trash" class="p-button-outlined p-button-danger p-button-sm"
+              (click)="deleteStructure(struct.id)">
+            </button>
+          </div>
         </div>
 
       </div>
@@ -172,6 +177,59 @@
 
     </form>
 
+  </p-dialog>
+
+  <!-- ── Billing Run Dialog Overlay ────────────────── -->
+  <p-dialog header="Configure Billing Run" [(visible)]="displayBillingDialog" [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '400px' }" [draggable]="false"
+    [resizable]="false" styleClass="p-fluid border-round-xl shadow-4 overflow-hidden">
+
+    <form [formGroup]="billingForm" (ngSubmit)="submitBillingRun()" class="py-2 flex flex-column gap-3">
+      
+      <div class="p-3 bg-gray-50 border-round-lg border-1 surface-border mb-2 text-xs text-600 line-height-3">
+        <div class="font-bold text-700 text-sm mb-1 uppercase">Billing Template Target</div>
+        <div><strong>Category:</strong> {{ selectedStructure() ? getFeeTypeLabel(selectedStructure().feeType) : '' }}</div>
+        <div><strong>Amount:</strong> ₹{{ (selectedStructure()?.amount || 0) | number:'1.2-2' }}</div>
+        <div><strong>Class:</strong> {{ selectedStructure()?.class ? (selectedStructure().class.name + ' ' + selectedStructure().class.section) : 'Global (All Enrolled)' }}</div>
+      </div>
+
+      <!-- Session Selection -->
+      <div>
+        <label for="billSession" class="text-700 font-semibold text-sm block mb-1.5">Academic Session Year <span class="text-red-500">*</span></label>
+        <p-select id="billSession" [options]="feesService.sessions()" formControlName="sessionId" optionLabel="name" optionValue="id"
+          class="w-full border-round-md" placeholder="Select session"></p-select>
+      </div>
+
+      <!-- Month Selection -->
+      <div>
+        <label for="billMonth" class="text-700 font-semibold text-sm block mb-1.5">Billing Month <span class="text-red-500">*</span></label>
+        <p-select id="billMonth" [options]="monthsList" formControlName="month" optionLabel="label" optionValue="value"
+          class="w-full border-round-md" placeholder="Select month"></p-select>
+      </div>
+
+      <!-- Year Input -->
+      <div>
+        <label for="billYear" class="text-700 font-semibold text-sm block mb-1.5">Billing Year <span class="text-red-500">*</span></label>
+        <input id="billYear" type="number" pInputText formControlName="year" placeholder="e.g. 2026"
+          class="p-inputtext-sm border-round-md" />
+        <small class="text-red-500 mt-1 block"
+          *ngIf="billingForm.get('year')?.touched && billingForm.get('year')?.invalid">
+          Please enter a valid billing year (2020 - 2100).
+        </small>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="flex gap-2 justify-content-end mt-4">
+        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+          (click)="displayBillingDialog.set(false)"></button>
+        <button pButton type="submit" [disabled]="billingForm.invalid || feesService.loading()"
+          class="p-button-sm px-4">
+          <i *ngIf="feesService.loading()" class="pi pi-spin pi-spinner mr-2"></i>
+          <span>{{ feesService.loading() ? 'Processing...' : 'Run Billing Invoices' }}</span>
+        </button>
+      </div>
+
+    </form>
   </p-dialog>
 
 </div>

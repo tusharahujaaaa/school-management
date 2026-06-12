@@ -64,6 +64,7 @@ export class FeeRecordsComponent implements OnInit {
   ngOnInit() {
     this.initPaymentForm();
     this.loadSetupClasses();
+    this.feesService.loadSessions();
     this.feesService.loadFeeRecords(1);
   }
 
@@ -91,40 +92,20 @@ export class FeeRecordsComponent implements OnInit {
   }
 
   onFilterChange() {
-    // Sync filters to FeesService
     this.feesService.filterStatus.set(this.statusFilter());
-    
-    // We filter list based on studentId search query or classId.
-    // Since our backend handles student search through filtering, let's trigger reloading:
+    this.feesService.filterClassId.set(this.classFilter());
     this.feesService.loadFeeRecords(1);
   }
 
   onSearch(event: any) {
     const val = event?.target?.value || '';
     this.searchQuery.set(val);
-    
-    // If student name search query is entered, we match clientside or search on backend:
-    // Wait, backend accepts studentId but not search query directly in `/fees/records`.
-    // Let's reload to fetch matching records.
+    this.feesService.filterSearch.set(val);
     this.feesService.loadFeeRecords(1);
   }
 
-  // Client-side computed search filter matching searchQuery and classFilter
-  filteredRecords = computed(() => {
-    const query = this.searchQuery().toLowerCase();
-    const clsId = this.classFilter();
-    const records = this.feesService.feeRecords();
-
-    return records.filter(r => {
-      const matchSearch = !query || 
-        r.student?.name?.toLowerCase().includes(query) || 
-        r.student?.rollNumber?.toLowerCase().includes(query);
-      
-      const matchClass = !clsId || r.student?.class?.id === clsId;
-      
-      return matchSearch && matchClass;
-    });
-  });
+  // Returned directly from service (fully server-side paginated & filtered list)
+  filteredRecords = computed(() => this.feesService.feeRecords());
 
   openPaymentModal(record: any) {
     this.selectedRecord.set(record);

@@ -17,6 +17,10 @@ export class FeesService {
   readonly overdueFees = signal<number>(0);
   readonly recentPayments = signal<any[]>([]);
 
+  // Sessions states
+  readonly sessions = signal<any[]>([]);
+  readonly activeSession = signal<any>(null);
+
   // Structure states
   readonly feeStructures = signal<any[]>([]);
 
@@ -32,6 +36,8 @@ export class FeesService {
   readonly filterStatus = signal<string>('');
   readonly filterFeeType = signal<string>('');
   readonly filterMonth = signal<string>('');
+  readonly filterSearch = signal<string>('');
+  readonly filterClassId = signal<string>('');
 
   /**
    * Initialise & load aggregate dashboard figures
@@ -74,6 +80,26 @@ export class FeesService {
   }
 
   /**
+   * Load active session years list
+   */
+  loadSessions() {
+    this.loading.set(true);
+    this.httpSvc.getSessions().pipe(
+      catchError((err) => {
+        console.error('Error fetching sessions:', err);
+        return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe((res: any) => {
+      if (res?.success && Array.isArray(res.data)) {
+        this.sessions.set(res.data);
+        const active = res.data.find((s: any) => s.isActive);
+        this.activeSession.set(active || null);
+      }
+    });
+  }
+
+  /**
    * Retrieve filtered paginated transaction logs
    */
   loadFeeRecords(page = 1) {
@@ -86,7 +112,10 @@ export class FeesService {
       studentId: this.filterStudentId() || undefined,
       status: this.filterStatus() || undefined,
       feeType: this.filterFeeType() || undefined,
-      month: this.filterMonth() || undefined
+      month: this.filterMonth() || undefined,
+      search: this.filterSearch() || undefined,
+      classId: this.filterClassId() || undefined,
+      sessionId: this.activeSession()?.id || undefined
     };
 
     this.httpSvc.getFeeRecords(filters).pipe(
@@ -122,7 +151,7 @@ export class FeesService {
   /**
    * Register a new fee structure configuration template
    */
-  createStructure(data: { classId?: string; feeType: string; label: string; amount: number; frequency: string; dueDay?: number }) {
+  createStructure(data: { classId?: string; feeType: string; label: string; amount: number; frequency: string; dueDay?: number; sessionId?: string }) {
     this.loading.set(true);
     return this.httpSvc.createFeeStructure(data).pipe(
       finalize(() => this.loading.set(false))
@@ -130,11 +159,21 @@ export class FeesService {
   }
 
   /**
+   * Delete a fee structure template
+   */
+  deleteStructure(structureId: string) {
+    this.loading.set(true);
+    return this.httpSvc.deleteFeeStructure(structureId).pipe(
+      finalize(() => this.loading.set(false))
+    );
+  }
+
+  /**
    * Perform invoice generation action
    */
-  runInvoiceGeneration(structureId: string) {
+  runInvoiceGeneration(payload: { sessionId: string; classId?: string; feeType: string; month: number; year: number }) {
     this.loading.set(true);
-    return this.httpSvc.generateInvoices(structureId).pipe(
+    return this.httpSvc.generateInvoices(payload).pipe(
       finalize(() => this.loading.set(false))
     );
   }

@@ -12,21 +12,56 @@ export class FeesHttpService extends BaseApiService {
    * Fetch all fee structure templates
    */
   getFeeStructures(): Observable<ApiResponse<any>> {
-    return this.get<ApiResponse<any>>('/fees/structures');
+    return this.get<ApiResponse<any>>('/fees/structure');
   }
 
   /**
    * Create a new fee structure configuration
    */
   createFeeStructure(data: any): Observable<ApiResponse<any>> {
-    return this.post<ApiResponse<any>>('/fees/structures', data);
+    return this.post<ApiResponse<any>>('/fees/structure', data);
   }
 
   /**
-   * Run batch invoice generation for a structure
+   * Update an existing fee structure configuration
    */
-  generateInvoices(structureId: string): Observable<ApiResponse<any>> {
-    return this.post<ApiResponse<any>>(`/fees/structures/${structureId}/generate`, {});
+  updateFeeStructure(structureId: string, data: any): Observable<ApiResponse<any>> {
+    return this.put<ApiResponse<any>>(`/fees/structure/${structureId}`, data);
+  }
+
+  /**
+   * Delete a fee structure configuration
+   */
+  deleteFeeStructure(structureId: string): Observable<ApiResponse<any>> {
+    return this.delete<ApiResponse<any>>(`/fees/structure/${structureId}`);
+  }
+
+  /**
+   * Run parametric batch invoice generation
+   */
+  generateInvoices(payload: { sessionId: string; classId?: string; feeType: string; month: number; year: number }): Observable<ApiResponse<any>> {
+    return this.post<ApiResponse<any>>('/fees/generate', payload);
+  }
+
+  /**
+   * Fetch active session years
+   */
+  getSessions(): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/fees/sessions');
+  }
+
+  /**
+   * Define a new session year
+   */
+  createSession(data: any): Observable<ApiResponse<any>> {
+    return this.post<ApiResponse<any>>('/fees/sessions', data);
+  }
+
+  /**
+   * Set a session year as active
+   */
+  activateSession(sessionId: string): Observable<ApiResponse<any>> {
+    return this.patch<ApiResponse<any>>(`/fees/sessions/${sessionId}/activate`, {});
   }
 
   /**

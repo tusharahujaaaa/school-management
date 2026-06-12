@@ -31,9 +31,12 @@ export class FeeStructuresComponent implements OnInit {
   private messageService = inject(MessageService);
 
   displayDialog = signal<boolean>(false);
+  displayBillingDialog = signal<boolean>(false);
   classesList = signal<any[]>([]);
+  selectedStructure = signal<any>(null);
   
   structureForm!: FormGroup;
+  billingForm!: FormGroup;
 
   feeTypes = [
     { label: 'Tuition Fee', value: 'TUITION' },
@@ -52,10 +55,27 @@ export class FeeStructuresComponent implements OnInit {
     { label: 'One-Time', value: 'ONE_TIME' }
   ];
 
+  monthsList = [
+    { label: 'January', value: 1 },
+    { label: 'February', value: 2 },
+    { label: 'March', value: 3 },
+    { label: 'April', value: 4 },
+    { label: 'May', value: 5 },
+    { label: 'June', value: 6 },
+    { label: 'July', value: 7 },
+    { label: 'August', value: 8 },
+    { label: 'September', value: 9 },
+    { label: 'October', value: 10 },
+    { label: 'November', value: 11 },
+    { label: 'December', value: 12 }
+  ];
+
   ngOnInit() {
     this.feesService.loadFeeStructures();
+    this.feesService.loadSessions();
     this.loadSetupClasses();
     this.initForm();
+    this.initBillingForm();
   }
 
   initForm() {
@@ -66,6 +86,14 @@ export class FeeStructuresComponent implements OnInit {
       amount: [null, [Validators.required, Validators.min(1)]],
       frequency: ['MONTHLY', Validators.required],
       dueDay: [10, [Validators.required, Validators.min(1), Validators.max(28)]]
+    });
+  }
+
+  initBillingForm() {
+    this.billingForm = this.fb.group({
+      sessionId: ['', Validators.required],
+      month: [new Date().getMonth() + 1, Validators.required],
+      year: [new Date().getFullYear(), [Validators.required, Validators.min(2020), Validators.max(2100)]]
     });
   }
 
@@ -102,7 +130,11 @@ export class FeeStructuresComponent implements OnInit {
       return;
     }
 
-    const payload = this.structureForm.value;
+    const payload = {
+      ...this.structureForm.value,
+      sessionId: this.feesService.activeSession()?.id || null
+    };
+
     this.feesService.createStructure(payload).subscribe({
       next: (res: any) => {
         if (res?.success) {
@@ -117,20 +149,60 @@ export class FeeStructuresComponent implements OnInit {
     });
   }
 
-  runInvoice(structureId: string) {
-    this.feesService.runInvoiceGeneration(structureId).subscribe({
+  runInvoice(struct: any) {
+    this.selectedStructure.set(struct);
+    this.billingForm.reset({
+      sessionId: this.feesService.activeSession()?.id || '',
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear()
+    });
+    this.displayBillingDialog.set(true);
+  }
+
+  submitBillingRun() {
+    if (this.billingForm.invalid || !this.selectedStructure()) {
+      return;
+    }
+
+    const struct = this.selectedStructure();
+    const payload = {
+      sessionId: this.billingForm.value.sessionId,
+      month: Number(this.billingForm.value.month),
+      year: Number(this.billingForm.value.year),
+      feeType: struct.feeType,
+      classId: struct.classId || undefined
+    };
+
+    this.feesService.runInvoiceGeneration(payload).subscribe({
       next: (res: any) => {
         if (res?.success) {
           const detailMsg = res.data
             ? `Generated ${res.data.generated} invoices. Skipped ${res.data.skipped || 0} duplicates.`
             : 'Invoices generated successfully.';
           this.messageService.add({ severity: 'success', summary: 'Invoice Run Completed', detail: detailMsg });
+          this.displayBillingDialog.set(false);
         }
       },
       error: (err: any) => {
         this.messageService.add({ severity: 'error', summary: 'Invoice Run Failed', detail: err?.error?.message || 'Unable to generate invoices.' });
       }
     });
+  }
+
+  deleteStructure(structureId: string) {
+    if (confirm('Are you sure you want to delete this fee structure template? This action cannot be undone.')) {
+      this.feesService.deleteStructure(structureId).subscribe({
+        next: (res: any) => {
+          if (res?.success) {
+            this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Fee structure template deleted successfully.' });
+            this.feesService.loadFeeStructures();
+          }
+        },
+        error: (err: any) => {
+          this.messageService.add({ severity: 'error', summary: 'Deletion Failed', detail: err?.error?.message || 'Unable to delete fee structure.' });
+        }
+      });
+    }
   }
 
   getFeeTypeLabel(type: string): string {
