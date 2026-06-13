@@ -1,4 +1,4 @@
-import { Component, Input, computed } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type BadgeSeverity = 'success' | 'warning' | 'danger' | 'info' | 'neutral' | 'primary';
@@ -21,7 +21,7 @@ export class StatusBadgeComponent {
   @Input() icon?: string;
 
   /** Computed classes based on severity */
-  readonly badgeClass = computed(() => {
+  get badgeClass(): string {
     const classes: Record<BadgeSeverity, string> = {
       success: 'bg-green-100 text-green-700',
       danger:  'bg-red-100 text-red-700',
@@ -31,5 +31,5 @@ export class StatusBadgeComponent {
       neutral: 'bg-surface-200 text-600'
     };
     return classes[this.severity] || classes.neutral;
-  });
+  }
 }

@@ -177,4 +177,15 @@ export class FeesService {
       finalize(() => this.loading.set(false))
     );
   }
+
+  /**
+   * Waive a fee record
+   */
+  waiveRecord(recordId: string, remarks?: string) {
+    this.loading.set(true);
+    return this.httpSvc.waiveFeeRecord(recordId, remarks).pipe(
+      finalize(() => this.loading.set(false))
+    );
+  }
 }
+

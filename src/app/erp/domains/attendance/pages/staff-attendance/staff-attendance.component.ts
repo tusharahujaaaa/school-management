@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
@@ -29,6 +29,13 @@ export class StaffAttendanceComponent {
 
   searchQuery = signal('');
   isSubmitting = signal(false);
+
+  constructor() {
+    effect(() => {
+      const date = this.svc.selectedDate();
+      this.svc.loadStaffRoster(date);
+    });
+  }
 
   staff = this.svc.filteredStaff;
   records = this.svc.staffRecords;
@@ -83,9 +90,16 @@ export class StaffAttendanceComponent {
 
   submit() {
     this.isSubmitting.set(true);
-    this.svc.submitAttendance().subscribe(() => {
-      this.isSubmitting.set(false);
-      this.messageService.add({ severity: 'success', summary: 'Submitted', detail: 'Staff attendance saved!' });
+    const date = this.svc.selectedDate();
+    this.svc.submitStaffAttendance(date).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.messageService.add({ severity: 'success', summary: 'Submitted', detail: 'Staff attendance saved!' });
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.message || 'Failed to submit staff attendance.' });
+      }
     });
   }
 }

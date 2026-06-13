@@ -29,7 +29,7 @@ import { NotificationData } from '../../domains/dashboard/models/dashboard.model
       </div>
 
       <!-- Filters & Counter -->
-      <div class="surface-card p-3 border-round-xl shadow-1 mb-4 flex flex-column md:flex-row align-items-md-center justify-content-between gap-3 border-1 surface-border">
+      <div class="surface-card p-3 border-round-xl shadow-1 mb-4 flex flex-column md:flex-row md:align-items-center justify-content-between gap-3 border-1 surface-border">
         <!-- Filter Tabs -->
         <div class="flex flex-wrap gap-2">
           <button *ngFor="let tab of tabs" 

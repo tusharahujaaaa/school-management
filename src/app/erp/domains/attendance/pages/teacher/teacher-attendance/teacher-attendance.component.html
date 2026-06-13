@@ -69,7 +69,7 @@
 
   <!-- Class Progress metrics -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4" *ngIf="students().length > 0">
-    <div class="flex flex-column sm:flex-row justify-content-between align-items-sm-center gap-2 mb-3">
+    <div class="flex flex-column sm:flex-row justify-content-between sm:align-items-center gap-2 mb-3">
       <div>
         <h4 class="m-0 text-800 font-semibold text-md mb-1">Roster Progress</h4>
         <span class="text-sm text-500">{{ students().length - summary().unmarked }} of {{ students().length }} students marked</span>
@@ -146,11 +146,11 @@
                   [disabled]="sheetStatus() === 'LOCKED' || isFutureDate()"
                   class="w-2.5rem h-2.5rem border-circle border-1 text-sm font-bold cursor-pointer transition-all flex align-items-center justify-content-center shadow-sm"
                   [ngClass]="{
-                    'bg-green-500 border-green-500 text-white scale-95': getStatus(student.id) === opt.value && opt.value === 'present',
-                    'bg-red-500 border-red-500 text-white scale-95':   getStatus(student.id) === opt.value && opt.value === 'absent',
-                    'bg-orange-400 border-orange-400 text-white scale-95': getStatus(student.id) === opt.value && opt.value === 'late',
-                    'bg-blue-500 border-blue-500 text-white scale-95':   getStatus(student.id) === opt.value && opt.value === 'leave',
-                    'surface-0 border-surface-300 text-600 hover:bg-surface-100': getStatus(student.id) !== opt.value,
+                    'bg-green-500 border-green-500 text-white scale-95': getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'present',
+                    'bg-red-500 border-red-500 text-white scale-95':   getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'absent',
+                    'bg-orange-400 border-orange-400 text-white scale-95': getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'late',
+                    'bg-blue-500 border-blue-500 text-white scale-95':   getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'leave',
+                    'surface-0 border-surface-300 text-600 hover:bg-surface-100': getStatus(student.id)?.toLowerCase() !== opt.value,
                     'opacity-50 cursor-not-allowed': sheetStatus() === 'LOCKED' || isFutureDate()
                   }"
                   [title]="opt.value | titlecase">

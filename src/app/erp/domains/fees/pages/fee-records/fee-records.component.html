@@ -108,11 +108,18 @@
 
             <!-- Action buttons -->
             <td class="p-3 text-center">
-              <button *ngIf="record.status !== 'PAID'" pButton label="Collect" icon="pi pi-indian-rupee"
-                class="p-button-outlined p-button-sm p-button-success" (click)="openPaymentModal(record)"></button>
+              <div class="flex justify-content-center gap-1.5">
+                <button *ngIf="record.status !== 'PAID' && record.status !== 'WAIVED'" pButton label="Collect" icon="pi pi-indian-rupee"
+                  class="p-button-outlined p-button-sm p-button-success" (click)="openPaymentModal(record)"></button>
 
-              <button *ngIf="record.status === 'PAID'" pButton label="Receipt" icon="pi pi-print"
-                class="p-button-outlined p-button-sm p-button-secondary" (click)="openReceiptModal(record)"></button>
+                <ng-container *erpHasPermission="PERMISSIONS.FEES.COLLECT">
+                  <button *ngIf="record.status !== 'PAID' && record.status !== 'WAIVED'" pButton label="Waive" icon="pi pi-tag"
+                    class="p-button-outlined p-button-sm p-button-danger" (click)="openWaiveModal(record)"></button>
+                </ng-container>
+
+                <button *ngIf="record.status === 'PAID'" pButton label="Receipt" icon="pi pi-print"
+                  class="p-button-outlined p-button-sm p-button-secondary" (click)="openReceiptModal(record)"></button>
+              </div>
             </td>
 
           </tr>
@@ -254,6 +261,50 @@
         <button pButton type="button" label="Print Invoice" icon="pi pi-print" class="p-button-sm px-4"
           (click)="printReceipt()"></button>
       </div>
+
+    </div>
+
+  </p-dialog>
+
+  <!-- ── Waive Fee Modal Overlay ─────────────────────── -->
+  <p-dialog header="Waive Student Fee Record" [(visible)]="waiveDialog" [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '420px' }" [draggable]="false"
+    [resizable]="false" styleClass="p-fluid border-round-xl shadow-4 overflow-hidden">
+
+    <div *ngIf="selectedRecord()" class="py-2 flex flex-column gap-3">
+
+      <!-- Student & Fee Particulars Info Widget -->
+      <div class="p-3 bg-red-50 border-round-xl border-1 border-red-100 text-red-700">
+        <span class="text-xs font-semibold uppercase block mb-1">WAIVER WARNING</span>
+        <div class="text-sm line-height-3">
+          You are about to waive the fee record for <strong>{{ selectedRecord().student?.name }}</strong>. 
+          This will set the invoice status of <strong>₹{{ selectedRecord().amount }}</strong> ({{ selectedRecord().feeType }}) to <strong>WAIVED</strong>. 
+          This transaction cannot be collected after waiving.
+        </div>
+      </div>
+
+      <form [formGroup]="waiverForm" (ngSubmit)="submitWaiver()" class="flex flex-column gap-3">
+
+        <!-- Waiver Remarks -->
+        <div>
+          <label for="waiveRemarks" class="text-700 font-semibold text-sm block mb-1.5">Waiver Reason / Authorization Remarks <span
+              class="text-red-500">*</span></label>
+          <input id="waiveRemarks" type="text" pInputText formControlName="remarks" placeholder="e.g. Scholarship approved by Principal"
+            class="p-inputtext-sm border-round-md" />
+          <small class="text-red-500 mt-1 block"
+            *ngIf="waiverForm.get('remarks')?.touched && waiverForm.get('remarks')?.invalid">
+            Please enter a waiver reason (min 3 characters).
+          </small>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2 justify-content-end mt-4">
+          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+            (click)="waiveDialog.set(false)"></button>
+          <button pButton type="submit" [disabled]="waiverForm.invalid" label="Approve Waiver" class="p-button-danger p-button-sm px-4"></button>
+        </div>
+
+      </form>
 
     </div>
 

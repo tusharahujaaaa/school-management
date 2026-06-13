@@ -12,10 +12,13 @@ import {
   MOCK_ATTENDANCE_HISTORY, MOCK_LOW_ATTENDANCE, MOCK_REPORTS
 } from '../mock-data/attendance.mock';
 
+import { TeachersHttpService } from '../../teachers/services/teachers-http.service';
+
 @Injectable({ providedIn: 'root' })
 export class AttendanceService {
   private httpSvc = inject(AttendanceHttpService);
   private loadingSvc = inject(LoadingService);
+  private teachersHttpSvc = inject(TeachersHttpService);
 
   private readonly USE_MOCK = false;
 
@@ -382,6 +385,56 @@ export class AttendanceService {
 
   getStaffStatus(staffId: string): StaffAttendanceStatus | null {
     return this._staffRecords()?.get(staffId)?.status ?? null;
+  }
+
+  loadStaffRoster(date: string) {
+    if (this.USE_MOCK) return;
+
+    this.teachersHttpSvc.getTeachers().subscribe({
+      next: (res) => {
+        const teachersList = res?.data || [];
+        const mappedStaff = teachersList.map((t: any) => ({
+          id: t.id,
+          employeeId: t.phone || t.id.slice(0, 8),
+          name: t.name,
+          department: t.subject || 'General Studies',
+          role: 'Teacher',
+          avatar: t.photoUrl
+        }));
+        this.staff.set(mappedStaff);
+
+        // Fetch staff attendance records for this date
+        this.httpSvc.getStaffAttendanceHistory({ date }).subscribe({
+          next: (historyRes) => {
+            const historyList = historyRes?.data?.data || [];
+            const recordsMap = new Map<string, StaffAttendanceRecord>();
+            historyList.forEach((item: any) => {
+              const teacherId = item.studentId; // stored in studentId column on backend schema
+              recordsMap.set(teacherId, {
+                staffId: teacherId,
+                status: item.status.toLowerCase() as StaffAttendanceStatus,
+                remarks: item.remarks || ''
+              });
+            });
+            this._staffRecords.set(recordsMap);
+          }
+        });
+      }
+    });
+  }
+
+  submitStaffAttendance(date: string): Observable<any> {
+    if (this.isFutureDate(date)) {
+      throw new Error('Cannot submit staff attendance for future dates.');
+    }
+
+    const records = Array.from(this._staffRecords().values()).map(r => ({
+      teacherId: r.staffId,
+      status: r.status.toUpperCase(),
+      remarks: r.remarks || ''
+    }));
+
+    return this.httpSvc.submitStaffAttendance(date, records);
   }
 
   saveDraft(): Observable<any> {

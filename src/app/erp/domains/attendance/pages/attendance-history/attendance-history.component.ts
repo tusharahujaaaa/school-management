@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AttendanceService } from '../../services/attendance.service';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
@@ -12,7 +13,7 @@ import { AttendanceHistoryRecord } from '../../models/attendance.model';
 @Component({
   selector: 'app-attendance-history',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, ButtonModule, PageHeaderComponent, ErpTableComponent],
+  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, PageHeaderComponent, ErpTableComponent],
   templateUrl: './attendance-history.component.html',
   styleUrls: ['./attendance-history.component.scss']
 })

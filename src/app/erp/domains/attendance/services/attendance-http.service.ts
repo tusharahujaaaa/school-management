@@ -42,4 +42,18 @@ export class AttendanceHttpService extends BaseApiService {
   getStudentAttendanceHistory(studentId: string, filters?: { startDate?: string; endDate?: string; status?: string }): Observable<ApiResponse<any>> {
     return this.get<ApiResponse<any>>(`/attendance/student/${studentId}/history`, filters);
   }
+
+  /**
+   * Submit staff attendance records in bulk
+   */
+  submitStaffAttendance(date: string, records: any[]): Observable<ApiResponse<any>> {
+    return this.post<ApiResponse<any>>('/attendance/staff', { date, records });
+  }
+
+  /**
+   * Fetch staff attendance history logs
+   */
+  getStaffAttendanceHistory(filters?: { date?: string; dateFrom?: string; dateTo?: string; teacherId?: string }): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/attendance/staff/history', filters);
+  }
 }

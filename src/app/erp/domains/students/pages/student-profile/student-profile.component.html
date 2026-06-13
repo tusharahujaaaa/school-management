@@ -112,6 +112,35 @@
 
                             <!-- Ledger Content (when loaded and not empty) -->
                             <div *ngIf="!loadingLedger() && studentLedger()">
+                                <!-- Fee Profile Rules Widget -->
+                                <div class="surface-card p-3 border-round-xl border-1 surface-border mb-4 flex flex-column sm:flex-row justify-content-between sm:align-items-center gap-3 bg-surface-50">
+                                    <div>
+                                        <div class="flex align-items-center gap-2 mb-1.5">
+                                            <i class="pi pi-percentage text-primary text-sm"></i>
+                                            <span class="text-900 font-bold text-sm">Discount & Waiver Settings</span>
+                                        </div>
+                                        <div class="text-500 text-xs line-height-3">
+                                            <ng-container *ngIf="feeProfile() as profile; else noProfile">
+                                                <span *ngIf="profile.isFeeWaived" class="text-red-700 font-bold">
+                                                    <i class="pi pi-exclamation-triangle mr-1"></i>Fees Waived: Yes ({{ profile.waiverReason || 'No reason specified' }})
+                                                </span>
+                                                <span *ngIf="!profile.isFeeWaived && profile.hasDiscount" class="text-green-700 font-bold">
+                                                    <i class="pi pi-tag mr-1"></i>Active Discount: {{ profile.discountValue }} {{ profile.discountType === 'PERCENTAGE' ? '%' : 'INR' }} ({{ profile.discountReason | titlecase }})
+                                                </span>
+                                                <span *ngIf="!profile.isFeeWaived && !profile.hasDiscount" class="text-600">
+                                                    No active discounts or waiver configurations applied to this student.
+                                                </span>
+                                            </ng-container>
+                                            <ng-template #noProfile>
+                                                <span class="text-600">No active discounts or waiver configurations applied to this student.</span>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                    <div *erpHasPermission="PERMISSIONS.FEES.COLLECT">
+                                        <button pButton label="Configure Profile" icon="pi pi-cog" class="p-button-outlined p-button-sm px-3" (click)="openProfileModal()"></button>
+                                    </div>
+                                </div>
+
                                 <!-- Summary Cards -->
                                 <div class="grid mb-4">
                                     <div class="col-12 md:col-4">
@@ -204,3 +233,93 @@
         </div>
     </div>
 </div>
+
+<!-- ── Manage Fee Profile Dialog ───────────────────── -->
+<p-dialog header="Configure Student Fee Profile" [(visible)]="displayProfileDialog" [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '480px' }" [draggable]="false"
+  [resizable]="false" styleClass="p-fluid border-round-xl shadow-4 overflow-hidden">
+
+  <div *ngIf="store.selectedStudent() as student" class="py-2 flex flex-column gap-3">
+
+    <!-- Profile context header -->
+    <div class="p-3 bg-surface-50 border-round-xl border-1 surface-border">
+      <span class="text-500 text-xs block mb-1">Configuring Scoped Billing Rules for</span>
+      <div class="text-900 font-bold text-base mb-1">{{ student.fullName }}</div>
+      <div class="text-500 text-xs">
+        Admission No: {{ student.admissionNumber }} &bull; Class: {{ student.class }} &bull; Active Session: <strong>{{ feesService.activeSession()?.name || 'N/A' }}</strong>
+      </div>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="submitFeeProfile()" class="flex flex-column gap-3.5">
+
+      <!-- direct session waiver -->
+      <div class="field-checkbox flex align-items-center gap-2 p-2 border-round-lg border-1 border-red-100 bg-red-50/30">
+        <input type="checkbox" id="isFeeWaived" formControlName="isFeeWaived" class="w-1.2rem h-1.2rem accent-red-600 cursor-pointer" />
+        <div>
+          <label for="isFeeWaived" class="text-red-700 font-bold text-sm cursor-pointer">Waive All Academic Fees for Session</label>
+          <span class="text-500 text-2xs block mt-0.5">Overrides all generated bills to status Waived (finalAmount = 0).</span>
+        </div>
+      </div>
+
+      <!-- waiver reason input -->
+      <div *ngIf="profileForm.get('isFeeWaived')?.value">
+        <label for="waiverReason" class="text-700 font-semibold text-sm block mb-1.5">Waiver Reason</label>
+        <input id="waiverReason" type="text" pInputText formControlName="waiverReason" placeholder="e.g. Merit Scholarship Full Waiver"
+          class="p-inputtext-sm border-round-md" />
+      </div>
+
+      <hr class="surface-border my-2" />
+
+      <!-- standard scholarship discount -->
+      <div class="field-checkbox flex align-items-center gap-2 p-2 border-round-lg border-1 surface-border bg-surface-50">
+        <input type="checkbox" id="hasDiscount" formControlName="hasDiscount" class="w-1.2rem h-1.2rem accent-primary cursor-pointer" />
+        <div>
+          <label for="hasDiscount" class="text-900 font-semibold text-sm cursor-pointer">Apply Scholarship / Sibling Discount</label>
+          <span class="text-500 text-2xs block mt-0.5">Subtracts a fixed amount or percentage from billing generation templates.</span>
+        </div>
+      </div>
+
+      <div *ngIf="profileForm.get('hasDiscount')?.value" class="flex flex-column gap-3">
+        
+        <div class="grid">
+          <div class="col-6">
+            <label for="discountType" class="text-700 font-semibold text-sm block mb-1.5">Discount Type <span class="text-red-500">*</span></label>
+            <p-select id="discountType" [options]="discountTypes" formControlName="discountType" optionLabel="label"
+              optionValue="value" class="w-full border-round-md"></p-select>
+          </div>
+          <div class="col-6">
+            <label for="discountValue" class="text-700 font-semibold text-sm block mb-1.5">Discount Value <span class="text-red-500">*</span></label>
+            <input id="discountValue" type="number" pInputText formControlName="discountValue" placeholder="e.g. 15 or 500"
+              class="p-inputtext-sm border-round-md" />
+          </div>
+        </div>
+
+        <div>
+          <label for="discountReason" class="text-700 font-semibold text-sm block mb-1.5">Scholarship Category / Reason <span class="text-red-500">*</span></label>
+          <p-select id="discountReason" [options]="discountReasons" formControlName="discountReason" optionLabel="label"
+            optionValue="value" class="w-full border-round-md"></p-select>
+        </div>
+
+      </div>
+
+      <hr class="surface-border my-2" />
+
+      <!-- Remarks -->
+      <div>
+        <label for="profileRemarks" class="text-700 font-semibold text-sm block mb-1.5">Internal Remarks</label>
+        <input id="profileRemarks" type="text" pInputText formControlName="remarks" placeholder="e.g. Approved in board meeting"
+          class="p-inputtext-sm border-round-md" />
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-2 justify-content-end mt-4">
+        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+          (click)="displayProfileDialog.set(false)"></button>
+        <button pButton type="submit" [disabled]="profileForm.invalid" label="Save settings" class="p-button-sm px-4"></button>
+      </div>
+
+    </form>
+
+  </div>
+
+</p-dialog>

@@ -11,8 +11,8 @@
     <div class="grid align-items-end">
       <div class="col-12 md:col-3">
         <label class="block text-700 font-medium mb-2">Date</label>
-        <input type="date" [ngModel]="filterDate()" (ngModelChange)="filterDate.set($event)"
-               class="w-full p-3 border-1 surface-border border-round-lg surface-0 text-900 outline-none">
+        <input pInputText type="date" [ngModel]="filterDate()" (ngModelChange)="filterDate.set($event)"
+               class="w-full border-round-lg py-2 px-3">
       </div>
       <div class="col-12 md:col-3">
         <label class="block text-700 font-medium mb-2">Class</label>

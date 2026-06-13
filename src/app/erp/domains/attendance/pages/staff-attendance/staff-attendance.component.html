@@ -12,6 +12,17 @@
     </div>
   </app-erp-page-header>
 
+  <!-- Filters Card -->
+  <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
+    <div class="grid">
+      <div class="col-12 md:col-4">
+        <label class="block text-700 font-medium mb-2">Date</label>
+        <input type="date" [value]="svc.selectedDate()" (change)="svc.selectedDate.set($any($event.target).value)"
+          class="w-full p-3 border-1 surface-border border-round-lg surface-0 text-900 outline-none focus:border-primary transition-all">
+      </div>
+    </div>
+  </div>
+
   <!-- Staff Table -->
   <app-erp-table
     [data]="staff()"
@@ -48,12 +59,12 @@
         <button *ngFor="let opt of statusOptions" (click)="markStatus(member.id, opt.value)"
           class="border-round px-2 py-1 text-xs font-semibold border-1 cursor-pointer transition-all"
           [ngClass]="{
-            'bg-green-500 border-green-500 text-white': getStatus(member.id) === opt.value && opt.value === 'present',
-            'bg-red-500 border-red-500 text-white': getStatus(member.id) === opt.value && opt.value === 'absent',
-            'bg-orange-500 border-orange-500 text-white': getStatus(member.id) === opt.value && opt.value === 'late',
-            'bg-yellow-500 border-yellow-500 text-white': getStatus(member.id) === opt.value && opt.value === 'half-day',
-            'bg-blue-500 border-blue-500 text-white': getStatus(member.id) === opt.value && opt.value === 'leave',
-            'surface-0 border-surface-300 text-500 hover:surface-100': getStatus(member.id) !== opt.value
+            'bg-green-500 border-green-500 text-white': getStatus(member.id)?.toLowerCase() === opt.value && opt.value === 'present',
+            'bg-red-500 border-red-500 text-white': getStatus(member.id)?.toLowerCase() === opt.value && opt.value === 'absent',
+            'bg-orange-500 border-orange-500 text-white': getStatus(member.id)?.toLowerCase() === opt.value && opt.value === 'late',
+            'bg-yellow-500 border-yellow-500 text-white': getStatus(member.id)?.toLowerCase() === opt.value && opt.value === 'half-day',
+            'bg-blue-500 border-blue-500 text-white': getStatus(member.id)?.toLowerCase() === opt.value && opt.value === 'leave',
+            'surface-0 border-surface-300 text-500 hover:surface-100': getStatus(member.id)?.toLowerCase() !== opt.value
           }">{{ opt.label }}</button>
       </div>
     </ng-template>

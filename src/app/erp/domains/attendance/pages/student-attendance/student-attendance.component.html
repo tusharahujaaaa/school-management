@@ -22,7 +22,7 @@
 
       <!-- Lifecycle Banner: Locked session -->
       <div *ngIf="sheetStatus() === 'LOCKED' && !isFutureDate()" 
-        class="border-round-xl p-3 flex flex-column md:flex-row justify-content-between align-items-md-center gap-3 bg-surface-100 border-1 border-300 text-700 shadow-sm animate-fadein">
+        class="border-round-xl p-3 flex flex-column md:flex-row justify-content-between md:align-items-center gap-3 bg-surface-100 border-1 border-300 text-700 shadow-sm animate-fadein">
         <div class="flex align-items-center gap-3">
           <i class="pi pi-lock text-2xl text-gray-500"></i>
           <div>
@@ -38,7 +38,7 @@
 
       <!-- Lifecycle Banner: Submitted or Edited session -->
       <div *ngIf="(sheetStatus() === 'SUBMITTED' || sheetStatus() === 'EDITED') && !isFutureDate()" 
-        class="border-round-xl p-3 flex flex-column md:flex-row justify-content-between align-items-md-center gap-3 bg-blue-50 border-1 border-blue-200 text-blue-800 shadow-sm animate-fadein">
+        class="border-round-xl p-3 flex flex-column md:flex-row justify-content-between md:align-items-center gap-3 bg-blue-50 border-1 border-blue-200 text-blue-800 shadow-sm animate-fadein">
         <div class="flex align-items-center gap-3">
           <i class="pi pi-check-circle text-2xl text-blue-500"></i>
           <div>
@@ -88,7 +88,7 @@
 
   <!-- Step 2: Filters -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
-    <div class="flex flex-column md:flex-row justify-content-between align-items-md-center mb-3 gap-2">
+    <div class="flex flex-column md:flex-row justify-content-between md:align-items-center mb-3 gap-2">
       <h3 class="m-0 text-900 font-semibold text-lg flex align-items-center gap-2">
         <span class="bg-primary text-white border-circle w-2rem h-2rem flex align-items-center justify-content-center text-sm font-bold shadow-sm">1</span>
         Select Class, Section & Date
@@ -101,8 +101,8 @@
     <div class="grid">
       <div class="col-12 md:col-4">
         <label class="block text-700 font-medium mb-2">Date</label>
-        <input type="date" [value]="selectedDate()" (change)="selectedDate.set($any($event.target).value)"
-          class="w-full p-3 border-1 surface-border border-round-lg surface-0 text-900 outline-none focus:border-primary transition-all">
+        <input pInputText type="date" [value]="selectedDate()" (change)="selectedDate.set($any($event.target).value)"
+          class="w-full border-round-lg py-2 px-3">
       </div>
       <div class="col-12 md:col-4">
         <label class="block text-700 font-medium mb-2">Class</label>
@@ -119,7 +119,7 @@
 
   <!-- Completion Progress Metrics -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4" *ngIf="students().length > 0">
-    <div class="flex flex-column md:flex-row justify-content-between align-items-md-center gap-2 mb-3">
+    <div class="flex flex-column md:flex-row justify-content-between md:align-items-center gap-2 mb-3">
       <div>
         <h4 class="m-0 text-800 font-semibold text-md mb-1">Class Marking Progress</h4>
         <span class="text-sm text-500">{{ students().length - summary().unmarked }} of {{ students().length }} students marked</span>
@@ -216,11 +216,11 @@
             [disabled]="sheetStatus() === 'LOCKED' || isFutureDate()"
             class="border-round-lg px-3 py-2 text-sm font-semibold border-1 cursor-pointer transition-all shadow-sm focus:outline-none" 
             [ngClass]="{
-              'bg-green-500 border-green-500 text-white scale-95': getStatus(student.id) === opt.value && opt.value === 'present',
-              'bg-red-500 border-red-500 text-white scale-95': getStatus(student.id) === opt.value && opt.value === 'absent',
-              'bg-orange-500 border-orange-500 text-white scale-95': getStatus(student.id) === opt.value && opt.value === 'late',
-              'bg-blue-500 border-blue-500 text-white scale-95': getStatus(student.id) === opt.value && opt.value === 'leave',
-              'surface-0 border-surface-300 text-600 hover:bg-surface-100': getStatus(student.id) !== opt.value,
+              'bg-green-500 border-green-500 text-white scale-95': getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'present',
+              'bg-red-500 border-red-500 text-white scale-95': getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'absent',
+              'bg-orange-500 border-orange-500 text-white scale-95': getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'late',
+              'bg-blue-500 border-blue-500 text-white scale-95': getStatus(student.id)?.toLowerCase() === opt.value && opt.value === 'leave',
+              'surface-0 border-surface-300 text-600 hover:bg-surface-100': getStatus(student.id)?.toLowerCase() !== opt.value,
               'opacity-50 cursor-not-allowed': sheetStatus() === 'LOCKED' || isFutureDate()
             }">{{ opt.label }}</button>
         </div>

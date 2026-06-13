@@ -1,1 +1,9 @@
-:host { display: block; }
+:host {
+  display: block;
+}
+
+input[type="date"],
+::ng-deep .p-select {
+  height: 40px !important;
+  box-sizing: border-box;
+}

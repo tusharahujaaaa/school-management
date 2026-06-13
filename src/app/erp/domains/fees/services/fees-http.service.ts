@@ -86,6 +86,28 @@ export class FeesHttpService extends BaseApiService {
   }
 
   /**
+   * Waive an individual fee record
+   */
+  waiveFeeRecord(recordId: string, remarks?: string): Observable<ApiResponse<any>> {
+    return this.patch<ApiResponse<any>>(`/fees/records/${recordId}/waive`, { remarks });
+  }
+
+  /**
+   * Fetch a student's session-specific fee profile (discounts, waivers)
+   */
+  getStudentFeeProfile(studentId: string, sessionId?: string): Observable<ApiResponse<any>> {
+    const params = sessionId ? { sessionId } : undefined;
+    return this.get<ApiResponse<any>>(`/fees/profile/${studentId}`, params);
+  }
+
+  /**
+   * Create or update student fee profile (apply discounts or session waiver)
+   */
+  upsertStudentFeeProfile(studentId: string, data: any): Observable<ApiResponse<any>> {
+    return this.post<ApiResponse<any>>(`/fees/profile/${studentId}`, data);
+  }
+
+  /**
    * Fetch aggregate collections data and recent transactions
    */
   getFeeDashboard(): Observable<ApiResponse<any>> {
@@ -99,3 +121,4 @@ export class FeesHttpService extends BaseApiService {
     return this.get<ApiResponse<any>>(`/fees/student/${studentId}`);
   }
 }
+

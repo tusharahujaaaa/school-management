@@ -9,6 +9,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
+import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
+import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 
 @Component({
   selector: 'app-fee-records',
@@ -21,7 +23,8 @@ import { TableModule } from 'primeng/table';
     ButtonModule,
     SelectModule,
     TableModule,
-    FormsModule
+    FormsModule,
+    HasPermissionDirective
   ],
   providers: [MessageService],
   templateUrl: './fee-records.component.html',
@@ -33,12 +36,16 @@ export class FeeRecordsComponent implements OnInit {
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
 
+  readonly PERMISSIONS = ERP_PERMISSIONS;
+
   paymentDialog = signal<boolean>(false);
   receiptDialog = signal<boolean>(false);
+  waiveDialog = signal<boolean>(false);
   classesList = signal<any[]>([]);
 
   selectedRecord = signal<any>(null);
   paymentForm!: FormGroup;
+  waiverForm!: FormGroup;
 
   statuses = [
     { label: 'All Statuses', value: '' },
@@ -73,6 +80,9 @@ export class FeeRecordsComponent implements OnInit {
       paymentMode: ['CASH', Validators.required],
       paidDate: [new Date().toISOString().split('T')[0], Validators.required],
       remarks: ['']
+    });
+    this.waiverForm = this.fb.group({
+      remarks: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 
@@ -144,6 +154,34 @@ export class FeeRecordsComponent implements OnInit {
 
   printReceipt() {
     window.print();
+  }
+
+  openWaiveModal(record: any) {
+    this.selectedRecord.set(record);
+    this.waiverForm.reset({
+      remarks: ''
+    });
+    this.waiveDialog.set(true);
+  }
+
+  submitWaiver() {
+    if (this.waiverForm.invalid || !this.selectedRecord()) return;
+
+    const recordId = this.selectedRecord().id;
+    const remarks = this.waiverForm.value.remarks;
+
+    this.feesService.waiveRecord(recordId, remarks).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.messageService.add({ severity: 'success', summary: 'Fee Waived', detail: 'The fee record has been successfully waived.' });
+          this.feesService.loadFeeRecords(this.feesService.currentPage());
+          this.waiveDialog.set(false);
+        }
+      },
+      error: (err: any) => {
+        this.messageService.add({ severity: 'error', summary: 'Waiver Failed', detail: err?.error?.message || 'Unable to waive the fee record.' });
+      }
+    });
   }
 
   getStatusClass(status: string): string {
