@@ -75,7 +75,15 @@ export class FeesHttpService extends BaseApiService {
     page?: number; 
     limit?: number 
   }): Observable<ApiResponse<any>> {
+    console.log('Fetching fee records with filters:', filters);
     return this.get<ApiResponse<any>>('/fees/records', filters);
+  }
+
+  /**
+   * Scan outstanding fee records and mark past-due pending invoices as overdue.
+   */
+  markOverdueRecords(sessionId?: string): Observable<ApiResponse<{ updated: number }>> {
+    return this.post<ApiResponse<{ updated: number }>>('/fees/records/mark-overdue', { sessionId });
   }
 
   /**
@@ -121,4 +129,3 @@ export class FeesHttpService extends BaseApiService {
     return this.get<ApiResponse<any>>(`/fees/student/${studentId}`);
   }
 }
-

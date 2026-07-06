@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { Student, StudentFilters } from '../models/student.model';
 import { StudentService } from '../services/student.service';
-import { finalize } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StudentStore {
@@ -190,5 +190,16 @@ export class StudentStore {
                 }
             });
     }
+  }
+
+  updateStudentPhoto(studentId: string, photoUrl: string) {
+    return this.studentService.uploadStudentPhoto(studentId, photoUrl).pipe(
+      tap((res: any) => {
+        const updatedPhotoUrl = res?.data?.photoUrl || photoUrl;
+        this._students.update(prev => prev.map(student => (
+          student.id === studentId ? { ...student, photoUrl: updatedPhotoUrl } : student
+        )));
+      })
+    );
   }
 }

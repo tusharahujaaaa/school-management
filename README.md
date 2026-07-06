@@ -1,72 +1,133 @@
-# 🏫 Campus Handle SMS — Premium school ERP Frontend
+# Campus Handle SMS Frontend
 
-Welcome to the premium frontend application for **Campus Handle SMS**, an enterprise-grade School Management System designed for modern educational institutions.
+Frontend ERP application for **Campus Handle SMS**, an enterprise school management SaaS platform.
 
-This project is built using **Angular 19** and **PrimeNG**, featuring a reactive, state-of-the-art architecture driven by **Angular Signals** for lightning-fast performance, type safety, and real-time backend synchronization.
+This project is built with **Angular 21**, **PrimeNG 21**, Angular Signals, and zoneless change detection. It connects to the `campus-handle-api` backend through the configured `/api/v1` API base URL.
 
----
+## Tech Stack
 
-## 🚀 Key Modules Integrated
+| Technology | Usage |
+| --- | --- |
+| Angular 21 | Application framework |
+| PrimeNG 21 | UI component library |
+| PrimeFlex / PrimeIcons | Layout utilities and icons |
+| Tailwind CSS 4 | Utility styling pipeline |
+| RxJS | Async data flows |
+| Angular Signals | Local reactive state |
+| Angular zoneless change detection | Runtime change detection mode |
 
-### 🔐 1. Core Authentication & Hybrid Security (`/auth`)
-* **Secure JWT Management**: Access tokens are kept strictly in-memory (XSS protection) with automatic background token rotation matching the POST `/auth/refresh` endpoint.
-* **Anti-Session Overlap**: Sensitive data (refresh tokens, user state) is stored in `sessionStorage` so it automatically discards upon tab closure.
-* **Automatic Silent Refresh**: A custom `AuthInterceptor` captures page refreshes and transparently rotates expired tokens without interrupting active user workflows.
-* **Superuser Bypass**: Upper-case `'ADMIN'` users automatically bypass sidebar and module restrictions.
+## Application Structure
 
-### 📊 2. Live Administration Home Dashboard (`/dashboard`)
-* **Dynamic Statistics**: ForkJoin-loaded counts reflecting real database records (Total Enrolled Students, active System Staff, Today's Attendance percentage, Outstanding Dues, Active Classes count, and Admissions Leads in the last 30 days).
-* **Live Activities Feed**: Displays database updates (like new admissions or inquiries) dynamically formatted with responsive icons and timestamps.
+```text
+src/
+├── app.routes.ts                  # Root routes
+├── app.config.ts                  # App providers, router, HTTP interceptors, PrimeNG
+├── environments/                  # API environment config
+└── app/erp/
+    ├── core/                      # API base service, interceptors, permissions
+    ├── domains/                   # ERP feature modules
+    ├── layout/                    # Auth and dashboard layouts
+    ├── pages/                     # Shared top-level pages
+    └── shared/                    # Reusable UI, forms, and types
+```
 
-### 🧑‍🎓 3. Student Directory & Profile Management (`/students`)
-* **Server-Side Filters**: Advanced search querying, class-specific lookups, and status updates directly bound to backend queries.
-* **Dynamic Year Sync**: The academic session calculations default dynamically based on client year and hot-sync with the backend's active setting on resolution.
-* **Modular Creation/Edit Forms**: Fully validated, responsive PrimeNG form bindings with complete data-mappers that convert gender/status properties to correct database enums.
+## Integrated Modules
 
-### 📝 4. Daily Student Attendance marking (`/attendance`)
-* **Dynamic Setup Fetch**: Automatically resolves academic classes and sections from setup APIs.
-* **Reactive Effects**: Built with Angular Signals effect loops that dynamically reload student sheets as soon as filters change, eliminating manual click triggers.
+| Module | Frontend Route | Backend API |
+| --- | --- | --- |
+| Authentication | `/erp/login` | `/auth` |
+| Dashboard | `/erp/dashboard` | `/dashboard` |
+| Students | `/erp/students` | `/students` |
+| Attendance | `/erp/attendance` | `/attendance` |
+| Fees | `/erp/fees` | `/fees` |
+| Admissions | `/erp/admissions` | `/admissions` |
+| Public Admission Inquiry | `/admission-inquiry`, `/admission-inquiry/:domain` | `/admissions/submit`, `/website/public/:domain` |
+| Teachers | `/erp/teachers` | `/teachers` |
+| Academics | `/erp/academics` | `/classes`, `/fees/sessions` |
+| Settings / Website Config | `/erp/settings` | `/website` |
 
----
+## API Configuration
 
-## 🛠️ Project Coordination & Audit Tracking
+The API base URL is configured through Angular environment files:
 
-Directly in the root of the **`SMS`** workspace, we maintain two live trackers for absolute coordination and compilation safety:
+| File | API URL |
+| --- | --- |
+| `src/environments/environment.development.ts` | `http://localhost:3000/api/v1` |
+| `src/environments/environment.ts` | `https://campus-handle-api.onrender.com/api/v1` |
 
-* 📄 **[frontend_integration_tracker.md](../frontend_integration_tracker.md)**: Chronological log of all modified services, files, signal structures, and clean build compile audits.
-* 📄 **[backend_gaps_track.md](../backend_gaps_track.md)**: Sync ledger detailing aligned modules and coordinate deficit reports directly with the backend team.
+The shared API layer lives under `src/app/erp/core/api/` and includes:
 
----
+- `BaseApiService` for common HTTP methods.
+- `authInterceptor` for Bearer token injection and silent refresh handling.
+- `loadingInterceptor` for request loading state.
+- `errorInterceptor` for global API error handling.
 
-## 💻 Getting Started
+## Authentication
+
+- Access tokens are stored in memory.
+- Refresh tokens and temporary user/session state are stored in `sessionStorage`.
+- Token refresh is performed through `POST /auth/refresh`.
+- User details are synchronized through `GET /auth/me`.
+- Protected ERP routes use `authGuard` and module-level `permissionGuard`.
+
+## Getting Started
 
 ### Prerequisites
-* [Node.js](https://nodejs.org/) (v18.x or above recommended)
-* [Angular CLI](https://angular.dev/tools/cli) (v19.x)
 
-### Development Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd sakai-ng
-   ```
-2. Install project dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server locally:
-   ```bash
-   npm run dev
-   ```
-4. Open your browser and navigate to `http://localhost:4200/` to preview the live ERP dashboard!
+- Node.js 18 or newer.
+- npm.
+- Angular CLI 21 if running Angular commands globally.
+- Running backend API from `../campus-handle-api` for local development.
 
-### Code Compilation Check
-Before pushing any modifications, perform a strict type audit to ensure zero runtime regressions:
+### Install
+
+```bash
+npm install
+```
+
+### Run Locally
+
+```bash
+npm start
+```
+
+The development server runs on:
+
+```text
+http://localhost:4300/
+```
+
+The root route redirects to `/erp`, then to `/erp/login` when unauthenticated.
+
+## Available Scripts
+
+| Script | Command | Description |
+| --- | --- | --- |
+| `start` | `ng serve --port 4300 -o` | Start the local dev server |
+| `build` | `ng build` | Build the application |
+| `watch` | `ng build --watch --configuration development` | Rebuild on changes |
+| `format` | `prettier --write "**/*.{js,mjs,ts,mts,d.ts,html}" --cache` | Format supported files |
+| `test` | `ng test` | Run Angular unit tests |
+
+## Verification
+
+Run a TypeScript compilation audit before shipping changes:
+
 ```bash
 npx tsc --noEmit
 ```
 
----
+Run a production build check when changing routing, environments, or shared providers:
 
-## 🎨 Design Guidelines
-* **Premium Aesthetics**: Strict adherence to HSL-tailored premium layouts, subtle micro-animations, and dynamic visual hover elements.
-* **Robust Form States**: Input validation errors display in a vibrant, glowing red with immediate boundary highlighting.
+```bash
+npm run build
+```
+
+## Coordination Docs
+
+Workspace-level project tracking files live under `../doc/`:
+
+- `../doc/frontend_integration_tracker.md`
+- `../doc/backend_gaps_track.md`
+
+Use these files to understand recent frontend integration work and known backend API gaps.

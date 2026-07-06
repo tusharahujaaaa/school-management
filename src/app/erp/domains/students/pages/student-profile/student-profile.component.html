@@ -21,6 +21,9 @@
                     styleClass="shadow-2 mb-3"
                     [style]="{'width': '120px', 'height': '120px'}">
                 </p-avatar>
+                <div *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" class="mb-3">
+                    <button pButton type="button" label="Update Photo" icon="pi pi-camera" class="p-button-outlined p-button-sm" (click)="openPhotoDialog()"></button>
+                </div>
                 <h2 class="text-xl font-bold text-900 m-0">{{ student.fullName }}</h2>
                 <p class="text-600 mb-3">{{ student.admissionNumber }}</p>
                 <app-erp-status-badge [label]="student.status" [severity]="getSeverity(student.status)"></app-erp-status-badge>
@@ -268,6 +271,58 @@
         </div>
     </div>
 </div>
+
+<!-- ── Update Student Photo Dialog ───────────────────── -->
+<p-dialog header="Update Student Photo" [(visible)]="displayPhotoDialog" [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '92vw' }" [style]="{ width: '460px' }" [draggable]="false"
+  [resizable]="false" styleClass="p-fluid border-round-xl shadow-4 overflow-hidden">
+
+  <div *ngIf="store.selectedStudent() as student" class="py-2">
+    <div class="flex flex-column align-items-center gap-3 mb-4">
+      <p-avatar
+        [image]="photoPreview() || student.photoUrl"
+        shape="circle"
+        size="xlarge"
+        [label]="!(photoPreview() || student.photoUrl) ? student.firstName[0] : ''"
+        styleClass="shadow-2"
+        [style]="{'width': '128px', 'height': '128px'}">
+      </p-avatar>
+      <div class="text-center">
+        <div class="text-900 font-bold">{{ student.fullName }}</div>
+        <div class="text-500 text-sm">{{ student.admissionNumber || 'No admission number' }}</div>
+      </div>
+    </div>
+
+    <form [formGroup]="photoForm" (ngSubmit)="saveStudentPhoto()" class="flex flex-column gap-3">
+      <div>
+        <label for="studentPhotoFile" class="text-700 font-semibold text-sm block mb-1.5">Choose Image</label>
+        <input id="studentPhotoFile" type="file" accept="image/*" class="w-full" (change)="onPhotoFileSelected($event)" />
+        <small class="text-500 block mt-1">Images are saved as a URL string through the backend photo endpoint. Maximum local file size: 2 MB.</small>
+      </div>
+
+      <div class="flex align-items-center gap-2 text-500 text-xs">
+        <div class="flex-1 border-top-1 surface-border"></div>
+        <span>or paste hosted URL</span>
+        <div class="flex-1 border-top-1 surface-border"></div>
+      </div>
+
+      <div>
+        <label for="studentPhotoUrl" class="text-700 font-semibold text-sm block mb-1.5">Photo URL <span class="text-red-500">*</span></label>
+        <input id="studentPhotoUrl" type="text" pInputText formControlName="photoUrl" placeholder="https://example.com/student-photo.jpg" class="p-inputtext-sm border-round-md" (input)="onPhotoUrlChange()" />
+      </div>
+
+      <div *ngIf="photoError()" class="p-3 bg-red-50 border-round text-red-700 text-sm flex align-items-center">
+        <i class="pi pi-exclamation-triangle mr-2"></i>
+        <span>{{ photoError() }}</span>
+      </div>
+
+      <div class="flex gap-2 justify-content-end mt-3">
+        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm" (click)="displayPhotoDialog.set(false)" [disabled]="uploadingPhoto()"></button>
+        <button pButton type="submit" label="Save Photo" icon="pi pi-check" class="p-button-sm px-4" [loading]="uploadingPhoto()" [disabled]="photoForm.invalid || uploadingPhoto()"></button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
 
 <!-- ── Manage Fee Profile Dialog ───────────────────── -->
 <p-dialog header="Configure Student Fee Profile" [(visible)]="displayProfileDialog" [modal]="true"

@@ -184,6 +184,35 @@ export class FeeRecordsComponent implements OnInit {
     });
   }
 
+  markOverdueRecords() {
+    if (this.feesService.markingOverdue()) return;
+
+    this.feesService.markOverdueRecords().subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          const updated = Number(res.data?.updated || 0);
+          this.messageService.add({
+            severity: updated > 0 ? 'success' : 'info',
+            summary: 'Overdue Scan Complete',
+            detail: updated > 0
+              ? `${updated} pending invoice${updated === 1 ? '' : 's'} marked as overdue.`
+              : 'No pending invoices were past their due date.'
+          });
+          console.log('Overdue scan result:', this.feesService.currentPage());
+          this.feesService.loadFeeRecords(this.feesService.currentPage());
+          this.feesService.loadDashboardData();
+        }
+      },
+      error: (err: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Overdue Scan Failed',
+          detail: err?.error?.message || 'Unable to mark overdue fee records.'
+        });
+      }
+    });
+  }
+
   getStatusClass(status: string): string {
     const s = (status || '').toUpperCase();
     if (s === 'PAID') return 'bg-green-50 text-green-700 border-green-200';

@@ -35,6 +35,13 @@ export class StudentService extends BaseApiService {
   }
 
   /**
+   * Update a student's profile photo URL.
+   */
+  uploadStudentPhoto(id: string, photoUrl: string): Observable<ApiResponse<any>> {
+    return this.patch<ApiResponse<any>>(`/students/${id}/photo`, { photoUrl });
+  }
+
+  /**
    * Fetch student setup options (classes & sections)
    */
   getSetupData(): Observable<ApiResponse<any>> {

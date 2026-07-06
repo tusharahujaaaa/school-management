@@ -10,6 +10,7 @@ export class FeesService {
 
   // Writable Signals for State Management
   readonly loading = signal<boolean>(false);
+  readonly markingOverdue = signal<boolean>(false);
   
   // Dashboard states
   readonly totalCollected = signal<number>(0);
@@ -187,5 +188,15 @@ export class FeesService {
       finalize(() => this.loading.set(false))
     );
   }
-}
 
+  /**
+   * Trigger backend scan for pending invoices whose due dates have passed.
+   */
+  markOverdueRecords() {
+    this.markingOverdue.set(true);
+    const sessionId = this.activeSession()?.id;
+    return this.httpSvc.markOverdueRecords(sessionId).pipe(
+      finalize(() => this.markingOverdue.set(false))
+    );
+  }
+}

@@ -12,6 +12,14 @@
       <h2 class="text-900 font-bold text-2xl m-0 mb-1">Fee Invoices & Ledger</h2>
       <span class="text-500 text-sm">Track invoice payment statuses and manage fee collections</span>
     </div>
+    <div *erpHasPermission="PERMISSIONS.FEES.COLLECT" class="flex flex-column sm:align-items-end gap-1">
+      <button pButton type="button" label="Mark Overdue" icon="pi pi-clock"
+        class="p-button-warning p-button-sm"
+        [loading]="feesService.markingOverdue()"
+        [disabled]="feesService.markingOverdue()"
+        (click)="markOverdueRecords()"></button>
+      <span class="text-500 text-xs">Scans pending invoices past due date</span>
+    </div>
   </div>
 
   <!-- ── Filter Bar ────────────────────────────────────── -->

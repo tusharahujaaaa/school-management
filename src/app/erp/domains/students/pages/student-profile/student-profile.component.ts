@@ -15,6 +15,7 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { SkeletonLoaderComponent } from '@/app/erp/shared/ui/loaders/skeleton-loader.component';
@@ -36,6 +37,7 @@ import { SkeletonLoaderComponent } from '@/app/erp/shared/ui/loaders/skeleton-lo
     DialogModule,
     SelectModule,
     CheckboxModule,
+    InputTextModule,
     HasPermissionDirective,
     SkeletonLoaderComponent
   ],
@@ -56,6 +58,12 @@ export class StudentProfileComponent implements OnInit {
   loadingProfile = signal<boolean>(false);
   displayProfileDialog = signal<boolean>(false);
   profileForm!: FormGroup;
+
+  displayPhotoDialog = signal<boolean>(false);
+  uploadingPhoto = signal<boolean>(false);
+  photoPreview = signal<string | null>(null);
+  photoError = signal<string>('');
+  photoForm!: FormGroup;
 
   discountReasons = [
     { label: 'Scholarship', value: 'SCHOLARSHIP' },
@@ -107,9 +115,16 @@ export class StudentProfileComponent implements OnInit {
       this.store.selectStudent(id);
       this.feesService.loadSessions();
       this.initProfileForm();
+      this.initPhotoForm();
       this.loadFeeLedger(id);
       this.loadStudentFeeProfile(id);
     }
+  }
+
+  initPhotoForm() {
+    this.photoForm = this.fb.group({
+      photoUrl: ['', [Validators.required]]
+    });
   }
 
   initProfileForm() {
@@ -216,6 +231,75 @@ export class StudentProfileComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Error saving fee profile:', err);
+      }
+    });
+  }
+
+  openPhotoDialog() {
+    const photoUrl = this.store.selectedStudent()?.photoUrl || '';
+    this.photoError.set('');
+    this.photoPreview.set(photoUrl || null);
+    this.photoForm.reset({ photoUrl });
+    this.displayPhotoDialog.set(true);
+  }
+
+  onPhotoFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.photoError.set('');
+
+    if (!file.type.startsWith('image/')) {
+      this.photoError.set('Please choose a valid image file.');
+      input.value = '';
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      this.photoError.set('Please choose an image smaller than 2 MB.');
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result || '');
+      this.photoPreview.set(dataUrl);
+      this.photoForm.patchValue({ photoUrl: dataUrl });
+      this.photoForm.markAsDirty();
+    };
+    reader.onerror = () => {
+      this.photoError.set('Could not read the selected image.');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onPhotoUrlChange() {
+    const value = this.photoForm.get('photoUrl')?.value?.trim() || '';
+    this.photoError.set('');
+    this.photoPreview.set(value || null);
+  }
+
+  saveStudentPhoto() {
+    if (this.photoForm.invalid || this.uploadingPhoto()) return;
+
+    const studentId = this.store.selectedStudent()?.id;
+    const photoUrl = this.photoForm.value.photoUrl?.trim();
+    if (!studentId || !photoUrl) return;
+
+    this.uploadingPhoto.set(true);
+    this.photoError.set('');
+
+    this.store.updateStudentPhoto(studentId, photoUrl).subscribe({
+      next: () => {
+        this.uploadingPhoto.set(false);
+        this.displayPhotoDialog.set(false);
+      },
+      error: (err: any) => {
+        console.error('Error uploading student photo:', err);
+        this.photoError.set(err?.error?.message || 'Could not save the student photo.');
+        this.uploadingPhoto.set(false);
       }
     });
   }
