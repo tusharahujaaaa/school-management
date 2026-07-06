@@ -111,6 +111,40 @@
         </div>
       </div>
 
+      <!-- Section 4: School Transport Services -->
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">School Transport Services</h4>
+      <div class="grid mb-4">
+        <div class="col-12 field mb-3">
+          <div class="flex align-items-center gap-2">
+            <p-checkbox formControlName="usesTransport" [binary]="true" inputId="usesTransport"></p-checkbox>
+            <label for="usesTransport" class="text-700 font-medium text-sm cursor-pointer select-none">Enable school bus transport services for this student</label>
+          </div>
+        </div>
+
+        <div *ngIf="admitForm.get('usesTransport')?.value" class="col-12 grid p-0 m-0">
+          <!-- Bus Route / Vehicle -->
+          <div class="col-12 md:col-4 field mb-3">
+            <label for="busId" class="text-700 font-semibold text-sm block mb-1.5">Bus Route / Vehicle <span class="text-red-500">*</span></label>
+            <p-select id="busId" [options]="busOptions()" formControlName="busId" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select route & plate"></p-select>
+            <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('busId')?.invalid && admitForm.get('busId')?.touched">
+              Please select a bus route.
+            </small>
+          </div>
+
+          <!-- Pickup Point -->
+          <div class="col-12 md:col-4 field mb-3">
+            <label for="pickupPoint" class="text-700 font-semibold text-sm block mb-1.5">Pickup Point</label>
+            <input id="pickupPoint" type="text" pInputText formControlName="pickupPoint" placeholder="e.g. Sector 12 Crossing" class="p-inputtext-sm border-round-md" />
+          </div>
+
+          <!-- Drop Point -->
+          <div class="col-12 md:col-4 field mb-3">
+            <label for="dropPoint" class="text-700 font-semibold text-sm block mb-1.5">Drop Point</label>
+            <input id="dropPoint" type="text" pInputText formControlName="dropPoint" placeholder="e.g. Main Gate" class="p-inputtext-sm border-round-md" />
+          </div>
+        </div>
+      </div>
+
       <!-- Actions -->
       <div class="flex flex-column sm:flex-row gap-2 justify-content-end mt-4 pt-3 border-top-1 surface-border">
         <button pButton type="button" label="Reset Form" class="p-button-outlined p-button-secondary sm:w-8rem" (click)="resetForm()" [disabled]="isLoading()"></button>

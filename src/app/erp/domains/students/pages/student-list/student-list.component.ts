@@ -50,6 +50,7 @@ export class StudentListComponent implements OnInit {
 
   ngOnInit() {
     this.store.loadStudents();
+    
   }
 
   viewProfile(id: string) {

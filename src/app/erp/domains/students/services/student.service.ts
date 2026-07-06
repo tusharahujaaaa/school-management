@@ -40,4 +40,11 @@ export class StudentService extends BaseApiService {
   getSetupData(): Observable<ApiResponse<any>> {
     return this.get<ApiResponse<any>>('/attendance/students/setup');
   }
+
+  /**
+   * Fetch active transport bus routes
+   */
+  getBuses(): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/students/buses');
+  }
 }

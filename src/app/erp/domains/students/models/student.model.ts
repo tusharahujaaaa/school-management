@@ -36,6 +36,23 @@ export interface Student {
   // Parent info (placeholder for now)
   parentName?: string;
   parentContact?: string;
+  busAssignment?: {
+    id: string;
+    busId: string;
+    pickupPoint?: string;
+    dropPoint?: string;
+    isActive?: boolean;
+    bus?: {
+      id: string;
+      schoolId: string;
+      routeName: string;
+      driverName: string;
+      driverPhone?: string;
+      plateNumber?: string;
+      capacity?: number;
+      isActive?: boolean;
+    };
+  };
 }
 
 export interface StudentFilters {

@@ -96,6 +96,41 @@
                                         <span>Parent management module integration pending.</span>
                                     </div>
                                 </div>
+
+                                <!-- Transport Details Section -->
+                                <div class="col-12 mt-4">
+                                    <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2 flex align-items-center gap-2">
+                                        <i class="pi pi-truck text-primary"></i> Transport Details
+                                    </h4>
+                                    
+                                    <div *ngIf="student.busAssignment" class="grid text-sm p-3 bg-surface-50 border-round border-1 surface-border">
+                                        <div class="col-12 md:col-6 grid p-0 align-content-start">
+                                            <div class="col-6 text-600 mb-2">Transport Status</div>
+                                            <div class="col-6 text-green-700 font-bold mb-2">
+                                                <span class="inline-block w-2 h-2 bg-green-500 border-circle mr-1.5" style="vertical-align: middle;"></span>Active
+                                            </div>
+                                            <div class="col-6 text-600 mb-2">Pickup Point</div>
+                                            <div class="col-6 text-900 font-medium mb-2">{{ student.busAssignment.pickupPoint || 'N/A' }}</div>
+                                            <div class="col-6 text-600">Drop Point</div>
+                                            <div class="col-6 text-900 font-medium">{{ student.busAssignment.dropPoint || 'N/A' }}</div>
+                                        </div>
+                                        <div class="col-12 md:col-6 grid p-0 border-left-1 surface-border pl-0 md:pl-4">
+                                            <div class="col-6 text-600 mb-2">Bus Route</div>
+                                            <div class="col-6 text-900 font-bold mb-2">{{ student.busAssignment.bus?.routeName || 'Route 1 - East Delhi' }}</div>
+                                            <div class="col-6 text-600 mb-2">Plate Number</div>
+                                            <div class="col-6 text-900 font-medium mb-2">{{ student.busAssignment.bus?.plateNumber || 'DL 1PA 1234' }}</div>
+                                            <div class="col-6 text-600">Driver & Contact</div>
+                                            <div class="col-6 text-900 font-medium">
+                                                {{ student.busAssignment.bus?.driverName || 'Ram Singh' }}
+                                                <span *ngIf="student.busAssignment.bus?.driverPhone" class="text-500 text-xs block">({{ student.busAssignment?.bus?.driverPhone }})</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="!student.busAssignment" class="p-3 bg-surface-50 border-round border-1 surface-border text-600 text-sm flex align-items-center">
+                                        <i class="pi pi-info-circle mr-2 text-500"></i>
+                                        This student is not registered for school bus transport services.
+                                    </div>
+                                </div>
                             </div>
                         </p-tabpanel>
                         <p-tabpanel value="1">

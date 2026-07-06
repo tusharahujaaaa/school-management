@@ -29,7 +29,28 @@ export class StudentFormComponent {
 
   @Input() set student(value: Student | null | undefined) {
     if (value) {
-      this.studentForm.patchValue(value);
+      const patchData: any = { ...value };
+      
+      // Parse ISO Date strings to Date objects for datepicker controls compatibility
+      if (value.dateOfBirth) {
+        patchData.dateOfBirth = new Date(value.dateOfBirth);
+      }
+      if (value.admissionDate) {
+        patchData.admissionDate = new Date(value.admissionDate);
+      }
+      
+      if (value.busAssignment) {
+        patchData.usesTransport = true;
+        patchData.busId = value.busAssignment.busId;
+        patchData.pickupPoint = value.busAssignment.pickupPoint || '';
+        patchData.dropPoint = value.busAssignment.dropPoint || '';
+      } else {
+        patchData.usesTransport = false;
+        patchData.busId = null;
+        patchData.pickupPoint = '';
+        patchData.dropPoint = '';
+      }
+      this.studentForm.patchValue(patchData);
     }
   }
 
@@ -52,6 +73,12 @@ export class StudentFormComponent {
     section: ['', Validators.required],
     admissionDate: [null as string | null, Validators.required],
     status: ['Active', Validators.required],
+
+    // Transport Fields
+    usesTransport: [false],
+    busId: [null as string | null],
+    pickupPoint: [''],
+    dropPoint: [''],
 
     contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     email: ['', [Validators.email]],

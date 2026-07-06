@@ -98,7 +98,6 @@ export class StudentStore {
             const nameParts = (item.name || 'Student').split(' ');
             const firstName = nameParts[0];
             const lastName = nameParts.slice(1).join(' ') || '';
-
             return {
               id: item.id,
               firstName,
@@ -115,10 +114,17 @@ export class StudentStore {
               email: item.parentEmail || '',
               address: item.address || '',
               parentName: item.parentName || '',
-              photoUrl: item.photoUrl || ''
+              photoUrl: item.photoUrl || '',
+              dateOfBirth: item.dateOfBirth || undefined,
+              admissionDate: item.admissionDate || undefined,
+              bloodGroup: item.bloodGroup || undefined,
+              city: item.city || undefined,
+              state: item.state || undefined,
+              postalCode: item.postalCode || undefined,
+              emergencyContact: item.emergencyContact || undefined,
+              busAssignment: item.busAssignment || undefined
             };
           });
-
           this._students.set(mappedStudents);
         },
         error: (err) => console.error('Error loading students', err)
@@ -144,7 +150,7 @@ export class StudentStore {
                         const firstName = nameParts[0];
                         const lastName = nameParts.slice(1).join(' ') || '';
 
-                        const student: Student = {
+                         const student: Student = {
                           id: item.id,
                           firstName,
                           lastName,
@@ -160,7 +166,15 @@ export class StudentStore {
                           email: item.parentEmail || '',
                           address: item.address || '',
                           parentName: item.parentName || '',
-                          photoUrl: item.photoUrl || ''
+                          photoUrl: item.photoUrl || '',
+                          dateOfBirth: item.dateOfBirth || undefined,
+                          admissionDate: item.admissionDate || undefined,
+                          bloodGroup: item.bloodGroup || undefined,
+                          city: item.city || undefined,
+                          state: item.state || undefined,
+                          postalCode: item.postalCode || undefined,
+                          emergencyContact: item.emergencyContact || undefined,
+                          busAssignment: item.busAssignment || undefined
                         };
 
                         this._students.update(prev => {

@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { finalize } from 'rxjs';
 import { StudentService } from '../../services/student.service';
+import { ClassesService } from '@/app/erp/domains/academics/services/classes.service';
 
 @Component({
   selector: 'app-student-create-edit',
@@ -22,6 +23,7 @@ export class StudentCreateEditComponent implements OnInit {
   protected store = inject(StudentStore);
   private studentService = inject(StudentService);
   private messageService = inject(MessageService);
+  private classesService = inject(ClassesService);
 
   isEditMode = signal(false);
   isLoading = signal(false);
@@ -30,6 +32,7 @@ export class StudentCreateEditComponent implements OnInit {
   pageTitle = computed(() => this.isEditMode() ? 'Edit Student' : 'Add New Student');
   
   ngOnInit() {
+    this.classesService.loadSessions();
     const id = this.route.snapshot.paramMap.get('id');
     const isEdit = this.route.snapshot.url.some(segment => segment.path === 'edit');
     
@@ -73,20 +76,66 @@ export class StudentCreateEditComponent implements OnInit {
       return;
     }
 
-    const payload = {
-      classId,
-      name: studentData.firstName + ' ' + (studentData.middleName ? studentData.middleName + ' ' : '') + studentData.lastName,
-      rollNumber: studentData.rollNumber,
-      dateOfBirth: studentData.dateOfBirth,
-      gender: studentData.gender.toUpperCase(),
-      parentName: studentData.parentName || 'Parent',
-      parentPhone: studentData.contactNumber,
-      parentEmail: studentData.email || null,
-      address: studentData.address || null,
-      admissionDate: studentData.admissionDate || null,
-      status: studentData.status.toUpperCase(),
-      photoUrl: studentData.photoUrl || null
-    };
+    // Resolve academic session ID from list or fallback to active session
+    const matchedSession = this.classesService.sessions().find(s => s.name === studentData.academicSession);
+    const sessionId = matchedSession?.id || this.classesService.activeSession()?.id;
+
+    if (!sessionId && !this.isEditMode()) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Session Missing',
+        detail: 'Unable to resolve academic session ID.'
+      });
+      this.isLoading.set(false);
+      return;
+    }
+
+    let payload: any;
+    if (this.isEditMode()) {
+      // Backend updateStudent expects flat payload mapping database columns directly
+      payload = {
+        classId,
+        name: studentData.firstName + ' ' + (studentData.middleName ? studentData.middleName + ' ' : '') + studentData.lastName,
+        rollNumber: studentData.rollNumber,
+        dateOfBirth: studentData.dateOfBirth,
+        gender: studentData.gender.toUpperCase(),
+        parentName: studentData.parentName || 'Parent',
+        parentPhone: studentData.contactNumber,
+        parentEmail: studentData.email || null,
+        address: studentData.address || null,
+        admissionDate: studentData.admissionDate || null,
+        status: studentData.status.toUpperCase(),
+        photoUrl: studentData.photoUrl || null
+      };
+    } else {
+      // Backend createStudent expects nested structure (personalInfo, parentInfo, etc.)
+      payload = {
+        personalInfo: {
+          name: studentData.firstName + ' ' + (studentData.middleName ? studentData.middleName + ' ' : '') + studentData.lastName,
+          dateOfBirth: studentData.dateOfBirth,
+          gender: studentData.gender.toUpperCase(),
+          photoUrl: studentData.photoUrl || null
+        },
+        parentInfo: {
+          fatherName: studentData.parentName || 'Parent',
+          fatherPhone: studentData.contactNumber,
+          fatherEmail: studentData.email || null,
+          address: studentData.address || null
+        },
+        academicInfo: {
+          classId,
+          sessionId,
+          admissionDate: studentData.admissionDate || null,
+          rollNumber: studentData.rollNumber
+        },
+        services: {
+          usesTransport: studentData.usesTransport || false,
+          busId: studentData.usesTransport ? studentData.busId : null,
+          pickupPoint: studentData.usesTransport ? studentData.pickupPoint : '',
+          dropPoint: studentData.usesTransport ? studentData.dropPoint : ''
+        }
+      };
+    }
 
     const request = this.isEditMode() 
       ? this.studentService.updateStudent(this.studentId()!, payload)

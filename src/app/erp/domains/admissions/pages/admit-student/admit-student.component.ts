@@ -1,14 +1,16 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StudentService } from '../../../students/services/student.service';
+import { ClassesService } from '@/app/erp/domains/academics/services/classes.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-admit-student',
@@ -21,7 +23,8 @@ import { InputTextModule } from 'primeng/inputtext';
     ButtonModule,
     SelectModule,
     TextareaModule,
-    InputTextModule
+    InputTextModule,
+    CheckboxModule
   ],
   providers: [MessageService],
   templateUrl: './admit-student.component.html'
@@ -29,12 +32,14 @@ import { InputTextModule } from 'primeng/inputtext';
 export class AdmitStudentComponent implements OnInit {
   private fb = inject(FormBuilder);
   private studentSvc = inject(StudentService);
+  private classesService = inject(ClassesService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private messageService = inject(MessageService);
 
   admitForm!: FormGroup;
   classesList = signal<any[]>([]);
+  busesList = signal<any[]>([]);
   isLoading = signal<boolean>(false);
 
   genderOptions = [
@@ -48,9 +53,18 @@ export class AdmitStudentComponent implements OnInit {
     { label: 'Inactive', value: 'INACTIVE' }
   ];
 
+  busOptions = computed(() => {
+    return this.busesList().map(b => ({
+      label: `${b.plateNumber || 'No Plate'} (${b.routeName})`,
+      value: b.id
+    }));
+  });
+
   ngOnInit() {
     this.initForm();
     this.loadClasses();
+    this.loadBuses();
+    this.setupTransportValidation();
     this.checkPrefillParams();
   }
 
@@ -64,13 +78,50 @@ export class AdmitStudentComponent implements OnInit {
       parentName: [''],
       parentPhone: ['', [Validators.required, Validators.pattern(/^[+]?[0-9\s-]{10,15}$/)]],
       parentEmail: ['', [Validators.email]],
-      address: [''],
+      address: ['', Validators.required],
       photoUrl: [''],
-      status: ['ACTIVE', Validators.required]
+      status: ['ACTIVE', Validators.required],
+      
+      // Transport Fields
+      usesTransport: [false],
+      busId: [null as string | null],
+      pickupPoint: [''],
+      dropPoint: ['']
+    });
+  }
+
+  setupTransportValidation() {
+    const usesCtrl = this.admitForm.get('usesTransport');
+    const busCtrl = this.admitForm.get('busId');
+    
+    if (usesCtrl && busCtrl) {
+      usesCtrl.valueChanges.subscribe(uses => {
+        if (uses) {
+          busCtrl.setValidators([Validators.required]);
+        } else {
+          busCtrl.clearValidators();
+          busCtrl.setValue(null);
+          this.admitForm.get('pickupPoint')?.setValue('');
+          this.admitForm.get('dropPoint')?.setValue('');
+        }
+        busCtrl.updateValueAndValidity();
+      });
+    }
+  }
+
+  loadBuses() {
+    this.studentSvc.getBuses().subscribe({
+      next: (res: any) => {
+        if (res?.success && Array.isArray(res.data)) {
+          this.busesList.set(res.data);
+        }
+      },
+      error: (err) => console.error('Error fetching buses for admissions form:', err)
     });
   }
 
   loadClasses() {
+    this.classesService.loadSessions();
     this.studentSvc.getSetupData().subscribe({
       next: (res: any) => {
         if (res?.success && res.data && Array.isArray(res.data.classes)) {
@@ -122,17 +173,41 @@ export class AdmitStudentComponent implements OnInit {
 
     this.isLoading.set(true);
     const formVal = this.admitForm.value;
-    const payload: any = {
-      ...formVal,
-      photoUrl: formVal.photoUrl || null,
-      parentEmail: formVal.parentEmail || null,
-      address: formVal.address || null,
-      rollNumber: formVal.rollNumber || null
-    };
 
-    if (formVal.dateOfBirth) {
-      payload.dateOfBirth = new Date(formVal.dateOfBirth).toISOString();
+    const activeSess = this.classesService.activeSession() || this.classesService.sessions()[0];
+    const sessionId = activeSess?.id;
+
+    if (!sessionId) {
+      this.messageService.add({ severity: 'error', summary: 'Session Error', detail: 'Unable to resolve active academic session ID.' });
+      this.isLoading.set(false);
+      return;
     }
+
+    const payload = {
+      personalInfo: {
+        name: formVal.name,
+        dateOfBirth: formVal.dateOfBirth ? new Date(formVal.dateOfBirth).toISOString() : null,
+        gender: formVal.gender.toUpperCase(),
+        photoUrl: formVal.photoUrl || null
+      },
+      parentInfo: {
+        fatherName: formVal.parentName || 'Parent',
+        fatherPhone: formVal.parentPhone,
+        fatherEmail: formVal.parentEmail || null,
+        address: formVal.address
+      },
+      academicInfo: {
+        classId: formVal.classId,
+        sessionId,
+        rollNumber: formVal.rollNumber || null
+      },
+      services: {
+        usesTransport: formVal.usesTransport || false,
+        busId: formVal.usesTransport ? formVal.busId : null,
+        pickupPoint: formVal.usesTransport ? formVal.pickupPoint : '',
+        dropPoint: formVal.usesTransport ? formVal.dropPoint : ''
+      }
+    };
 
     this.studentSvc.createStudent(payload).subscribe({
       next: (res: any) => {
@@ -166,7 +241,11 @@ export class AdmitStudentComponent implements OnInit {
       parentEmail: '',
       address: '',
       photoUrl: '',
-      status: 'ACTIVE'
+      status: 'ACTIVE',
+      usesTransport: false,
+      busId: null,
+      pickupPoint: '',
+      dropPoint: ''
     });
   }
 }
