@@ -56,4 +56,39 @@ export class AttendanceHttpService extends BaseApiService {
   getStaffAttendanceHistory(filters?: { date?: string; dateFrom?: string; dateTo?: string; teacherId?: string }): Observable<ApiResponse<any>> {
     return this.get<ApiResponse<any>>('/attendance/staff/history', filters);
   }
+
+  /**
+   * Fetch student attendance analytics (percentages, class trends, low attendance)
+   */
+  getStudentAnalytics(): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/attendance/analytics/students');
+  }
+
+  /**
+   * Fetch filtered student history records
+   */
+  getStudentHistoryFiltered(filters?: { date?: string; classId?: string; sectionId?: string; studentId?: string; status?: string; page?: number; limit?: number }): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/attendance/students/history', filters);
+  }
+
+  /**
+   * Fetch daily student attendance report
+   */
+  getDailyReport(date: string): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/attendance/reports/daily', { date });
+  }
+
+  /**
+   * Fetch monthly student attendance report
+   */
+  getMonthlyReport(month: number, year: number): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/attendance/reports/monthly', { month, year });
+  }
+
+  /**
+   * Fetch low attendance report below threshold
+   */
+  getLowAttendanceReport(threshold: number): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/attendance/reports/low-attendance', { threshold });
+  }
 }

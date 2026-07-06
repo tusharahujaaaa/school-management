@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
@@ -21,20 +21,30 @@ export class AttendanceHistoryComponent {
   private svc = inject(AttendanceService);
 
   history = this.svc.history;
-  classOptions = [{ label: 'All Classes', value: '' }, ...this.svc.classes().map(c => ({ label: c, value: c }))];
-  sectionOptions = [{ label: 'All Sections', value: '' }, ...this.svc.sections().map(s => ({ label: `Section ${s}`, value: s }))];
+  get classOptions() {
+    return [{ label: 'All Classes', value: '' }, ...this.svc.classes().map(c => ({ label: c, value: c }))];
+  }
+
+  get sectionOptions() {
+    return [{ label: 'All Sections', value: '' }, ...this.svc.sections().map(s => ({ label: `Section ${s}`, value: s }))];
+  }
 
   filterClass = signal('');
   filterSection = signal('');
   filterDate = signal('');
 
+  constructor() {
+    effect(() => {
+      this.svc.loadStudentHistory({
+        date: this.filterDate(),
+        className: this.filterClass(),
+        sectionName: this.filterSection()
+      });
+    }, { allowSignalWrites: true });
+  }
+
   get filteredHistory(): AttendanceHistoryRecord[] {
-    return this.history().filter(h => {
-      const matchClass = !this.filterClass() || h.class === this.filterClass();
-      const matchSection = !this.filterSection() || h.section === this.filterSection();
-      const matchDate = !this.filterDate() || h.date === this.filterDate();
-      return matchClass && matchSection && matchDate;
-    });
+    return this.history();
   }
 
   tableCols = [

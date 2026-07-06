@@ -82,4 +82,51 @@ export class ClassesService {
       finalize(() => this.loading.set(false))
     );
   }
+
+  // ─── Academic Sessions States ─────────────────────
+  readonly sessions = signal<any[]>([]);
+  readonly activeSession = signal<any | null>(null);
+
+  /**
+   * Load all academic sessions from backend
+   */
+  loadSessions() {
+    this.loading.set(true);
+    this.httpSvc.getSessions().pipe(
+      catchError((err) => {
+        console.error("Error loading academic sessions:", err);
+        return of(null);
+      }),
+      finalize(() => this.loading.set(false))
+    ).subscribe((res: any) => {
+      if (res?.success && Array.isArray(res.data)) {
+        this.sessions.set(res.data);
+        const active = res.data.find((s: any) => s.isActive);
+        this.activeSession.set(active || null);
+      } else {
+        this.sessions.set([]);
+        this.activeSession.set(null);
+      }
+    });
+  }
+
+  /**
+   * Create a new academic session year
+   */
+  createSession(data: { name: string; startDate: string; endDate: string; isActive: boolean }) {
+    this.loading.set(true);
+    return this.httpSvc.createSession(data).pipe(
+      finalize(() => this.loading.set(false))
+    );
+  }
+
+  /**
+   * Set an academic session year as active (archives others)
+   */
+  activateSession(sessionId: string) {
+    this.loading.set(true);
+    return this.httpSvc.activateSession(sessionId).pipe(
+      finalize(() => this.loading.set(false))
+    );
+  }
 }

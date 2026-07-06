@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ClassesService } from '../../services/classes.service';
@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TabsModule } from 'primeng/tabs';
+import { ConfirmDialogComponent } from '@/app/erp/shared/ui/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-class-list',
@@ -23,7 +24,8 @@ import { TabsModule } from 'primeng/tabs';
     ButtonModule,
     InputTextModule,
     SelectModule,
-    TabsModule
+    TabsModule,
+    ConfirmDialogComponent
   ],
   providers: [MessageService],
   templateUrl: './class-list.component.html'
@@ -36,15 +38,25 @@ export class ClassListComponent implements OnInit {
 
   classDialog = signal<boolean>(false);
   classDetailDialog = signal<boolean>(false);
+  sessionDialog = signal<boolean>(false);
+  confirmSessionVisible = signal<boolean>(false);
   isEditMode = signal<boolean>(false);
   selectedClassId = signal<string | null>(null);
+  selectedSessionToActivate = signal<{ id: string; name: string } | null>(null);
+  confirmationMessage = computed(() => {
+    const session = this.selectedSessionToActivate();
+    return session ? `Are you sure you want to set Academic Session "${session.name}" as active?` : '';
+  });
   
   classForm!: FormGroup;
+  sessionForm!: FormGroup;
   teachersList = signal<any[]>([]);
 
   ngOnInit() {
     this.initForm();
+    this.initSessionForm();
     this.classesService.loadClasses();
+    this.classesService.loadSessions();
     this.loadTeachersDropdown();
   }
 
@@ -53,6 +65,15 @@ export class ClassListComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3)]],
       section: ['', [Validators.required, Validators.maxLength(5)]],
       classTeacherId: [null]
+    });
+  }
+
+  initSessionForm() {
+    this.sessionForm = this.fb.group({
+      name: ['', [Validators.required, Validators.pattern(/^\d{4}-\d{2}$/)]], // e.g. "2026-27"
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]],
+      isActive: [false]
     });
   }
 
@@ -202,5 +223,107 @@ export class ClassListComponent implements OnInit {
         }
       });
     }
+  }
+
+  // ─── Academic Sessions Actions ─────────────────────
+  openSessionModal() {
+    this.sessionForm.reset({
+      name: '',
+      startDate: '',
+      endDate: '',
+      isActive: false
+    });
+    this.sessionDialog.set(true);
+  }
+
+  saveSession() {
+    if (this.sessionForm.invalid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Please check your inputs. Name format must be YYYY-YY (e.g., 2026-27).'
+      });
+      return;
+    }
+
+    const formVal = this.sessionForm.value;
+    
+    // Validate that End Date is after Start Date
+    const start = new Date(formVal.startDate);
+    const end = new Date(formVal.endDate);
+    if (end <= start) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Date Error',
+        detail: 'End Date must be after Start Date.'
+      });
+      return;
+    }
+
+    const payload = {
+      name: formVal.name,
+      startDate: new Date(formVal.startDate).toISOString(),
+      endDate: new Date(formVal.endDate).toISOString(),
+      isActive: formVal.isActive || false
+    };
+
+    this.classesService.createSession(payload).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Session Created',
+            detail: `Academic session '${formVal.name}' created successfully.`
+          });
+          this.sessionDialog.set(false);
+          this.classesService.loadSessions();
+        }
+      },
+      error: (err: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Creation Failed',
+          detail: err?.error?.message || 'Unable to create academic session.'
+        });
+      }
+    });
+  }
+
+  activateSession(sessionId: string, sessionName: string) {
+    this.selectedSessionToActivate.set({ id: sessionId, name: sessionName });
+    this.confirmSessionVisible.set(true);
+  }
+
+  onConfirmSessionActivation() {
+    const session = this.selectedSessionToActivate();
+    if (!session) return;
+
+    this.classesService.activateSession(session.id).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Session Activated',
+            detail: `Academic session '${session.name}' is now active. All other sessions have been archived.`
+          });
+          this.classesService.loadSessions();
+        }
+        this.selectedSessionToActivate.set(null);
+      },
+      error: (err: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Activation Failed',
+          detail: err?.error?.message || 'Unable to activate session.'
+        });
+        this.selectedSessionToActivate.set(null);
+      }
+    });
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 }

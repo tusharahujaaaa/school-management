@@ -42,4 +42,25 @@ export class ClassesHttpService extends BaseApiService {
   deleteClass(id: string): Observable<ApiResponse<any>> {
     return this.delete<ApiResponse<any>>(`/classes/${id}`);
   }
+
+  /**
+   * Fetch all academic session years
+   */
+  getSessions(): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>('/fees/sessions');
+  }
+
+  /**
+   * Define a new academic session year
+   */
+  createSession(data: { name: string; startDate: string; endDate: string; isActive: boolean }): Observable<ApiResponse<any>> {
+    return this.post<ApiResponse<any>>('/fees/sessions', data);
+  }
+
+  /**
+   * Set an academic session year as active (archives/deactivates others)
+   */
+  activateSession(sessionId: string): Observable<ApiResponse<any>> {
+    return this.patch<ApiResponse<any>>(`/fees/sessions/${sessionId}/activate`, {});
+  }
 }

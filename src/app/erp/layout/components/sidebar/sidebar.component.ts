@@ -33,8 +33,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .map(group => ({
         ...group,
         items: group.items.filter(item => {
-          if (item.permissionKey) return this.permissionService.hasPermission(item.permissionKey);
-          if (item.roles && item.roles.length > 0) return item.roles.includes(role);
+          // If the item restricts visibility to specific roles, the user's role must match
+          if (item.roles && item.roles.length > 0 && !item.roles.includes(role)) {
+            return false;
+          }
+          // If the item requires a specific permission, the user must have it
+          if (item.permissionKey && !this.permissionService.hasPermission(item.permissionKey)) {
+            return false;
+          }
           return true;
         })
       }))

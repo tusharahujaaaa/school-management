@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of, tap, forkJoin, catchError } from 'rxjs';
 import { LoadingService } from '../../../core/api/services/loading.service';
 import { AttendanceHttpService } from './attendance-http.service';
 import {
@@ -16,9 +16,9 @@ import { TeachersHttpService } from '../../teachers/services/teachers-http.servi
 
 @Injectable({ providedIn: 'root' })
 export class AttendanceService {
-  private httpSvc = inject(AttendanceHttpService);
-  private loadingSvc = inject(LoadingService);
-  private teachersHttpSvc = inject(TeachersHttpService);
+  httpSvc = inject(AttendanceHttpService);
+  loadingSvc = inject(LoadingService);
+  teachersHttpSvc = inject(TeachersHttpService);
 
   private readonly USE_MOCK = false;
 
@@ -60,8 +60,11 @@ export class AttendanceService {
 
   readonly sheetStatuses = signal<Map<string, 'DRAFT' | 'SUBMITTED' | 'LOCKED' | 'EDITED'>>(this.loadSheetStatuses());
 
+  private _classSummaries = signal<ClassAttendanceSummary[]>([]);
+  private _dashboardStatsBase = signal<AttendanceDashboardStats | null>(null);
+
   readonly classSummaries = computed(() => {
-    const summaries = [...MOCK_CLASS_SUMMARIES];
+    const summaries = [...this._classSummaries()];
     const activeClass = this.selectedClass();
     const activeSec = this.selectedSection();
     const summary = this.attendanceSummary();
@@ -75,7 +78,7 @@ export class AttendanceService {
           const absent = summary.absent;
           const late = summary.late;
           const leave = summary.leave;
-          const pct = Math.round((present / total) * 1000) / 10;
+          const pct = Math.round((present / total) * 100);
           
           summaries[idx] = {
             class: activeClass,
@@ -94,7 +97,19 @@ export class AttendanceService {
   });
 
   readonly dashboardStats = computed(() => {
-    const base = { ...MOCK_ATTENDANCE_STATS };
+    const base = this._dashboardStatsBase() 
+      ? { ...this._dashboardStatsBase()! } 
+      : {
+          totalStudents: 0,
+          presentToday: 0,
+          absentToday: 0,
+          lateToday: 0,
+          onLeave: 0,
+          overallPercentage: 0,
+          staffPresent: 0,
+          staffAbsent: 0,
+          staffTotal: 0
+        };
     const activeSummaries = this.classSummaries();
     
     let totalStudents = 0;
@@ -117,14 +132,14 @@ export class AttendanceService {
       base.absentToday = absent;
       base.lateToday = late;
       base.onLeave = leave;
-      base.overallPercentage = Math.round((present / totalStudents) * 1000) / 10;
+      base.overallPercentage = Math.round((present / totalStudents) * 100);
     }
     
     return base;
   });
 
-  readonly history = signal<AttendanceHistoryRecord[]>(MOCK_ATTENDANCE_HISTORY);
-  readonly lowAttendanceAlerts = signal<LowAttendanceAlert[]>(MOCK_LOW_ATTENDANCE);
+  readonly history = signal<AttendanceHistoryRecord[]>([]);
+  readonly lowAttendanceAlerts = signal<LowAttendanceAlert[]>([]);
   readonly reports = signal<AttendanceReport[]>(MOCK_REPORTS);
 
   readonly selectedDate = signal<string>(new Date().toISOString().split('T')[0]);
@@ -514,5 +529,323 @@ export class AttendanceService {
         this.loadStudents();
       })
     );
+  }
+
+  // ─── Analytics, Reports & History Dynamic Loaders ────────────────────────
+
+  loadDashboardStats() {
+    this.loadingSvc.isLoading.set(true);
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    forkJoin({
+      analytics: this.httpSvc.getStudentAnalytics().pipe(catchError(() => of(null))),
+      daily: this.httpSvc.getDailyReport(todayStr).pipe(catchError(() => of(null))),
+      staffHistory: this.httpSvc.getStaffAttendanceHistory({ date: todayStr }).pipe(catchError(() => of(null))),
+      teachers: this.teachersHttpSvc.getTeachers().pipe(catchError(() => of(null)))
+    }).subscribe({
+      next: ({ analytics, daily, staffHistory, teachers }) => {
+        // 1. Map student alerts
+        const rawAlerts = analytics?.data?.lowAttendanceStudents || [];
+        const mappedAlerts: LowAttendanceAlert[] = rawAlerts.map((item: any) => ({
+          studentId: item.studentId,
+          studentName: item.name,
+          class: item.className?.split(' ')[0] || 'Class',
+          section: item.className?.split(' ')[1] || 'A',
+          attendancePercentage: item.percentage,
+          totalDays: 30, // fallback
+          presentDays: Math.round((item.percentage / 100) * 30),
+          severity: item.percentage < 65 ? 'critical' : 'warning'
+        }));
+        this.lowAttendanceAlerts.set(mappedAlerts);
+
+        // 2. Map class-wide trends to _classSummaries
+        const trends = analytics?.data?.classWiseTrends || [];
+        const mappedSummaries: ClassAttendanceSummary[] = trends.map((item: any) => {
+          const parts = item.className?.split(' ') || [];
+          const cls = parts.slice(0, -1).join(' ') || 'Class';
+          const sec = parts[parts.length - 1] || 'A';
+          return {
+            class: cls,
+            section: sec,
+            totalStudents: 0,
+            present: 0,
+            absent: 0,
+            late: 0,
+            leave: 0,
+            percentage: item.percentage
+          };
+        });
+
+        const dailyRecords = daily?.data?.records || [];
+        const dailySummary = daily?.data || {};
+
+        const summariesMap = new Map<string, ClassAttendanceSummary>();
+        mappedSummaries.forEach(s => summariesMap.set(`${s.class}_${s.section}`, s));
+
+        dailyRecords.forEach((rec: any) => {
+          const cls = rec.student?.class?.name || 'Class';
+          const sec = rec.student?.class?.section || 'A';
+          const key = `${cls}_${sec}`;
+          if (!summariesMap.has(key)) {
+            summariesMap.set(key, {
+              class: cls,
+              section: sec,
+              totalStudents: 0,
+              present: 0,
+              absent: 0,
+              late: 0,
+              leave: 0,
+              percentage: 100
+            });
+          }
+          const sum = summariesMap.get(key)!;
+          sum.totalStudents++;
+          if (rec.status === 'PRESENT') sum.present++;
+          else if (rec.status === 'ABSENT') sum.absent++;
+          else if (rec.status === 'LATE') sum.late++;
+          else if (rec.status === 'LEAVE') sum.leave++;
+        });
+
+        summariesMap.forEach(sum => {
+          if (sum.totalStudents > 0) {
+            sum.percentage = Math.round((sum.present / sum.totalStudents) * 100);
+          }
+        });
+        this._classSummaries.set(Array.from(summariesMap.values()));
+
+        // 3. Populate overall dashboard stats
+        const activeStaffList = teachers?.data || [];
+        const staffRecs = staffHistory?.data?.data || [];
+        const staffPresentCount = staffRecs.filter((r: any) => r.status === 'PRESENT' || r.status === 'LATE').length;
+
+        this._dashboardStatsBase.set({
+          totalStudents: dailySummary.total || 0,
+          presentToday: dailySummary.present || 0,
+          absentToday: dailySummary.absent || 0,
+          lateToday: dailyRecords.filter((r: any) => r.status === 'LATE').length,
+          onLeave: dailyRecords.filter((r: any) => r.status === 'LEAVE').length,
+          overallPercentage: analytics?.data?.yearlyPercentage || dailySummary.percentage || 0,
+          staffPresent: staffPresentCount,
+          staffAbsent: activeStaffList.length - staffPresentCount,
+          staffTotal: activeStaffList.length || 80
+        });
+
+        this.loadingSvc.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading dashboard analytics:', err);
+        this.loadingSvc.isLoading.set(false);
+      }
+    });
+  }
+
+  loadStudentHistory(filters: { date?: string; className?: string; sectionName?: string }) {
+    this.loadingSvc.isLoading.set(true);
+    const classId = filters.className && filters.sectionName
+      ? this.getClassId(filters.className, filters.sectionName)
+      : undefined;
+
+    this.httpSvc.getStudentHistoryFiltered({
+      date: filters.date || undefined,
+      classId: classId || undefined,
+      sectionId: filters.sectionName || undefined,
+      limit: 1000
+    }).subscribe({
+      next: (res) => {
+        const rawData = res?.data?.data || [];
+        const grouped = new Map<string, AttendanceHistoryRecord>();
+
+        rawData.forEach((item: any) => {
+          const dateStr = item.date ? new Date(item.date).toISOString().split('T')[0] : 'Unknown';
+          const cls = item.student?.class?.name || 'Class';
+          const sec = item.student?.class?.section || 'A';
+          const key = `${dateStr}_${cls}_${sec}`;
+
+          if (!grouped.has(key)) {
+            grouped.set(key, {
+              id: key,
+              date: dateStr,
+              class: cls,
+              section: sec,
+              totalStudents: 0,
+              present: 0,
+              absent: 0,
+              percentage: 0,
+              markedBy: item.markedBy || 'Staff'
+            });
+          }
+
+          const group = grouped.get(key)!;
+          group.totalStudents++;
+          if (item.status === 'PRESENT' || item.status === 'LATE') {
+            group.present++;
+          } else if (item.status === 'ABSENT') {
+            group.absent++;
+          }
+        });
+
+        grouped.forEach(group => {
+          group.percentage = group.totalStudents > 0
+            ? Math.round((group.present / group.totalStudents) * 100)
+            : 100;
+        });
+
+        this.history.set(Array.from(grouped.values()));
+        this.loadingSvc.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading history logs:', err);
+        this.loadingSvc.isLoading.set(false);
+      }
+    });
+  }
+
+  loadReportsData(type: string, filters: { class?: string; section?: string; month?: string }) {
+    this.loadingSvc.isLoading.set(true);
+
+    if (type === 'daily') {
+      const todayStr = new Date().toISOString().split('T')[0];
+      this.httpSvc.getDailyReport(todayStr).subscribe({
+        next: (res) => {
+          const dailyRecords = res?.data?.records || [];
+          const summariesMap = new Map<string, ClassAttendanceSummary>();
+
+          dailyRecords.forEach((rec: any) => {
+            const cls = rec.student?.class?.name || 'Class';
+            const sec = rec.student?.class?.section || 'A';
+            const key = `${cls}_${sec}`;
+
+            if (!summariesMap.has(key)) {
+              summariesMap.set(key, {
+                class: cls,
+                section: sec,
+                totalStudents: 0,
+                present: 0,
+                absent: 0,
+                late: 0,
+                leave: 0,
+                percentage: 0
+              });
+            }
+            const sum = summariesMap.get(key)!;
+            sum.totalStudents++;
+            if (rec.status === 'PRESENT') sum.present++;
+            else if (rec.status === 'ABSENT') sum.absent++;
+            else if (rec.status === 'LATE') sum.late++;
+            else if (rec.status === 'LEAVE') sum.leave++;
+          });
+
+          summariesMap.forEach(sum => {
+            sum.percentage = sum.totalStudents > 0 ? Math.round((sum.present / sum.totalStudents) * 100) : 100;
+          });
+
+          this._classSummaries.set(Array.from(summariesMap.values()));
+          this.loadingSvc.isLoading.set(false);
+        },
+        error: (err) => {
+          console.error('Error loading daily report:', err);
+          this.loadingSvc.isLoading.set(false);
+        }
+      });
+    } else if (type === 'monthly') {
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthIndex = monthNames.indexOf(filters.month || 'May');
+      const monthNum = monthIndex >= 0 ? monthIndex + 1 : 5;
+      const yearNum = new Date().getFullYear();
+
+      this.httpSvc.getMonthlyReport(monthNum, yearNum).subscribe({
+        next: (res) => {
+          const reportRows = res?.data?.report || [];
+          const summariesMap = new Map<string, ClassAttendanceSummary>();
+
+          reportRows.forEach((row: any) => {
+            const classAndSec = row.className || 'Class A';
+            const parts = classAndSec.split(' ');
+            const cls = parts.slice(0, -1).join(' ') || 'Class';
+            const sec = parts[parts.length - 1] || 'A';
+            const key = `${cls}_${sec}`;
+
+            if (!summariesMap.has(key)) {
+              summariesMap.set(key, {
+                class: cls,
+                section: sec,
+                totalStudents: 0,
+                present: 0,
+                absent: 0,
+                late: 0,
+                leave: 0,
+                percentage: 0
+              });
+            }
+
+            const sum = summariesMap.get(key)!;
+            sum.totalStudents++;
+            sum.present += row.present || 0;
+            sum.absent += row.absent || 0;
+            sum.late += row.late || 0;
+            sum.leave += row.leave || 0;
+          });
+
+          summariesMap.forEach(sum => {
+            const totalDays = sum.present + sum.absent + sum.late + sum.leave;
+            sum.percentage = totalDays > 0 ? Math.round((sum.present / totalDays) * 100) : 100;
+          });
+
+          this._classSummaries.set(Array.from(summariesMap.values()));
+          this.loadingSvc.isLoading.set(false);
+        },
+        error: (err) => {
+          console.error('Error loading monthly report:', err);
+          this.loadingSvc.isLoading.set(false);
+        }
+      });
+    } else if (type === 'low') {
+      this.httpSvc.getLowAttendanceReport(75).subscribe({
+        next: (res) => {
+          const rawAlerts = res?.data || [];
+          const mappedAlerts: LowAttendanceAlert[] = rawAlerts.map((item: any) => ({
+            studentId: item.studentId,
+            studentName: item.name,
+            class: item.className?.split(' ')[0] || 'Class',
+            section: item.className?.split(' ')[1] || 'A',
+            attendancePercentage: item.percentage,
+            totalDays: item.total || 30,
+            presentDays: item.present || 0,
+            severity: item.percentage < 65 ? 'critical' : 'warning'
+          }));
+          this.lowAttendanceAlerts.set(mappedAlerts);
+          this.loadingSvc.isLoading.set(false);
+        },
+        error: (err) => {
+          console.error('Error loading low attendance report:', err);
+          this.loadingSvc.isLoading.set(false);
+        }
+      });
+    } else if (type === 'staff') {
+      const todayStr = new Date().toISOString().split('T')[0];
+      this.teachersHttpSvc.getTeachers().subscribe({
+        next: (res) => {
+          const teachersList = res?.data || [];
+          const mappedStaff = teachersList.map((t: any) => ({
+            id: t.id,
+            employeeId: t.phone || t.id.slice(0, 8),
+            name: t.name,
+            department: t.subject || 'General Studies',
+            role: 'Teacher',
+            avatar: t.photoUrl
+          }));
+          this.staff.set(mappedStaff);
+          this.loadingSvc.isLoading.set(false);
+        },
+        error: (err) => {
+          console.error('Error loading staff for report:', err);
+          this.loadingSvc.isLoading.set(false);
+        }
+      });
+    } else if (type === 'logs') {
+      this.loadStudentHistory({});
+    } else {
+      this.loadingSvc.isLoading.set(false);
+    }
   }
 }

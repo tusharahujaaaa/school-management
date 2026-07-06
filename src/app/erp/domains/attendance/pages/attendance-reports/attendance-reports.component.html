@@ -85,8 +85,10 @@
           </div>
         </div>
         <div class="flex gap-2">
-          <button pButton label="Generate" icon="pi pi-chart-bar" class="p-button-sm p-button-outlined border-round-lg" (click)="generateReport(report.id === 'r5' ? 'low' : report.id === 'r4' ? 'staff' : 'logs')"></button>
-          <button pButton icon="pi pi-download" class="p-button-sm p-button-outlined border-round-lg" (click)="exportCSV()"></button>
+          <button pButton label="Generate" icon="pi pi-chart-bar" class="p-button-sm p-button-outlined border-round-lg" 
+            (click)="generateReport(report.id === 'r5' ? 'low' : report.id === 'r4' ? 'staff' : report.id === 'r2' ? 'monthly' : report.id === 'r1' ? 'daily' : 'logs')"></button>
+          <button pButton icon="pi pi-download" class="p-button-sm p-button-outlined border-round-lg" 
+            (click)="exportCSV(report.id === 'r5' ? 'low' : report.id === 'r4' ? 'staff' : report.id === 'r2' ? 'monthly' : report.id === 'r1' ? 'daily' : 'logs')"></button>
         </div>
       </div>
     </div>

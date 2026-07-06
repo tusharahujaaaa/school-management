@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -20,7 +20,7 @@ import { AttendanceAlertCardComponent } from '../../components/attendance-alert-
   templateUrl: './attendance-dashboard.component.html',
   styleUrls: ['./attendance-dashboard.component.scss']
 })
-export class AttendanceDashboardComponent {
+export class AttendanceDashboardComponent implements OnInit {
   private svc = inject(AttendanceService);
   readonly PERMS = ERP_PERMISSIONS;
 
@@ -38,4 +38,8 @@ export class AttendanceDashboardComponent {
   ];
 
   today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  ngOnInit() {
+    this.svc.loadDashboardStats();
+  }
 }
