@@ -1,17 +1,17 @@
 <div [formGroup]="group" class="grid p-fluid">
     <div class="col-12 md:col-4">
         <app-erp-form-field label="First Name" [required]="true" [control]="group.get('firstName')">
-            <app-erp-input formControlName="firstName" placeholder="Enter first name"></app-erp-input>
+            <app-erp-input formControlName="firstName" maxlength="50" placeholder="Enter first name"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
         <app-erp-form-field label="Middle Name" [control]="group.get('middleName')">
-            <app-erp-input formControlName="middleName" placeholder="Enter middle name"></app-erp-input>
+            <app-erp-input formControlName="middleName" maxlength="50" placeholder="Enter middle name"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
         <app-erp-form-field label="Last Name" [required]="true" [control]="group.get('lastName')">
-            <app-erp-input formControlName="lastName" placeholder="Enter last name"></app-erp-input>
+            <app-erp-input formControlName="lastName" maxlength="50" placeholder="Enter last name"></app-erp-input>
         </app-erp-form-field>
     </div>
 

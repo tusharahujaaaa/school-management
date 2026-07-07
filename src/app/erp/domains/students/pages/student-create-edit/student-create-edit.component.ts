@@ -96,16 +96,22 @@ export class StudentCreateEditComponent implements OnInit {
       payload = {
         classId,
         name: studentData.firstName + ' ' + (studentData.middleName ? studentData.middleName + ' ' : '') + studentData.lastName,
-        rollNumber: studentData.rollNumber,
+        admissionNumber: studentData.admissionNumber || null,
+        rollNumber: studentData.rollNumber || null,
         dateOfBirth: studentData.dateOfBirth,
         gender: studentData.gender.toUpperCase(),
         parentName: studentData.parentName || 'Parent',
         parentPhone: studentData.contactNumber,
         parentEmail: studentData.email || null,
         address: studentData.address || null,
+        city: studentData.city || null,
+        state: studentData.state || null,
+        pincode: studentData.postalCode || null,
         admissionDate: studentData.admissionDate || null,
         status: studentData.status.toUpperCase(),
-        photoUrl: studentData.photoUrl || null
+        photoUrl: studentData.photoUrl || null,
+        emergencyContact: studentData.emergencyContact || null,
+        emergencyPhone: studentData.emergencyContact || null
       };
     } else {
       // Backend createStudent expects nested structure (personalInfo, parentInfo, etc.)
@@ -120,13 +126,19 @@ export class StudentCreateEditComponent implements OnInit {
           fatherName: studentData.parentName || 'Parent',
           fatherPhone: studentData.contactNumber,
           fatherEmail: studentData.email || null,
-          address: studentData.address || null
+          address: studentData.address || null,
+          city: studentData.city || null,
+          state: studentData.state || null,
+          pincode: studentData.postalCode || null,
+          emergencyContact: studentData.emergencyContact || null,
+          emergencyPhone: studentData.emergencyContact || null
         },
         academicInfo: {
           classId,
           sessionId,
           admissionDate: studentData.admissionDate || null,
-          rollNumber: studentData.rollNumber
+          admissionNumber: studentData.admissionNumber || null,
+          rollNumber: studentData.rollNumber || null
         },
         services: {
           usesTransport: studentData.usesTransport || false,

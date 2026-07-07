@@ -72,11 +72,11 @@ export class AdmitStudentComponent implements OnInit {
     this.admitForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       classId: [null, Validators.required],
-      rollNumber: [''],
+      rollNumber: [{ value: '', disabled: true }],
       dateOfBirth: [null],
       gender: ['MALE', Validators.required],
       parentName: [''],
-      parentPhone: ['', [Validators.required, Validators.pattern(/^[+]?[0-9\s-]{10,15}$/)]],
+      parentPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       parentEmail: ['', [Validators.email]],
       address: ['', Validators.required],
       photoUrl: [''],

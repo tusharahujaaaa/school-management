@@ -18,6 +18,7 @@ import { BaseControlValueAccessor } from '../utils/base-control';
         [placeholder]="placeholder"
         [disabled]="disabled"
         [value]="value"
+        [attr.maxlength]="maxlength"
         (input)="onRawInput($event)"
         (blur)="onTouched()"
         class="w-full"
@@ -28,9 +29,15 @@ import { BaseControlValueAccessor } from '../utils/base-control';
 })
 export class ErpInputComponent extends BaseControlValueAccessor<string | number> {
   @Input() type: 'text' | 'password' | 'email' | 'number' = 'text';
+  @Input() maxlength?: number | string;
+  @Input() numericOnly = false;
 
   onRawInput(event: Event): void {
-    const val = (event.target as HTMLInputElement).value;
+    let val = (event.target as HTMLInputElement).value;
+    if (this.numericOnly) {
+      val = val.replace(/[^0-9]/g, '');
+      (event.target as HTMLInputElement).value = val;
+    }
     this.handleInputChange(this.type === 'number' ? Number(val) : val);
   }
 }

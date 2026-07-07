@@ -1,16 +1,16 @@
 <div [formGroup]="group" class="grid p-fluid">
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Admission Number" [required]="true" [control]="group.get('admissionNumber')">
+        <app-erp-form-field label="Admission Number" [required]="!!group.get('admissionNumber')?.enabled" [control]="group.get('admissionNumber')">
             <app-erp-input formControlName="admissionNumber" placeholder="ADM-YYYY-XXX"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Roll Number" [required]="true" [control]="group.get('rollNumber')">
+        <app-erp-form-field label="Roll Number" [required]="!!group.get('rollNumber')?.enabled" [control]="group.get('rollNumber')">
             <app-erp-input formControlName="rollNumber" placeholder="Enter roll number"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Academic Session" [required]="true" [control]="group.get('academicSession')">
+        <app-erp-form-field label="Academic Session" [required]="!!group.get('admissionNumber')?.enabled" [control]="group.get('academicSession')">
             <app-erp-select formControlName="academicSession" [options]="sessionOptions" placeholder="Select session"></app-erp-select>
         </app-erp-form-field>
     </div>
@@ -57,12 +57,12 @@
             </div>
             <div class="col-12 md:col-4">
                 <app-erp-form-field label="Pickup Point" [control]="group.get('pickupPoint')">
-                    <app-erp-input formControlName="pickupPoint" placeholder="e.g. Sector 12 Crossing"></app-erp-input>
+                    <app-erp-input formControlName="pickupPoint" maxlength="100" placeholder="e.g. Sector 12 Crossing"></app-erp-input>
                 </app-erp-form-field>
             </div>
             <div class="col-12 md:col-4">
                 <app-erp-form-field label="Drop Point" [control]="group.get('dropPoint')">
-                    <app-erp-input formControlName="dropPoint" placeholder="e.g. Main Gate"></app-erp-input>
+                    <app-erp-input formControlName="dropPoint" maxlength="100" placeholder="e.g. Main Gate"></app-erp-input>
                 </app-erp-form-field>
             </div>
         </div>

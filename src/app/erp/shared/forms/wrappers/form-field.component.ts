@@ -26,7 +26,7 @@ import { ERP_VALIDATION_MESSAGES } from '../constants/validation-messages.consta
       </small>
 
       <div class="error-container min-h-1rem mt-1">
-        <small *ngIf="errorMessage" class="p-error block text-xs animate-fade-in">
+        <small *ngIf="errorMessage" class="p-error block text-xs animate-fade-in text-red-500 font-semibold">
           {{ errorMessage }}
         </small>
       </div>
@@ -35,6 +35,7 @@ import { ERP_VALIDATION_MESSAGES } from '../constants/validation-messages.consta
   styles: [`
     .erp-form-field { width: 100%; }
     .min-h-1rem { min-height: 1.25rem; }
+    .p-error { color: #ef4444 !important; }
   `]
 })
 export class FormFieldComponent {
@@ -54,6 +55,15 @@ export class FormFieldComponent {
     }
 
     const firstErrorKey = Object.keys(this.control.errors)[0];
+    if (firstErrorKey === 'pattern') {
+      const lowerLabel = (this.label || '').toLowerCase();
+      if (lowerLabel.includes('phone') || lowerLabel.includes('mobile')) {
+        return 'Phone number must be exactly 10 digits';
+      }
+      if (lowerLabel.includes('postal') || lowerLabel.includes('pin') || lowerLabel.includes('zip')) {
+        return 'Postal code must be exactly 6 digits';
+      }
+    }
     const errorFn = ERP_VALIDATION_MESSAGES[firstErrorKey];
     
     return errorFn ? errorFn(this.control.errors[firstErrorKey]) : 'Invalid input';

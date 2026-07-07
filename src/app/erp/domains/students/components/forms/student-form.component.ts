@@ -28,7 +28,20 @@ export class StudentFormComponent {
   private fb = inject(FormBuilder);
 
   @Input() set student(value: Student | null | undefined) {
+    const admNumCtrl = this.studentForm.get('admissionNumber');
+    const rollNumCtrl = this.studentForm.get('rollNumber');
+    const sessionCtrl = this.studentForm.get('academicSession');
+
     if (value) {
+      // Enable fields for editing
+      admNumCtrl?.enable();
+      rollNumCtrl?.enable();
+
+      // Enforce mandatory validation in edit mode
+      admNumCtrl?.setValidators([Validators.required]);
+      rollNumCtrl?.setValidators([Validators.required]);
+      sessionCtrl?.setValidators([Validators.required]);
+
       const patchData: any = { ...value };
       
       // Parse ISO Date strings to Date objects for datepicker controls compatibility
@@ -51,7 +64,20 @@ export class StudentFormComponent {
         patchData.dropPoint = '';
       }
       this.studentForm.patchValue(patchData);
+    } else {
+      // Disable key generation fields during creation
+      admNumCtrl?.disable();
+      rollNumCtrl?.disable();
+
+      // Clear required validation during creation
+      admNumCtrl?.clearValidators();
+      rollNumCtrl?.clearValidators();
+      sessionCtrl?.clearValidators();
     }
+
+    admNumCtrl?.updateValueAndValidity();
+    rollNumCtrl?.updateValueAndValidity();
+    sessionCtrl?.updateValueAndValidity();
   }
 
   @Input() loading = false;
@@ -60,15 +86,15 @@ export class StudentFormComponent {
 
   studentForm = this.fb.group({
     firstName: ['', [Validators.required, Validators.maxLength(50)]],
-    middleName: [''],
+    middleName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.required, Validators.maxLength(50)]],
     gender: ['', Validators.required],
     dateOfBirth: ['', Validators.required],
     bloodGroup: [''],
 
-    admissionNumber: ['', Validators.required],
-    rollNumber: ['', Validators.required],
-    academicSession: ['', Validators.required],
+    admissionNumber: [{ value: '', disabled: true }],
+    rollNumber: [{ value: '', disabled: true }],
+    academicSession: [''],
     class: ['', Validators.required],
     section: ['', Validators.required],
     admissionDate: [null as string | null, Validators.required],
@@ -77,16 +103,16 @@ export class StudentFormComponent {
     // Transport Fields
     usesTransport: [false],
     busId: [null as string | null],
-    pickupPoint: [''],
-    dropPoint: [''],
+    pickupPoint: ['', [Validators.maxLength(100)]],
+    dropPoint: ['', [Validators.maxLength(100)]],
 
     contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-    email: ['', [Validators.email]],
-    emergencyContact: ['', Validators.required],
+    email: ['', [Validators.email, Validators.maxLength(100)]],
+    emergencyContact: ['', [Validators.required, Validators.maxLength(100)]],
 
-    address: ['', Validators.required],
-    city: ['', Validators.required],
-    state: ['', Validators.required],
+    address: ['', [Validators.required, Validators.maxLength(250)]],
+    city: ['', [Validators.required, Validators.maxLength(100)]],
+    state: ['', [Validators.required, Validators.maxLength(100)]],
     postalCode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]]
   });
 

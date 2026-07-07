@@ -16,6 +16,7 @@ import { BaseControlValueAccessor } from '../utils/base-control';
         [placeholder]="placeholder"
         [disabled]="disabled"
         [value]="value"
+        [attr.maxlength]="maxlength"
         (input)="onRawInput($event)"
         (blur)="onTouched()"
         class="w-full"
@@ -29,6 +30,7 @@ import { BaseControlValueAccessor } from '../utils/base-control';
 export class ErpTextareaComponent extends BaseControlValueAccessor<string> {
   @Input() rows = 3;
   @Input() autoResize = true;
+  @Input() maxlength?: number | string;
 
   onRawInput(event: Event): void {
     const val = (event.target as HTMLTextAreaElement).value;

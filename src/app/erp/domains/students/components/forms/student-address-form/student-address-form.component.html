@@ -1,22 +1,22 @@
 <div [formGroup]="group" class="grid p-fluid">
     <div class="col-12">
         <app-erp-form-field label="Address Line" [required]="true" [control]="group.get('address')">
-            <app-erp-textarea formControlName="address" placeholder="Enter full address"></app-erp-textarea>
+            <app-erp-textarea formControlName="address" maxlength="250" placeholder="Enter full address"></app-erp-textarea>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
         <app-erp-form-field label="City" [required]="true" [control]="group.get('city')">
-            <app-erp-input formControlName="city" placeholder="Enter city"></app-erp-input>
+            <app-erp-input formControlName="city" maxlength="100" placeholder="Enter city"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
         <app-erp-form-field label="State" [required]="true" [control]="group.get('state')">
-            <app-erp-input formControlName="state" placeholder="Enter state"></app-erp-input>
+            <app-erp-input formControlName="state" maxlength="100" placeholder="Enter state"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
         <app-erp-form-field label="Postal Code" [required]="true" [control]="group.get('postalCode')">
-            <app-erp-input formControlName="postalCode" placeholder="Enter postal code"></app-erp-input>
+            <app-erp-input formControlName="postalCode" maxlength="6" [numericOnly]="true" placeholder="Enter 6-digit postal code"></app-erp-input>
         </app-erp-form-field>
     </div>
 </div>

@@ -73,9 +73,9 @@
         <!-- Parent Phone -->
         <div class="col-12 md:col-6 field mb-3">
           <label for="parentPhone" class="text-700 font-semibold text-sm block mb-1.5">Contact Number <span class="text-red-500">*</span></label>
-          <input id="parentPhone" type="text" pInputText formControlName="parentPhone" placeholder="e.g. +919876543210" class="p-inputtext-sm border-round-md" />
+          <input id="parentPhone" type="text" pInputText formControlName="parentPhone" maxlength="10" placeholder="Enter 10-digit number" class="p-inputtext-sm border-round-md" />
           <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('parentPhone')?.invalid && admitForm.get('parentPhone')?.touched">
-            Valid contact number is required.
+            Phone number must be exactly 10 digits.
           </small>
         </div>
 
