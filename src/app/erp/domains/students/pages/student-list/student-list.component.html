@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <app-erp-page-header 
     title="Student Management" 
     subtitle="View and manage student records"
@@ -48,10 +49,17 @@
 </ng-template>
 
 <ng-template #statusTemplate let-student>
-    <app-erp-status-badge 
-        [label]="student.status" 
-        [severity]="getSeverity(student.status)">
-    </app-erp-status-badge>
+    <div class="status-chips-container">
+        <span *ngFor="let opt of statusOptions"
+            (click)="onStatusChange(student.id, opt.value)"
+            [class]="student.status.toUpperCase() === opt.value 
+                ? 'px-2 py-1 text-xs font-bold border-round-xl border-1 cursor-pointer ' + getActiveStatusClass(opt.value)
+                : 'px-2 py-1 text-xs font-medium border-round-xl border-1 text-500 bg-surface-50 surface-border hover:bg-surface-200 cursor-pointer transition-colors'"
+            [pTooltip]="'Set status to ' + opt.label"
+            tooltipPosition="top">
+            {{ opt.label }}
+        </span>
+    </div>
 </ng-template>
 
 <ng-template #actionTemplate let-student>

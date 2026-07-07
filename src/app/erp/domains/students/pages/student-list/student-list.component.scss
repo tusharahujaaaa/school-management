@@ -1,3 +1,16 @@
 :host {
     display: block;
 }
+
+.status-chips-container {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+
+  @media (max-width: 1530px) {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+}

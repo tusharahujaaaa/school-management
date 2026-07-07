@@ -202,4 +202,15 @@ export class StudentStore {
       })
     );
   }
+
+  updateStudentStatus(studentId: string, status: string) {
+    return this.studentService.updateStudentStatus(studentId, status.toUpperCase()).pipe(
+      tap(() => {
+        const formattedStatus = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+        this._students.update(prev => prev.map(student => (
+          student.id === studentId ? { ...student, status: formattedStatus as any } : student
+        )));
+      })
+    );
+  }
 }

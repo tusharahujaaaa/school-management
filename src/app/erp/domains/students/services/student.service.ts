@@ -42,6 +42,13 @@ export class StudentService extends BaseApiService {
   }
 
   /**
+   * Update student status
+   */
+  updateStudentStatus(id: string, status: string): Observable<ApiResponse<any>> {
+    return this.patch<ApiResponse<any>>(`/students/${id}/status`, { status });
+  }
+
+  /**
    * Fetch student setup options (classes & sections)
    */
   getSetupData(): Observable<ApiResponse<any>> {
