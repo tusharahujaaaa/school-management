@@ -58,44 +58,59 @@ export class ExamStore {
       });
   }
 
-  createExam(data: any, sessionId: string, callback?: () => void) {
+  createExam(data: any, sessionId: string, callback?: (msg: string) => void, errorCallback?: (msg: string) => void) {
     this._loading.set(true);
     this.examService.createExam(data)
       .pipe(
         finalize(() => this._loading.set(false))
       )
-      .subscribe(res => {
-        if (res.success) {
-          this.loadExams(sessionId);
-          if (callback) callback();
+      .subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            this.loadExams(sessionId);
+            if (callback) callback(res.message || 'Exam created.');
+          }
+        },
+        error: (err: any) => {
+          if (errorCallback) errorCallback(err?.error?.message || 'Failed to create exam.');
         }
       });
   }
 
-  addSubjectToExam(examId: string, data: any, sessionId: string, callback?: () => void) {
+  addSubjectToExam(examId: string, data: any, sessionId: string, callback?: (msg: string) => void, errorCallback?: (msg: string) => void) {
     this._loading.set(true);
     this.examService.addSubjectToExam(examId, data)
       .pipe(
         finalize(() => this._loading.set(false))
       )
-      .subscribe(res => {
-        if (res.success) {
-          this.loadExams(sessionId);
-          if (callback) callback();
+      .subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            this.loadExams(sessionId);
+            if (callback) callback(res.message || 'Subject added to exam.');
+          }
+        },
+        error: (err: any) => {
+          if (errorCallback) errorCallback(err?.error?.message || 'Failed to add subject to exam.');
         }
       });
   }
 
-  publishAndRank(examId: string, sessionId: string, callback?: () => void) {
+  publishAndRank(examId: string, sessionId: string, callback?: (msg: string) => void, errorCallback?: (msg: string) => void) {
     this._loading.set(true);
     this.examService.publishAndRankExam(examId)
       .pipe(
         finalize(() => this._loading.set(false))
       )
-      .subscribe(res => {
-        if (res.success) {
-          this.loadExams(sessionId);
-          if (callback) callback();
+      .subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            this.loadExams(sessionId);
+            if (callback) callback(res.message || 'Results published.');
+          }
+        },
+        error: (err: any) => {
+          if (errorCallback) errorCallback(err?.error?.message || 'Failed to publish exam results.');
         }
       });
   }

@@ -57,4 +57,9 @@ export class ExamService extends BaseApiService {
   getStudentReportCard(studentId: string, examId: string): Observable<ApiResponse<any>> {
     return this.get<ApiResponse<any>>(`/exams/students/${studentId}/exams/${examId}/report`);
   }
+
+  // 5. Results Browser
+  getExamResultsSummary(examId: string): Observable<ApiResponse<any>> {
+    return this.get<ApiResponse<any>>(`/exams/${examId}/results`);
+  }
 }

@@ -53,9 +53,16 @@
                 </td>
                 <td>
                     <div class="flex gap-2 justify-content-center">
-                        <button pButton icon="pi pi-plus" class="p-button-text p-button-sm" pTooltip="Map Subject to Exam" (click)="openAddSubject(exam)"></button>
-                        <button pButton icon="pi pi-send" class="p-button-text p-button-success p-button-sm" pTooltip="Publish Results & Calculate Ranks" 
-                                *ngIf="exam.currentStage?.name !== 'Published' && exam.currentStage?.name !== 'Locked'" (click)="publishExam(exam)"></button>
+                        <button pButton icon="pi pi-plus" class="p-button-text p-button-sm" pTooltip="Map Subject to Exam" (click)="openAddSubject(exam)"
+                                *ngIf="!exam.publishResult"></button>
+                        <ng-container *ngIf="exam.publishResult">
+                            <span class="text-xs text-green-600 font-semibold flex align-items-center gap-1">
+                                <i class="pi pi-lock"></i> Published
+                            </span>
+                            <button pButton icon="pi pi-eye" label="View Results" class="p-button-text p-button-info p-button-sm" pTooltip="Browse Results &amp; Print Report Cards" (click)="viewResults(exam)"></button>
+                        </ng-container>
+                        <button pButton icon="pi pi-send" class="p-button-text p-button-success p-button-sm" pTooltip="Publish Results &amp; Calculate Ranks" 
+                                *ngIf="!exam.publishResult && exam.currentStage?.name !== 'Locked'" (click)="publishExam(exam)"></button>
                     </div>
                 </td>
             </tr>
@@ -72,7 +79,10 @@
                                 </div>
                                 <div class="flex gap-1.5 align-items-center">
                                     <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 border-round-md font-medium">{{ es.maxMarks }} Marks</span>
-                                    <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded p-button-text p-button-secondary" pTooltip="Enter Marks" (click)="navigateToMarksEntry(es.id)"></button>
+                                    <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded p-button-text p-button-secondary" pTooltip="Enter Marks"
+                                            *ngIf="!exam.publishResult"
+                                            (click)="navigateToMarksEntry(es.id)"></button>
+                                    <i *ngIf="exam.publishResult" class="pi pi-lock text-400 text-sm" pTooltip="Results published – marks entry locked"></i>
                                 </div>
                             </div>
                         </div>
@@ -158,5 +168,79 @@
                 <button pButton type="submit" label="Add Subject" class="p-button-primary border-round-md"></button>
             </div>
         </form>
+    </p-dialog>
+
+    <!-- Results Browser Dialog -->
+    <p-dialog
+        [header]="selectedExamResults()?.exam?.name ? selectedExamResults().exam.name + ' — Results Browser' : 'Results Browser'"
+        [(visible)]="resultsDialogVisible" [modal]="true" [style]="{ width: '820px' }" [draggable]="false" [resizable]="false"
+        styleClass="p-fluid border-round-xl shadow-4 overflow-hidden">
+
+        <!-- Loading spinner -->
+        <div *ngIf="resultsLoading()" class="text-center py-6">
+            <i class="pi pi-spin pi-spinner text-primary text-3xl"></i>
+            <div class="text-500 text-sm mt-2">Loading results...</div>
+        </div>
+
+        <div *ngIf="!resultsLoading() && selectedExamResults()">
+            <!-- Summary strip -->
+            <div class="flex gap-3 mb-4 p-3 bg-surface-50 border-round-lg border-1 surface-border">
+                <div class="flex flex-column">
+                    <span class="text-500 text-xs uppercase font-semibold">Exam Type</span>
+                    <span class="text-900 font-bold text-sm">{{ selectedExamResults()?.exam?.examType?.name }}</span>
+                </div>
+                <div class="flex flex-column ml-4">
+                    <span class="text-500 text-xs uppercase font-semibold">Total Students</span>
+                    <span class="text-900 font-bold text-sm">{{ selectedExamResults()?.summaries?.length || 0 }}</span>
+                </div>
+            </div>
+
+            <!-- Results table -->
+            <div class="overflow-y-auto" style="max-height: 420px;">
+                <table class="w-full text-xs" style="border-collapse: collapse;">
+                    <thead>
+                        <tr class="surface-100 border-bottom-1 surface-border text-left">
+                            <th class="p-2.5 font-semibold text-600">Rank</th>
+                            <th class="p-2.5 font-semibold text-600">Roll No</th>
+                            <th class="p-2.5 font-semibold text-600">Student Name</th>
+                            <th class="p-2.5 font-semibold text-600">Class / Sec</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">Marks</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">%</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">GPA</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">Result</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let s of selectedExamResults()?.summaries" class="border-bottom-1 surface-border hover:surface-100">
+                            <td class="p-2.5 font-bold text-primary">#{{ s.classRank }}</td>
+                            <td class="p-2.5 text-700">{{ s.rollNumber || '—' }}</td>
+                            <td class="p-2.5 font-semibold text-900">{{ s.studentName }}</td>
+                            <td class="p-2.5 text-600">{{ s.className }} - {{ s.section }}</td>
+                            <td class="p-2.5 text-center font-semibold">{{ s.obtainedMarks }} / {{ s.totalMarks }}</td>
+                            <td class="p-2.5 text-center">{{ (+s.percentage).toFixed(1) }}%</td>
+                            <td class="p-2.5 text-center">{{ (+s.gpa).toFixed(2) }}</td>
+                            <td class="p-2.5 text-center">
+                                <span [ngClass]="{
+                                    'bg-green-100 text-green-700': s.overallResult === 'Promoted',
+                                    'bg-red-100 text-red-700': s.overallResult === 'Detained',
+                                    'bg-yellow-100 text-yellow-700': s.overallResult === 'Compartment'
+                                }" class="px-2 py-0.5 border-round-md text-3xs font-bold">{{ s.overallResult || 'Pending' }}</span>
+                            </td>
+                            <td class="p-2.5 text-center">
+                                <button pButton icon="pi pi-print" class="p-button-text p-button-sm p-button-secondary p-0 w-2rem h-2rem"
+                                        pTooltip="View &amp; Print Report Card"
+                                        (click)="navigateToReportCard(s.studentId)"></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="!resultsLoading() && !selectedExamResults()" class="text-center py-6">
+            <i class="pi pi-inbox text-300 text-4xl block mb-2"></i>
+            <p class="text-500 text-sm">No results found for this exam.</p>
+        </div>
     </p-dialog>
 </div>

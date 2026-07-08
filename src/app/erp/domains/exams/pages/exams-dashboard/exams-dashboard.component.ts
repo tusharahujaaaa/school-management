@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ExamStore } from '../../store/exam.store';
+import { ExamService } from '../../services/exam.service';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -45,6 +46,7 @@ export class ExamsDashboardComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
+  private examService = inject(ExamService);
 
   readonly PERMISSIONS = ERP_PERMISSIONS;
 
@@ -54,10 +56,13 @@ export class ExamsDashboardComponent implements OnInit {
   // Dialog visibility states
   examDialogVisible = signal<boolean>(false);
   subjectDialogVisible = signal<boolean>(false);
-  
+  resultsDialogVisible = signal<boolean>(false);
+
   examForm!: FormGroup;
   subjectForm!: FormGroup;
   selectedExam = signal<any | null>(null);
+  selectedExamResults = signal<any | null>(null);
+  resultsLoading = signal<boolean>(false);
 
   ngOnInit() {
     this.store.loadExams(this.activeSessionId());
@@ -128,10 +133,17 @@ export class ExamsDashboardComponent implements OnInit {
       academicSessionId: this.activeSessionId()
     };
 
-    this.store.createExam(payload, this.activeSessionId(), () => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Exam created successfully' });
-      this.examDialogVisible.set(false);
-    });
+    this.store.createExam(
+      payload,
+      this.activeSessionId(),
+      (msg: string) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: msg });
+        this.examDialogVisible.set(false);
+      },
+      (errMsg: string) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: errMsg });
+      }
+    );
   }
 
   getSubjects() {
@@ -150,19 +162,57 @@ export class ExamsDashboardComponent implements OnInit {
       return;
     }
 
-    this.store.addSubjectToExam(this.selectedExam().id, this.subjectForm.value, this.activeSessionId(), () => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Subject added to exam' });
-      this.subjectDialogVisible.set(false);
-    });
+    this.store.addSubjectToExam(
+      this.selectedExam().id,
+      this.subjectForm.value,
+      this.activeSessionId(),
+      (msg: string) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: msg });
+        this.subjectDialogVisible.set(false);
+      },
+      (errMsg: string) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: errMsg });
+      }
+    );
   }
 
   publishExam(exam: any) {
-    this.store.publishAndRank(exam.id, this.activeSessionId(), () => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Results published successfully' });
-    });
+    this.store.publishAndRank(
+      exam.id,
+      this.activeSessionId(),
+      (msg: string) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: msg });
+      },
+      (errMsg: string) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: errMsg });
+      }
+    );
   }
 
   navigateToMarksEntry(examSubjectId: string) {
     this.router.navigate(['/erp/exams/subjects', examSubjectId, 'marks']);
+  }
+
+  viewResults(exam: any) {
+    this.selectedExamResults.set(null);
+    this.resultsDialogVisible.set(true);
+    this.resultsLoading.set(true);
+    this.examService.getExamResultsSummary(exam.id).subscribe({
+      next: (res: any) => {
+        this.resultsLoading.set(false);
+        if (res?.success) this.selectedExamResults.set(res.data);
+      },
+      error: (err: any) => {
+        this.resultsLoading.set(false);
+        this.messageService.add({ severity: 'error', summary: 'Load Failed', detail: err?.error?.message || 'Could not load results.' });
+      }
+    });
+  }
+
+  navigateToReportCard(studentId: string) {
+    const examId = this.selectedExamResults()?.exam?.id;
+    if (examId) {
+      this.router.navigate(['/erp/exams/students', studentId, 'exams', examId, 'report']);
+    }
   }
 }

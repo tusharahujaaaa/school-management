@@ -106,14 +106,21 @@ export class MarksEntryComponent implements OnInit {
     this.loading.set(true);
     this.examService.bulkSaveExamResults(this.examSubjectId(), this.roster())
       .subscribe({
-        next: (res) => {
+        next: (res: any) => {
           this.loading.set(false);
           if (res.success) {
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Marks saved successfully' });
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message || 'Marks saved.' });
             this.loadRoster();
           }
         },
-        error: () => this.loading.set(false)
+        error: (err: any) => {
+          this.loading.set(false);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err?.error?.message || 'Unable to save marks. Please try again.'
+          });
+        }
       });
   }
 
