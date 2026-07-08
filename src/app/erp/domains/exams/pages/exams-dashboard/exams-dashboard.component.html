@@ -1,0 +1,162 @@
+<div class="card border-0 shadow-sm border-round-xl p-4 surface-card">
+    <app-erp-page-header 
+        title="Exams & Results" 
+        subtitle="Manage exam schedules, workflow pipelines, marks sheets, and student rankings.">
+        <div actions>
+            <button pButton label="New Exam" icon="pi pi-plus" class="p-button-primary border-round-md shadow-sm" (click)="openCreateExam()"></button>
+        </div>
+    </app-erp-page-header>
+
+    <p-toast></p-toast>
+
+    <!-- Sessions Scope Selector -->
+    <div class="flex align-items-center justify-content-between mb-4 mt-3 bg-blue-50 border-round-lg p-3">
+        <div class="flex align-items-center gap-2">
+            <i class="pi pi-calendar text-primary text-xl"></i>
+            <span class="text-900 font-semibold text-base">Scoping Academic Session:</span>
+            <span class="bg-primary text-white text-xs font-bold px-2 py-1 border-round-md">{{ activeSession() }}</span>
+        </div>
+        <div class="flex gap-2">
+            <span class="text-600 text-sm font-medium">All results calculated dynamically under configured parameters.</span>
+        </div>
+    </div>
+
+    <!-- Active Exams Table Grid -->
+    <p-table [value]="store.exams()" [loading]="store.loading()" [rowHover]="true" styleClass="p-datatable-striped" [responsiveLayout]="'scroll'">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="font-bold text-sm text-800">Exam Term</th>
+                <th class="font-bold text-sm text-800">Exam Type</th>
+                <th class="font-bold text-sm text-800">Start Date</th>
+                <th class="font-bold text-sm text-800">End Date</th>
+                <th class="font-bold text-sm text-800">Pipeline Stage</th>
+                <th class="font-bold text-sm text-800 text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-exam>
+            <tr>
+                <td class="font-semibold text-900">{{ exam.name }}</td>
+                <td>{{ exam.examType?.name }}</td>
+                <td>{{ exam.startDate | date:'dd MMM yyyy' }}</td>
+                <td>{{ exam.endDate | date:'dd MMM yyyy' }}</td>
+                <td>
+                    <span class="px-2.5 py-1 text-xs font-bold border-round-md" 
+                          [ngClass]="{
+                             'bg-gray-100 text-gray-700': exam.currentStage?.name === 'Draft',
+                             'bg-blue-100 text-blue-700': exam.currentStage?.name === 'Submitted',
+                             'bg-yellow-100 text-yellow-700': exam.currentStage?.name === 'Verified' || exam.currentStage?.name === 'Approved',
+                             'bg-green-100 text-green-700': exam.currentStage?.name === 'Published',
+                             'bg-red-100 text-red-700': exam.currentStage?.name === 'Locked'
+                          }">
+                        {{ exam.currentStage?.name || 'Draft' }}
+                    </span>
+                </td>
+                <td>
+                    <div class="flex gap-2 justify-content-center">
+                        <button pButton icon="pi pi-plus" class="p-button-text p-button-sm" pTooltip="Map Subject to Exam" (click)="openAddSubject(exam)"></button>
+                        <button pButton icon="pi pi-send" class="p-button-text p-button-success p-button-sm" pTooltip="Publish Results & Calculate Ranks" 
+                                *ngIf="exam.currentStage?.name !== 'Published' && exam.currentStage?.name !== 'Locked'" (click)="publishExam(exam)"></button>
+                    </div>
+                </td>
+            </tr>
+            <!-- Expanded row displaying subjects mapped -->
+            <tr *ngIf="exam.examSubjects?.length > 0">
+                <td colspan="6" class="bg-gray-50 px-4 py-3">
+                    <div class="border-left-2 border-primary pl-3">
+                        <h6 class="text-700 font-semibold text-xs mb-2 uppercase tracking-wider">Scheduled Exam Subjects</h6>
+                        <div class="grid gap-2">
+                            <div *ngFor="let es of exam.examSubjects" class="col-12 md:col-4 bg-white shadow-xs border-1 border-200 border-round-md p-2 flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="text-800 font-semibold text-sm">{{ es.subject?.name }}</div>
+                                    <div class="text-500 text-xs">{{ es.class?.name }} - {{ es.class?.section }}</div>
+                                </div>
+                                <div class="flex gap-1.5 align-items-center">
+                                    <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 border-round-md font-medium">{{ es.maxMarks }} Marks</span>
+                                    <button pButton icon="pi pi-pencil" class="p-button-sm p-button-rounded p-button-text p-button-secondary" pTooltip="Enter Marks" (click)="navigateToMarksEntry(es.id)"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptystate">
+            <tr>
+                <td colspan="6" class="text-center py-5">
+                    <i class="pi pi-folder-open text-400 text-5xl mb-3 block"></i>
+                    <span class="text-600 font-medium">No exams scheduled for this academic session yet.</span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <!-- Create Exam Dialog -->
+    <p-dialog header="Define New Exam Term" [(visible)]="examDialogVisible" [modal]="true" [style]="{width: '450px'}" class="p-fluid">
+        <form [formGroup]="examForm" (ngSubmit)="saveExam()" class="grid mt-2">
+            <div class="col-12 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Exam Term Name <span class="text-red-500">*</span></label>
+                <input pInputText type="text" formControlName="name" placeholder="e.g. Mid-Term Assessment" class="w-full border-round-md p-2 border-1 border-300" />
+                <small class="text-red-500 mt-1 block" *ngIf="examForm.get('name')?.invalid && examForm.get('name')?.touched">Exam name is required.</small>
+            </div>
+            <div class="col-12 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Exam Type <span class="text-red-500">*</span></label>
+                <p-select [options]="examTypesOptions" formControlName="examTypeId" placeholder="Select Exam Type" class="w-full border-round-md"></p-select>
+                <small class="text-red-500 mt-1 block" *ngIf="examForm.get('examTypeId')?.invalid && examForm.get('examTypeId')?.touched">Exam Type is required.</small>
+            </div>
+            <div class="col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Start Date <span class="text-red-500">*</span></label>
+                <input pInputText type="date" formControlName="startDate" class="w-full border-round-md p-2 border-1 border-300" />
+            </div>
+            <div class="col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">End Date <span class="text-red-500">*</span></label>
+                <input pInputText type="date" formControlName="endDate" class="w-full border-round-md p-2 border-1 border-300" />
+            </div>
+            <div class="col-12 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Default Grading Scheme</label>
+                <p-select [options]="gradeSchemeOptions" formControlName="gradingSchemeId" placeholder="Select Grading Scheme" class="w-full border-round-md"></p-select>
+            </div>
+            <div class="col-12 flex justify-content-end gap-2 mt-3">
+                <button pButton type="button" label="Cancel" class="p-button-text p-button-secondary" (click)="examDialogVisible.set(false)"></button>
+                <button pButton type="submit" label="Save Term" class="p-button-primary border-round-md"></button>
+            </div>
+        </form>
+    </p-dialog>
+
+    <!-- Map Subject Dialog -->
+    <p-dialog header="Schedule & Map Subject to Exam" [(visible)]="subjectDialogVisible" [modal]="true" [style]="{width: '500px'}" class="p-fluid">
+        <form [formGroup]="subjectForm" (ngSubmit)="saveSubject()" class="grid mt-2">
+            <div class="col-12 md:col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Class <span class="text-red-500">*</span></label>
+                <p-select [options]="classesList()" formControlName="classId" placeholder="Select Class" class="w-full border-round-md" (onChange)="getSubjects()"></p-select>
+            </div>
+            <div class="col-12 md:col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Subject <span class="text-red-500">*</span></label>
+                <p-select [options]="subjectsList()" formControlName="subjectId" placeholder="Select Subject" class="w-full border-round-md"></p-select>
+            </div>
+            <div class="col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Maximum Marks <span class="text-red-500">*</span></label>
+                <input pInputText type="number" formControlName="maxMarks" class="w-full border-round-md p-2 border-1 border-300" />
+            </div>
+            <div class="col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Passing Marks <span class="text-red-500">*</span></label>
+                <input pInputText type="number" formControlName="passingMarks" class="w-full border-round-md p-2 border-1 border-300" />
+            </div>
+            <div class="col-12 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Exam Date</label>
+                <input pInputText type="date" formControlName="examDate" class="w-full border-round-md p-2 border-1 border-300" />
+            </div>
+            <div class="col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">Start Time</label>
+                <input pInputText type="time" formControlName="startTime" class="w-full border-round-md p-2 border-1 border-300" />
+            </div>
+            <div class="col-6 field mb-3">
+                <label class="text-700 font-semibold text-xs block mb-1.5">End Time</label>
+                <input pInputText type="time" formControlName="endTime" class="w-full border-round-md p-2 border-1 border-300" />
+            </div>
+            <div class="col-12 flex justify-content-end gap-2 mt-3">
+                <button pButton type="button" label="Cancel" class="p-button-text p-button-secondary" (click)="subjectDialogVisible.set(false)"></button>
+                <button pButton type="submit" label="Add Subject" class="p-button-primary border-round-md"></button>
+            </div>
+        </form>
+    </p-dialog>
+</div>

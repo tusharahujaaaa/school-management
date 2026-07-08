@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ClassesService } from '../../services/classes.service';
 import { TeachersHttpService } from '../../../teachers/services/teachers-http.service';
+import { SubjectsHttpService } from '../../services/subjects-http.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
@@ -33,15 +34,18 @@ import { ConfirmDialogComponent } from '@/app/erp/shared/ui/confirm-dialog/confi
 export class ClassListComponent implements OnInit {
   protected classesService = inject(ClassesService);
   private teachersHttpSvc = inject(TeachersHttpService);
+  private subjectsHttpSvc = inject(SubjectsHttpService);
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
 
   classDialog = signal<boolean>(false);
   classDetailDialog = signal<boolean>(false);
   sessionDialog = signal<boolean>(false);
+  subjectDialog = signal<boolean>(false);
   confirmSessionVisible = signal<boolean>(false);
   isEditMode = signal<boolean>(false);
   selectedClassId = signal<string | null>(null);
+  selectedClassForSubject = signal<string | null>(null);
   selectedSessionToActivate = signal<{ id: string; name: string } | null>(null);
   confirmationMessage = computed(() => {
     const session = this.selectedSessionToActivate();
@@ -50,11 +54,13 @@ export class ClassListComponent implements OnInit {
   
   classForm!: FormGroup;
   sessionForm!: FormGroup;
+  subjectForm!: FormGroup;
   teachersList = signal<any[]>([]);
 
   ngOnInit() {
     this.initForm();
     this.initSessionForm();
+    this.initSubjectForm();
     this.classesService.loadClasses();
     this.classesService.loadSessions();
     this.loadTeachersDropdown();
@@ -74,6 +80,13 @@ export class ClassListComponent implements OnInit {
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
       isActive: [false]
+    });
+  }
+
+  initSubjectForm() {
+    this.subjectForm = this.fb.group({
+      name: ['', [Validators.required]],
+      teacherId: [null]
     });
   }
 
@@ -325,5 +338,82 @@ export class ClassListComponent implements OnInit {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  openAddSubjectModal(classId: string) {
+    this.selectedClassForSubject.set(classId);
+    this.subjectForm.reset({
+      name: '',
+      teacherId: null
+    });
+    this.subjectDialog.set(true);
+  }
+
+  saveSubject() {
+    if (this.subjectForm.invalid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Subject name is required.'
+      });
+      return;
+    }
+
+    const formVal = this.subjectForm.value;
+    const payload = {
+      name: formVal.name,
+      classId: this.selectedClassForSubject()!,
+      teacherId: formVal.teacherId || null
+    };
+
+    this.subjectsHttpSvc.createSubject(payload).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Subject Added',
+            detail: `Subject '${formVal.name}' mapped successfully.`
+          });
+          this.subjectDialog.set(false);
+          // Refresh details dialog data
+          this.classesService.loadClassDetail(this.selectedClassForSubject()!);
+        }
+      },
+      error: (err: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed to Add Subject',
+          detail: err?.error?.message || 'Unable to map subject.'
+        });
+      }
+    });
+  }
+
+  deleteSubject(subjectId: string) {
+    if (confirm('Are you sure you want to delete this subject mapping?')) {
+      this.subjectsHttpSvc.deleteSubject(subjectId).subscribe({
+        next: (res: any) => {
+          if (res?.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Subject Removed',
+              detail: 'Subject unmapped successfully.'
+            });
+            // Refresh details dialog data
+            const classId = this.classesService.activeClassDetail()?.id;
+            if (classId) {
+              this.classesService.loadClassDetail(classId);
+            }
+          }
+        },
+        error: (err: any) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Removal Failed',
+            detail: err?.error?.message || 'Unable to unmap subject.'
+          });
+        }
+      });
+    }
   }
 }

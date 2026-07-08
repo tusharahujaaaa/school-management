@@ -65,10 +65,29 @@ export class AuthService {
   readonly isStudent = computed(() => this.currentRole() === 'student');
   readonly isHR = computed(() => this.currentRole() === 'hr');
   readonly isAccountant = computed(() => this.currentRole() === 'accountant');
+  readonly activeSession = signal<string>(sessionStorage.getItem('erp_active_session') || '2026-27');
+  readonly activeSessionId = signal<string>(sessionStorage.getItem('erp_active_session_id') || '');
 
   private apiService = inject(BaseApiService);
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    if (this.isAuthenticated()) {
+      this.fetchActiveSession();
+    }
+  }
+
+  fetchActiveSession() {
+    this.apiService.get<any>('/attendance/students/setup').subscribe(res => {
+      if (res.success && res.data?.academicSession) {
+        const session = res.data.academicSession;
+        const sessionId = res.data.academicSessionId || '';
+        sessionStorage.setItem('erp_active_session', session);
+        sessionStorage.setItem('erp_active_session_id', sessionId);
+        this.activeSession.set(session);
+        this.activeSessionId.set(sessionId);
+      }
+    });
+  }
 
   private checkInitialState(): boolean {
     return sessionStorage.getItem(this.AUTH_KEY) === 'true';
@@ -137,6 +156,7 @@ export class AuthService {
 
         this.isAuthenticated.set(true);
         this.currentRole.set(role);
+        this.fetchActiveSession();
       })
     );
   }
@@ -156,6 +176,7 @@ export class AuthService {
           }));
 
           this.currentRole.set(role);
+          this.fetchActiveSession();
         }
       })
     );
@@ -168,6 +189,8 @@ export class AuthService {
       sessionStorage.removeItem(this.ROLE_KEY);
       sessionStorage.removeItem('erp_temp_user_data');
       sessionStorage.removeItem('refreshToken');
+      sessionStorage.removeItem('erp_active_session');
+      sessionStorage.removeItem('erp_active_session_id');
       this.isAuthenticated.set(false);
       this.router.navigate(['/erp/login']);
     };

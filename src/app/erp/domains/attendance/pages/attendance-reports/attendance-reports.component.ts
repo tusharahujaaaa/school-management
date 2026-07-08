@@ -6,7 +6,6 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AttendanceService } from '../../services/attendance.service';
-import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
 import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
 
 @Component({
@@ -14,7 +13,7 @@ import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badge
   standalone: true,
   imports: [
     CommonModule, FormsModule, SelectModule, ButtonModule, ToastModule, 
-    PageHeaderComponent, StatusBadgeComponent
+    StatusBadgeComponent
   ],
   providers: [MessageService],
   templateUrl: './attendance-reports.component.html',

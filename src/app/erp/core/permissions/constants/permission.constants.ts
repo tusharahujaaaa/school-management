@@ -56,6 +56,12 @@ export const ERP_PERMISSIONS = {
   ACADEMICS: {
     VIEW: 'academics.view',
     EDIT: 'academics.edit',
+  },
+  EXAMS: {
+    VIEW: 'exams.view',
+    CONFIG: 'exams.config',
+    ENTER_MARKS: 'exams.enter_marks',
+    PUBLISH: 'exams.publish',
   }
 } as const;
 

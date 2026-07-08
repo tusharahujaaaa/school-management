@@ -1,0 +1,94 @@
+<div class="card border-0 shadow-sm border-round-xl p-4 surface-card">
+    <app-erp-page-header 
+        title="Marks Entry Workspace" 
+        [subtitle]="'Entering marks for ' + (examSubject()?.subject?.name || '') + ' - Class: ' + (examSubject()?.class?.name || '') + ' (' + (examSubject()?.class?.section || '') + ')'">
+        <div actions class="flex gap-2">
+            <button pButton label="Back" icon="pi pi-arrow-left" class="p-button-text p-button-secondary" routerLink="/erp/exams"></button>
+            <button pButton label="Export CSV" icon="pi pi-download" class="p-button-outlined p-button-secondary border-round-md" (click)="exportToCSV()"></button>
+            <label for="csv-upload" class="p-button p-button-outlined p-button-info border-round-md flex align-items-center gap-2 cursor-pointer select-none">
+                <i class="pi pi-upload"></i> Import CSV
+            </label>
+            <input type="file" id="csv-upload" accept=".csv" (change)="onFileSelect($event)" class="hidden" />
+            <button pButton label="Save Marks" icon="pi pi-save" class="p-button-success border-round-md shadow-sm" (click)="saveMarks()"></button>
+        </div>
+    </app-erp-page-header>
+
+    <p-toast></p-toast>
+
+    <!-- Context Details Banner -->
+    <div class="grid mb-4 mt-2">
+        <div class="col-12 md:col-4">
+            <div class="p-3 bg-gray-50 border-round-lg border-1 border-200">
+                <span class="text-500 text-xs block font-semibold uppercase">Exam Term</span>
+                <span class="text-900 font-bold text-base mt-1 block">{{ examSubject()?.exam?.name || 'Loading...' }}</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-4">
+            <div class="p-3 bg-gray-50 border-round-lg border-1 border-200">
+                <span class="text-500 text-xs block font-semibold uppercase">Subject Context</span>
+                <span class="text-900 font-bold text-base mt-1 block">{{ examSubject()?.subject?.name || 'Loading...' }}</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-4">
+            <div class="p-3 bg-blue-50 border-round-lg border-1 border-blue-200">
+                <span class="text-primary text-xs block font-semibold uppercase">Maximum Passing Boundary</span>
+                <span class="text-primary font-bold text-base mt-1 block">{{ maxMarks() }} Max / {{ examSubject()?.passingMarks }} Pass</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marks Entry Interactive Sheet -->
+    <p-table [value]="roster()" [loading]="loading()" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 10%" class="font-bold text-sm text-800">Roll No.</th>
+                <th style="width: 30%" class="font-bold text-sm text-800">Student Name</th>
+                <th style="width: 15%" class="font-bold text-sm text-800">Marks Obtained</th>
+                <th style="width: 12%" class="font-bold text-sm text-800">Grace Marks</th>
+                <th style="width: 13%" class="font-bold text-sm text-800 text-center">Score Preview</th>
+                <th style="width: 20%" class="font-bold text-sm text-800">Remarks / Log Note</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr [ngClass]="{'bg-red-50': !validateMarks(row)}">
+                <td class="font-semibold text-700">{{ row.rollNumber }}</td>
+                <td class="font-bold text-900">{{ row.studentName }}</td>
+                <td>
+                    <input pInputText type="number" [(ngModel)]="row.marksObtained" [placeholder]="'Max ' + maxMarks()" 
+                           class="w-full p-inputtext-sm border-round-md" [ngClass]="{'border-red-500': !validateMarks(row)}" />
+                    <small class="text-red-500 text-xs block mt-1" *ngIf="!validateMarks(row)">Exceeds max marks!</small>
+                </td>
+                <td>
+                    <input pInputText type="number" [(ngModel)]="row.graceMarks" placeholder="0" class="w-full p-inputtext-sm border-round-md" />
+                </td>
+                <td class="text-center">
+                    <div class="flex flex-column align-items-center justify-content-center">
+                        <span class="text-900 font-bold text-sm">
+                            {{ row.marksObtained !== null ? (Number(row.marksObtained) + Number(row.graceMarks)) : '-' }} / {{ maxMarks() }}
+                        </span>
+                        <span class="text-xs font-semibold px-2 py-0.5 border-round-md mt-1" 
+                              [ngClass]="{
+                                'bg-green-100 text-green-700': calculateGrade(row.marksObtained, row.graceMarks).grade !== 'F' && row.marksObtained !== null,
+                                'bg-red-100 text-red-700': calculateGrade(row.marksObtained, row.graceMarks).grade === 'F' && row.marksObtained !== null,
+                                'bg-gray-100 text-gray-500': row.marksObtained === null
+                              }">
+                            {{ calculateGrade(row.marksObtained, row.graceMarks).grade }} ({{ calculateGrade(row.marksObtained, row.graceMarks).percent }}%)
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <input pInputText type="text" [(ngModel)]="row.teacherRemarks" placeholder="Optional comments..." class="w-full p-inputtext-sm border-round-md" />
+                    <!-- Grace marks reason reminder -->
+                    <small class="text-blue-500 text-xs block mt-1" *ngIf="row.graceMarks > 0">Reason for grace marks is logged in audit history.</small>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptystate">
+            <tr>
+                <td colspan="6" class="text-center py-5">
+                    <span class="text-600 font-medium">No students registered in this class.</span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

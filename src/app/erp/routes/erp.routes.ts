@@ -85,6 +85,12 @@ export const erpRoutes: Routes = [
         data: { permission: ERP_PERMISSIONS.ACADEMICS.VIEW }
       },
       {
+        path: 'exams',
+        loadChildren: () => import('../domains/exams/routes/exams.routes').then(m => m.examsRoutes),
+        canActivate: [permissionGuard],
+        data: { permission: ERP_PERMISSIONS.EXAMS.VIEW }
+      },
+      {
         path: 'settings',
         loadChildren: () => import('../domains/settings/routes/settings.routes').then(m => m.settingsRoutes),
         canActivate: [permissionGuard],

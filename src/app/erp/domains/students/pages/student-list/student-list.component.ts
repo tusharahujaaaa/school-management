@@ -5,7 +5,6 @@ import { StudentStore } from '../../store/student.store';
 import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-header.component';
 import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
 import { StudentFiltersComponent } from '../../components/student-filters/student-filters.component';
-import { StatusBadgeComponent } from '../../../../shared/ui/badges/status-badge.component';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -25,7 +24,6 @@ import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permissi
     PageHeaderComponent,
     ErpTableComponent,
     StudentFiltersComponent,
-    StatusBadgeComponent,
     AvatarModule,
     ButtonModule,
     TooltipModule,

@@ -223,6 +223,15 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         roles: ['admin', 'principal', 'teacher'],
         permissionKey: 'academics.view',
         moduleKey: 'academics'
+      },
+      {
+        type: 'link',
+        label: 'Exams & Results',
+        icon: 'pi pi-percentage',
+        route: '/erp/exams',
+        roles: ['admin', 'principal', 'teacher'],
+        permissionKey: 'exams.view',
+        moduleKey: 'exams'
       }
     ]
   },

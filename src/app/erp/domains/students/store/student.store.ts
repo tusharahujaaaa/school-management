@@ -1,11 +1,13 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { Student, StudentFilters } from '../models/student.model';
 import { StudentService } from '../services/student.service';
+import { AuthService } from '../../auth/services/auth.service';
 import { finalize, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StudentStore {
   private studentService = inject(StudentService);
+  private authService = inject(AuthService);
 
   // State
   private _students = signal<Student[]>([]);
@@ -28,6 +30,8 @@ export class StudentStore {
   // Selectors
   readonly students = this._students.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly activeSession = this.authService.activeSession;
+  readonly activeSessionId = this.authService.activeSessionId;
   readonly filters = this._filters.asReadonly();
   readonly selectedStudentId = this._selectedStudentId.asReadonly();
 

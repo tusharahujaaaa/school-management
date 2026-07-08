@@ -7,7 +7,6 @@ import { AuthService } from '../../auth/services/auth.service';
 
 import { SectionHeaderComponent } from '../components/section-header/section-header.component';
 import { StatCardComponent } from '../components/stat-card/stat-card.component';
-import { QuickActionCardComponent } from '../components/quick-action-card/quick-action-card.component';
 import { ActivityListComponent } from '../components/activity-list/activity-list.component';
 import { EventCardComponent } from '../components/event-card/event-card.component';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -21,7 +20,6 @@ import { TooltipModule } from 'primeng/tooltip';
     CommonModule,
     SectionHeaderComponent,
     StatCardComponent,
-    QuickActionCardComponent,
     ActivityListComponent,
     EventCardComponent,
     ProgressBarModule,
