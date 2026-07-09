@@ -20,6 +20,14 @@ export const erpRoutes: Routes = [
       {
         path: 'login',
         loadComponent: () => import('../domains/auth/login/login.component').then(m => m.LoginComponent)
+      },
+      {
+        path: 'forgot-password',
+        loadComponent: () => import('../domains/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+      },
+      {
+        path: 'reset-password',
+        loadComponent: () => import('../domains/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
       }
     ]
   },

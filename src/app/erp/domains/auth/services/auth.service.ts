@@ -13,6 +13,13 @@ export interface ErpUser {
   avatar?: string;
 }
 
+export interface PasswordResetRequestResult {
+  email: string;
+  resetLink?: string | null;
+  resetToken?: string | null;
+  expiresInMinutes: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly AUTH_KEY = 'erp_temp_auth_state';
@@ -159,6 +166,18 @@ export class AuthService {
         this.fetchActiveSession();
       })
     );
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.apiService.post<any>(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, { email });
+  }
+
+  resetPassword(token: string, newPassword: string, confirmPassword: string): Observable<any> {
+    return this.apiService.post<any>(API_ENDPOINTS.AUTH.RESET_PASSWORD, {
+      token,
+      newPassword,
+      confirmPassword,
+    });
   }
 
   getMe(): Observable<any> {
