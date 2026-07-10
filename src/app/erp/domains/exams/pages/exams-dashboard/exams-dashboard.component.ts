@@ -17,24 +17,14 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ClassesService } from '../../../academics/services/classes.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-exams-dashboard',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    PageHeaderComponent,
-    ButtonModule,
-    TooltipModule,
-    SelectModule,
-    DialogModule,
-    ToastModule,
-    CardModule,
-    TableModule,
-    RouterModule
-  ],
+        CommonModule, FormsModule, ReactiveFormsModule, PageHeaderComponent, ButtonModule, TooltipModule, SelectModule, DialogModule, ToastModule, CardModule, TableModule, RouterModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './exams-dashboard.component.html'
 })

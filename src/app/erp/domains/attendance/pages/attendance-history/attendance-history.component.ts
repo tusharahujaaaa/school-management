@@ -9,11 +9,14 @@ import { PageHeaderComponent } from '../../../../shared/ui/page-header/page-head
 import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.component';
 
 import { AttendanceHistoryRecord } from '../../models/attendance.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-attendance-history',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, PageHeaderComponent, ErpTableComponent],
+  imports: [
+        CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, PageHeaderComponent, ErpTableComponent, TranslatePipe
+    ],
   templateUrl: './attendance-history.component.html',
   styleUrls: ['./attendance-history.component.scss']
 })

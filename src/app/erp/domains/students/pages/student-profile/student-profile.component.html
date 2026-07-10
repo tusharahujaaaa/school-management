@@ -3,8 +3,8 @@
     [subtitle]="store.selectedStudent() ? 'Admission No: ' + store.selectedStudent()?.admissionNumber : 'Loading...'"
     [breadcrumbs]="[{label: 'ERP'}, {label: 'Students', routerLink: '/erp/students'}, {label: 'Profile'}]">
     <div actions>
-        <button *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" pButton label="Edit Profile" icon="pi pi-pencil" class="p-button-sm mr-2" [routerLink]="['/erp/students', store.selectedStudent()?.id, 'edit']"></button>
-        <button pButton label="Actions" icon="pi pi-chevron-down" class="p-button-outlined p-button-sm"></button>
+        <button *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" pButton [label]="'STUDENTS.STUDENT_PROFILE.LABEL_1' | translate" icon="pi pi-pencil" class="p-button-sm mr-2" [routerLink]="['/erp/students', store.selectedStudent()?.id, 'edit']"></button>
+        <button pButton [label]="'STUDENTS.STUDENT_PROFILE.LABEL_2' | translate" icon="pi pi-chevron-down" class="p-button-outlined p-button-sm"></button>
     </div>
 </app-erp-page-header>
 
@@ -22,7 +22,7 @@
                     [style]="{'width': '120px', 'height': '120px'}">
                 </p-avatar>
                 <div *erpHasPermission="PERMISSIONS.STUDENTS.EDIT" class="mb-3">
-                    <button pButton type="button" label="Update Photo" icon="pi pi-camera" class="p-button-outlined p-button-sm" (click)="openPhotoDialog()"></button>
+                    <button pButton type="button" [label]="'STUDENTS.STUDENT_PROFILE.LABEL_3' | translate" icon="pi pi-camera" class="p-button-outlined p-button-sm" (click)="openPhotoDialog()"></button>
                 </div>
                 <h2 class="text-xl font-bold text-900 m-0">{{ student.fullName }}</h2>
                 <p class="text-600 mb-3">{{ student.admissionNumber }}</p>
@@ -46,17 +46,17 @@
 
             <!-- Academic Quick Info -->
             <div class="surface-card p-4 border-round-xl shadow-1">
-                <h3 class="text-900 font-bold mb-3 text-base">Academic Info</h3>
+                <h3 class="text-900 font-bold mb-3 text-base">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_4' | translate }}</h3>
                 <div class="flex justify-content-between mb-2">
-                    <span class="text-600">Class:</span>
+                    <span class="text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_5' | translate }}</span>
                     <span class="text-900 font-medium">{{ student.class }}</span>
                 </div>
                 <div class="flex justify-content-between mb-2">
-                    <span class="text-600">Section:</span>
+                    <span class="text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_6' | translate }}</span>
                     <span class="text-900 font-medium">{{ student.section }}</span>
                 </div>
                 <div class="flex justify-content-between">
-                    <span class="text-600">Roll No:</span>
+                    <span class="text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_7' | translate }}</span>
                     <span class="text-900 font-medium">{{ student.rollNumber }}</span>
                 </div>
             </div>
@@ -67,62 +67,62 @@
             <div class="surface-card border-round-xl shadow-1 overflow-hidden">
                 <p-tabs value="0">
                     <p-tablist>
-                        <p-tab value="0">General Information</p-tab>
-                        <p-tab value="1">Attendance</p-tab>
-                        <p-tab value="2">Fees</p-tab>
-                        <p-tab value="3">Activity</p-tab>
+                        <p-tab value="0">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_8' | translate }}</p-tab>
+                        <p-tab value="1">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_9' | translate }}</p-tab>
+                        <p-tab value="2">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_10' | translate }}</p-tab>
+                        <p-tab value="3">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_11' | translate }}</p-tab>
                     </p-tablist>
                     <p-tabpanels>
                         <p-tabpanel value="0">
                             <div class="grid p-2">
                                 <div class="col-12 md:col-6">
-                                    <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2">Basic Details</h4>
+                                    <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_12' | translate }}</h4>
                                     <div class="grid text-sm">
-                                        <div class="col-6 text-600">Gender</div>
+                                        <div class="col-6 text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_13' | translate }}</div>
                                         <div class="col-6 text-900 font-medium">{{ student.gender }}</div>
-                                        <div class="col-6 text-600">Date of Birth</div>
+                                        <div class="col-6 text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_14' | translate }}</div>
                                         <div class="col-6 text-900 font-medium">{{ student.dateOfBirth || 'N/A' }}</div>
-                                        <div class="col-6 text-600">Admission Date</div>
+                                        <div class="col-6 text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_15' | translate }}</div>
                                         <div class="col-6 text-900 font-medium">{{ student.admissionDate || 'N/A' }}</div>
                                     </div>
                                 </div>
                                 <div class="col-12 md:col-6">
-                                    <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2">Parent Details</h4>
+                                    <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_16' | translate }}</h4>
                                     <div class="grid text-sm">
-                                        <div class="col-6 text-600">Father/Guardian</div>
+                                        <div class="col-6 text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_17' | translate }}</div>
                                         <div class="col-6 text-900 font-medium">{{ student.parentName || 'N/A' }}</div>
-                                        <div class="col-6 text-600">Contact</div>
+                                        <div class="col-6 text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_18' | translate }}</div>
                                         <div class="col-6 text-900 font-medium">{{ student.parentContact || 'N/A' }}</div>
                                     </div>
                                     <div class="mt-4 p-3 bg-blue-50 border-round text-blue-700 text-xs flex align-items-center">
                                         <i class="pi pi-info-circle mr-2"></i>
-                                        <span>Parent management module integration pending.</span>
+                                        <span>{{ 'STUDENTS.STUDENT_PROFILE.TEXT_19' | translate }}</span>
                                     </div>
                                 </div>
 
                                 <!-- Transport Details Section -->
                                 <div class="col-12 mt-4">
                                     <h4 class="text-900 font-bold mb-3 border-bottom-1 surface-border pb-2 flex align-items-center gap-2">
-                                        <i class="pi pi-truck text-primary"></i> Transport Details
+                                        <i class="pi pi-truck text-primary"></i> {{ 'STUDENTS.STUDENT_PROFILE.TEXT_20' | translate }}
                                     </h4>
                                     
                                     <div *ngIf="student.busAssignment" class="grid text-sm p-3 bg-surface-50 border-round border-1 surface-border">
                                         <div class="col-12 md:col-6 grid p-0 align-content-start">
-                                            <div class="col-6 text-600 mb-2">Transport Status</div>
+                                            <div class="col-6 text-600 mb-2">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_21' | translate }}</div>
                                             <div class="col-6 text-green-700 font-bold mb-2">
-                                                <span class="inline-block w-2 h-2 bg-green-500 border-circle mr-1.5 custom-style-1" ></span>Active
+                                                <span class="inline-block w-2 h-2 bg-green-500 border-circle mr-1.5 custom-style-1" ></span>{{ 'STUDENTS.STUDENT_PROFILE.TEXT_22' | translate }}
                                             </div>
-                                            <div class="col-6 text-600 mb-2">Pickup Point</div>
+                                            <div class="col-6 text-600 mb-2">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_23' | translate }}</div>
                                             <div class="col-6 text-900 font-medium mb-2">{{ student.busAssignment.pickupPoint || 'N/A' }}</div>
-                                            <div class="col-6 text-600">Drop Point</div>
+                                            <div class="col-6 text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_24' | translate }}</div>
                                             <div class="col-6 text-900 font-medium">{{ student.busAssignment.dropPoint || 'N/A' }}</div>
                                         </div>
                                         <div class="col-12 md:col-6 grid p-0 border-left-1 surface-border pl-0 md:pl-4">
-                                            <div class="col-6 text-600 mb-2">Bus Route</div>
+                                            <div class="col-6 text-600 mb-2">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_25' | translate }}</div>
                                             <div class="col-6 text-900 font-bold mb-2">{{ student.busAssignment.bus?.routeName || 'Route 1 - East Delhi' }}</div>
-                                            <div class="col-6 text-600 mb-2">Plate Number</div>
+                                            <div class="col-6 text-600 mb-2">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_26' | translate }}</div>
                                             <div class="col-6 text-900 font-medium mb-2">{{ student.busAssignment.bus?.plateNumber || 'DL 1PA 1234' }}</div>
-                                            <div class="col-6 text-600">Driver & Contact</div>
+                                            <div class="col-6 text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_27' | translate }}</div>
                                             <div class="col-6 text-900 font-medium">
                                                 {{ student.busAssignment.bus?.driverName || 'Ram Singh' }}
                                                 <span *ngIf="student.busAssignment.bus?.driverPhone" class="text-500 text-xs block">({{ student.busAssignment.bus?.driverPhone }})</span>
@@ -131,7 +131,7 @@
                                     </div>
                                     <div *ngIf="!student.busAssignment" class="p-3 bg-surface-50 border-round border-1 surface-border text-600 text-sm flex align-items-center">
                                         <i class="pi pi-info-circle mr-2 text-500"></i>
-                                        This student is not registered for school bus transport services.
+                                        {{ 'STUDENTS.STUDENT_PROFILE.TEXT_28' | translate }}
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                         <p-tabpanel value="1">
                              <div class="flex flex-column align-items-center justify-content-center p-8">
                                 <i class="pi pi-chart-bar text-4xl text-200 mb-3"></i>
-                                <span class="text-600">Attendance data will be integrated soon.</span>
+                                <span class="text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_29' | translate }}</span>
                             </div>
                         </p-tabpanel>
                         <p-tabpanel value="2">
@@ -155,7 +155,7 @@
                                     <div>
                                         <div class="flex align-items-center gap-2 mb-1.5">
                                             <i class="pi pi-percentage text-primary text-sm"></i>
-                                            <span class="text-900 font-bold text-sm">Discount & Waiver Settings</span>
+                                            <span class="text-900 font-bold text-sm">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_30' | translate }}</span>
                                         </div>
                                         <div class="text-500 text-xs line-height-3">
                                             <ng-container *ngIf="feeProfile() as profile; else noProfile">
@@ -166,16 +166,16 @@
                                                     <i class="pi pi-tag mr-1"></i>Active Discount: {{ profile.discountValue }} {{ profile.discountType === 'PERCENTAGE' ? '%' : 'INR' }} ({{ profile.discountReason | titlecase }})
                                                 </span>
                                                 <span *ngIf="!profile.isFeeWaived && !profile.hasDiscount" class="text-600">
-                                                    No active discounts or waiver configurations applied to this student.
+                                                    {{ 'STUDENTS.STUDENT_PROFILE.TEXT_31' | translate }}
                                                 </span>
                                             </ng-container>
                                             <ng-template #noProfile>
-                                                <span class="text-600">No active discounts or waiver configurations applied to this student.</span>
+                                                <span class="text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_32' | translate }}</span>
                                             </ng-template>
                                         </div>
                                     </div>
                                     <div *erpHasPermission="PERMISSIONS.FEES.COLLECT">
-                                        <button pButton label="Configure Profile" icon="pi pi-cog" class="p-button-outlined p-button-sm px-3" (click)="openProfileModal()"></button>
+                                        <button pButton [label]="'STUDENTS.STUDENT_PROFILE.LABEL_33' | translate" icon="pi pi-cog" class="p-button-outlined p-button-sm px-3" (click)="openProfileModal()"></button>
                                     </div>
                                 </div>
 
@@ -184,7 +184,7 @@
                                     <div class="col-12 md:col-4">
                                         <div class="surface-card p-3 border-round-lg border-1 surface-border border-left-3 border-green-500 shadow-1 flex align-items-center justify-content-between">
                                             <div>
-                                                <span class="text-500 text-xs font-semibold block mb-1">TOTAL PAID</span>
+                                                <span class="text-500 text-xs font-semibold block mb-1">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_34' | translate }}</span>
                                                 <span class="text-xl font-bold text-green-700">₹{{ ledgerSummary().paid | number:'1.2-2' }}</span>
                                             </div>
                                             <i class="pi pi-check-circle text-green-500 text-2xl"></i>
@@ -193,7 +193,7 @@
                                     <div class="col-12 md:col-4">
                                         <div class="surface-card p-3 border-round-lg border-1 surface-border border-left-3 border-orange-500 shadow-1 flex align-items-center justify-content-between">
                                             <div>
-                                                <span class="text-500 text-xs font-semibold block mb-1">PENDING DUES</span>
+                                                <span class="text-500 text-xs font-semibold block mb-1">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_35' | translate }}</span>
                                                 <span class="text-xl font-bold text-orange-700">₹{{ ledgerSummary().pending | number:'1.2-2' }}</span>
                                             </div>
                                             <i class="pi pi-exclamation-circle text-orange-500 text-2xl"></i>
@@ -202,7 +202,7 @@
                                     <div class="col-12 md:col-4">
                                         <div class="surface-card p-3 border-round-lg border-1 surface-border border-left-3 border-red-500 shadow-1 flex align-items-center justify-content-between">
                                             <div>
-                                                <span class="text-500 text-xs font-semibold block mb-1">OVERDUE FEES</span>
+                                                <span class="text-500 text-xs font-semibold block mb-1">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_36' | translate }}</span>
                                                 <span class="text-xl font-bold text-red-700">₹{{ ledgerSummary().overdue | number:'1.2-2' }}</span>
                                             </div>
                                             <i class="pi pi-times-circle text-red-500 text-2xl"></i>
@@ -213,8 +213,8 @@
                                 <!-- No Data Fallback -->
                                 <div *ngIf="allRecords().length === 0" class="text-center py-6">
                                     <i class="pi pi-wallet text-200 text-5xl block mb-3"></i>
-                                    <h3 class="text-900 font-semibold text-lg m-0 mb-1">No Ledger Records</h3>
-                                    <p class="text-500 m-0">This student does not have any generated invoices or payment logs.</p>
+                                    <h3 class="text-900 font-semibold text-lg m-0 mb-1">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_37' | translate }}</h3>
+                                    <p class="text-500 m-0">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_38' | translate }}</p>
                                 </div>
 
                                 <!-- Ledger Table Grid -->
@@ -222,12 +222,12 @@
                                     <table class="w-full text-sm erp-table-profile" >
                                         <thead>
                                             <tr class="surface-50 border-bottom-1 surface-border text-left">
-                                                <th class="p-3 text-500 font-semibold">Fee Particulars</th>
-                                                <th class="p-3 text-500 font-semibold">Invoice Date</th>
-                                                <th class="p-3 text-500 font-semibold">Due Date</th>
-                                                <th class="p-3 text-500 font-semibold text-right">Amount</th>
-                                                <th class="p-3 text-500 font-semibold">Status</th>
-                                                <th class="p-3 text-500 font-semibold">Paid Date & Mode</th>
+                                                <th class="p-3 text-500 font-semibold">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_39' | translate }}</th>
+                                                <th class="p-3 text-500 font-semibold">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_40' | translate }}</th>
+                                                <th class="p-3 text-500 font-semibold">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_41' | translate }}</th>
+                                                <th class="p-3 text-500 font-semibold text-right">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_42' | translate }}</th>
+                                                <th class="p-3 text-500 font-semibold">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_43' | translate }}</th>
+                                                <th class="p-3 text-500 font-semibold">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_44' | translate }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -250,7 +250,7 @@
                                                         <span class="text-500 text-xs block mt-0.5">Mode: {{ record.paymentMode || 'N/A' }}</span>
                                                     </div>
                                                     <div *ngIf="record.status !== 'PAID'" class="text-400 text-xs italic">
-                                                        Unpaid
+                                                        {{ 'STUDENTS.STUDENT_PROFILE.TEXT_45' | translate }}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -262,7 +262,7 @@
                         <p-tabpanel value="3">
                              <div class="flex flex-column align-items-center justify-content-center p-8">
                                 <i class="pi pi-history text-4xl text-200 mb-3"></i>
-                                <span class="text-600">Activity logging will be available in next phase.</span>
+                                <span class="text-600">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_46' | translate }}</span>
                             </div>
                         </p-tabpanel>
                     </p-tabpanels>
@@ -295,20 +295,20 @@
 
     <form [formGroup]="photoForm" (ngSubmit)="saveStudentPhoto()" class="flex flex-column gap-3">
       <div>
-        <label for="studentPhotoFile" class="text-700 font-semibold text-sm block mb-1.5">Choose Image</label>
+        <label for="studentPhotoFile" class="text-700 font-semibold text-sm block mb-1.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_47' | translate }}</label>
         <input id="studentPhotoFile" type="file" accept="image/*" class="w-full" (change)="onPhotoFileSelected($event)" />
-        <small class="text-500 block mt-1">Images are saved as a URL string through the backend photo endpoint. Maximum local file size: 2 MB.</small>
+        <small class="text-500 block mt-1">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_48' | translate }}</small>
       </div>
 
       <div class="flex align-items-center gap-2 text-500 text-xs">
         <div class="flex-1 border-top-1 surface-border"></div>
-        <span>or paste hosted URL</span>
+        <span>{{ 'STUDENTS.STUDENT_PROFILE.TEXT_49' | translate }}</span>
         <div class="flex-1 border-top-1 surface-border"></div>
       </div>
 
       <div>
-        <label for="studentPhotoUrl" class="text-700 font-semibold text-sm block mb-1.5">Photo URL <span class="text-red-500">*</span></label>
-        <input id="studentPhotoUrl" type="text" pInputText formControlName="photoUrl" placeholder="https://example.com/student-photo.jpg" class="p-inputtext-sm border-round-md" (input)="onPhotoUrlChange()" />
+        <label for="studentPhotoUrl" class="text-700 font-semibold text-sm block mb-1.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_50' | translate }} <span class="text-red-500">*</span></label>
+        <input id="studentPhotoUrl" type="text" pInputText formControlName="photoUrl" [placeholder]="'STUDENTS.STUDENT_PROFILE.PLACEHOLDER_51' | translate" class="p-inputtext-sm border-round-md" (input)="onPhotoUrlChange()" />
       </div>
 
       <div *ngIf="photoError()" class="p-3 bg-red-50 border-round text-red-700 text-sm flex align-items-center">
@@ -317,8 +317,8 @@
       </div>
 
       <div class="flex gap-2 justify-content-end mt-3">
-        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm" (click)="displayPhotoDialog.set(false)" [disabled]="uploadingPhoto()"></button>
-        <button pButton type="submit" label="Save Photo" icon="pi pi-check" class="p-button-sm px-4" [loading]="uploadingPhoto()" [disabled]="photoForm.invalid || uploadingPhoto()"></button>
+        <button pButton type="button" [label]="'STUDENTS.STUDENT_PROFILE.LABEL_52' | translate" class="p-button-text p-button-sm" (click)="displayPhotoDialog.set(false)" [disabled]="uploadingPhoto()"></button>
+        <button pButton type="submit" [label]="'STUDENTS.STUDENT_PROFILE.LABEL_53' | translate" icon="pi pi-check" class="p-button-sm px-4" [loading]="uploadingPhoto()" [disabled]="photoForm.invalid || uploadingPhoto()"></button>
       </div>
     </form>
   </div>
@@ -333,7 +333,7 @@
 
     <!-- Profile context header -->
     <div class="p-3 bg-surface-50 border-round-xl border-1 surface-border">
-      <span class="text-500 text-xs block mb-1">Configuring Scoped Billing Rules for</span>
+      <span class="text-500 text-xs block mb-1">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_54' | translate }}</span>
       <div class="text-900 font-bold text-base mb-1">{{ student.fullName }}</div>
       <div class="text-500 text-xs">
         Admission No: {{ student.admissionNumber }} &bull; Class: {{ student.class }} &bull; Active Session: <strong>{{ feesService.activeSession()?.name || 'N/A' }}</strong>
@@ -346,15 +346,15 @@
       <div class="field-checkbox flex align-items-center gap-2 p-2 border-round-lg border-1 border-red-100 bg-red-50/30">
         <input type="checkbox" id="isFeeWaived" formControlName="isFeeWaived" class="w-1.2rem h-1.2rem accent-red-600 cursor-pointer" />
         <div>
-          <label for="isFeeWaived" class="text-red-700 font-bold text-sm cursor-pointer">Waive All Academic Fees for Session</label>
-          <span class="text-500 text-2xs block mt-0.5">Overrides all generated bills to status Waived (finalAmount = 0).</span>
+          <label for="isFeeWaived" class="text-red-700 font-bold text-sm cursor-pointer">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_55' | translate }}</label>
+          <span class="text-500 text-2xs block mt-0.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_56' | translate }}</span>
         </div>
       </div>
 
       <!-- waiver reason input -->
       <div *ngIf="profileForm.get('isFeeWaived')?.value">
-        <label for="waiverReason" class="text-700 font-semibold text-sm block mb-1.5">Waiver Reason</label>
-        <input id="waiverReason" type="text" pInputText formControlName="waiverReason" placeholder="e.g. Merit Scholarship Full Waiver"
+        <label for="waiverReason" class="text-700 font-semibold text-sm block mb-1.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_57' | translate }}</label>
+        <input id="waiverReason" type="text" pInputText formControlName="waiverReason" [placeholder]="'STUDENTS.STUDENT_PROFILE.PLACEHOLDER_58' | translate"
           class="p-inputtext-sm border-round-md" />
       </div>
 
@@ -364,8 +364,8 @@
       <div class="field-checkbox flex align-items-center gap-2 p-2 border-round-lg border-1 surface-border bg-surface-50">
         <input type="checkbox" id="hasDiscount" formControlName="hasDiscount" class="w-1.2rem h-1.2rem accent-primary cursor-pointer" />
         <div>
-          <label for="hasDiscount" class="text-900 font-semibold text-sm cursor-pointer">Apply Scholarship / Sibling Discount</label>
-          <span class="text-500 text-2xs block mt-0.5">Subtracts a fixed amount or percentage from billing generation templates.</span>
+          <label for="hasDiscount" class="text-900 font-semibold text-sm cursor-pointer">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_59' | translate }}</label>
+          <span class="text-500 text-2xs block mt-0.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_60' | translate }}</span>
         </div>
       </div>
 
@@ -373,19 +373,19 @@
         
         <div class="grid">
           <div class="col-6">
-            <label for="discountType" class="text-700 font-semibold text-sm block mb-1.5">Discount Type <span class="text-red-500">*</span></label>
+            <label for="discountType" class="text-700 font-semibold text-sm block mb-1.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_61' | translate }} <span class="text-red-500">*</span></label>
             <p-select id="discountType" [options]="discountTypes" formControlName="discountType" optionLabel="label"
               optionValue="value" class="w-full border-round-md"></p-select>
           </div>
           <div class="col-6">
-            <label for="discountValue" class="text-700 font-semibold text-sm block mb-1.5">Discount Value <span class="text-red-500">*</span></label>
-            <input id="discountValue" type="number" pInputText formControlName="discountValue" placeholder="e.g. 15 or 500"
+            <label for="discountValue" class="text-700 font-semibold text-sm block mb-1.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_62' | translate }} <span class="text-red-500">*</span></label>
+            <input id="discountValue" type="number" pInputText formControlName="discountValue" [placeholder]="'STUDENTS.STUDENT_PROFILE.PLACEHOLDER_63' | translate"
               class="p-inputtext-sm border-round-md" />
           </div>
         </div>
 
         <div>
-          <label for="discountReason" class="text-700 font-semibold text-sm block mb-1.5">Scholarship Category / Reason <span class="text-red-500">*</span></label>
+          <label for="discountReason" class="text-700 font-semibold text-sm block mb-1.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_64' | translate }} <span class="text-red-500">*</span></label>
           <p-select id="discountReason" [options]="discountReasons" formControlName="discountReason" optionLabel="label"
             optionValue="value" class="w-full border-round-md"></p-select>
         </div>
@@ -396,16 +396,16 @@
 
       <!-- Remarks -->
       <div>
-        <label for="profileRemarks" class="text-700 font-semibold text-sm block mb-1.5">Internal Remarks</label>
-        <input id="profileRemarks" type="text" pInputText formControlName="remarks" placeholder="e.g. Approved in board meeting"
+        <label for="profileRemarks" class="text-700 font-semibold text-sm block mb-1.5">{{ 'STUDENTS.STUDENT_PROFILE.TEXT_65' | translate }}</label>
+        <input id="profileRemarks" type="text" pInputText formControlName="remarks" [placeholder]="'STUDENTS.STUDENT_PROFILE.PLACEHOLDER_66' | translate"
           class="p-inputtext-sm border-round-md" />
       </div>
 
       <!-- Actions -->
       <div class="flex gap-2 justify-content-end mt-4">
-        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+        <button pButton type="button" [label]="'STUDENTS.STUDENT_PROFILE.LABEL_67' | translate" class="p-button-text p-button-sm"
           (click)="displayProfileDialog.set(false)"></button>
-        <button pButton type="submit" [disabled]="profileForm.invalid" label="Save settings" class="p-button-sm px-4"></button>
+        <button pButton type="submit" [disabled]="profileForm.invalid" [label]="'STUDENTS.STUDENT_PROFILE.LABEL_68' | translate" class="p-button-sm px-4"></button>
       </div>
 
     </form>

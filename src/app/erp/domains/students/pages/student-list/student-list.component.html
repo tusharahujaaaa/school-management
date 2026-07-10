@@ -4,8 +4,8 @@
     subtitle="View and manage student records"
     [breadcrumbs]="[{label: 'ERP'}, {label: 'Students'}]">
     <div actions>
-        <button pButton label="Export" icon="pi pi-download" class="p-button-outlined p-button-sm mr-2"></button>
-        <button *erpHasPermission="PERMISSIONS.STUDENTS.CREATE" pButton label="Add Student" icon="pi pi-plus" class="p-button-sm" routerLink="create"></button>
+        <button pButton [label]="'STUDENTS.STUDENT_LIST.LABEL_1' | translate" icon="pi pi-download" class="p-button-outlined p-button-sm mr-2"></button>
+        <button *erpHasPermission="PERMISSIONS.STUDENTS.CREATE" pButton [label]="'STUDENTS.STUDENT_LIST.LABEL_2' | translate" icon="pi pi-plus" class="p-button-sm" routerLink="create"></button>
     </div>
 </app-erp-page-header>
 

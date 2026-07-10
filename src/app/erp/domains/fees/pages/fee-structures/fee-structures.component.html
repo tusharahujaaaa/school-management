@@ -7,13 +7,13 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-cog text-primary"></i>
-        <span class="text-500 text-sm">Finance Portal</span>
+        <span class="text-500 text-sm">{{ 'FEES.FEE_STRUCTURES.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Fee Configuration Profiles</h2>
-      <span class="text-500 text-sm">Define billing templates and run batch billing invoices across classes</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'FEES.FEE_STRUCTURES.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'FEES.FEE_STRUCTURES.TEXT_3' | translate }}</span>
     </div>
     <div>
-      <button pButton label="Define Structure" icon="pi pi-plus" class="p-button-primary p-button-sm"
+      <button pButton [label]="'FEES.FEE_STRUCTURES.LABEL_4' | translate" icon="pi pi-plus" class="p-button-primary p-button-sm"
         (click)="openNewDialog()"></button>
     </div>
   </div>
@@ -34,9 +34,9 @@
   <div *ngIf="!feesService.loading() && feesService.feeStructures().length === 0"
     class="text-center py-6 surface-card shadow-1 border-round-xl border-1 surface-border">
     <i class="pi pi-folder-open text-200 text-6xl block mb-3"></i>
-    <h3 class="text-900 font-semibold text-lg m-0 mb-2">No Configurations Found</h3>
-    <p class="text-500 m-0 mb-4">Create your first fee structure template to start issuing student billing invoices.</p>
-    <button pButton label="Define Structure" icon="pi pi-plus" class="p-button-sm p-button-outlined"
+    <h3 class="text-900 font-semibold text-lg m-0 mb-2">{{ 'FEES.FEE_STRUCTURES.TEXT_5' | translate }}</h3>
+    <p class="text-500 m-0 mb-4">{{ 'FEES.FEE_STRUCTURES.TEXT_6' | translate }}</p>
+    <button pButton [label]="'FEES.FEE_STRUCTURES.LABEL_7' | translate" icon="pi pi-plus" class="p-button-sm p-button-outlined"
       (click)="openNewDialog()"></button>
   </div>
 
@@ -71,7 +71,7 @@
 
           <!-- Amount -->
           <div class="mb-4">
-            <span class="text-500 text-xs block mb-1">Billing Amount</span>
+            <span class="text-500 text-xs block mb-1">{{ 'FEES.FEE_STRUCTURES.TEXT_8' | translate }}</span>
             <div class="flex align-items-baseline gap-1">
               <span class="text-900 font-extrabold text-3xl">₹{{ struct.amount | number:'1.2-2' }}</span>
               <span class="text-500 text-xs font-semibold">/ {{ struct.frequency | lowercase }}</span>
@@ -82,7 +82,7 @@
         <!-- Action Buttons: Run Billing Invoices & Delete -->
         <div>
           <div class="flex gap-2">
-            <button pButton label="Generate Run" icon="pi pi-refresh" class="p-button-outlined p-button-sm flex-grow-1"
+            <button pButton [label]="'FEES.FEE_STRUCTURES.LABEL_9' | translate" icon="pi pi-refresh" class="p-button-outlined p-button-sm flex-grow-1"
               (click)="runInvoice(struct)">
             </button>
             <button pButton icon="pi pi-trash" class="p-button-outlined p-button-danger p-button-sm"
@@ -105,68 +105,67 @@
 
       <!-- Label -->
       <div>
-        <label for="label" class="text-700 font-semibold text-sm block mb-1.5">Profile Label <span
+        <label for="label" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_10' | translate }} <span
             class="text-red-500">*</span></label>
-        <input id="label" pInputText formControlName="label" placeholder="e.g. Q1 Tuition Term"
+        <input id="label" pInputText formControlName="label" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_11' | translate"
           class="p-inputtext-sm border-round-md" />
         <small class="text-red-500 mt-1 block"
           *ngIf="structureForm.get('label')?.touched && structureForm.get('label')?.invalid">
-          Please enter a profile label name (min 3 characters).
+          {{ 'FEES.FEE_STRUCTURES.TEXT_12' | translate }}
         </small>
       </div>
 
       <!-- Fee Category -->
       <div>
-        <label for="feeType" class="text-700 font-semibold text-sm block mb-1.5">Fee Category <span
+        <label for="feeType" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_13' | translate }} <span
             class="text-red-500">*</span></label>
         <p-select id="feeType" [options]="feeTypes" formControlName="feeType" optionLabel="label" optionValue="value"
-          class="w-full border-round-md" placeholder="Select type"></p-select>
+          class="w-full border-round-md" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_14' | translate"></p-select>
       </div>
 
       <!-- Class Mapping -->
       <div>
-        <label for="classId" class="text-700 font-semibold text-sm block mb-1.5">Target Academic Class</label>
+        <label for="classId" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_15' | translate }}</label>
         <p-select id="classId" [options]="classesList()" formControlName="classId" optionLabel="label"
-          optionValue="value" class="w-full border-round-md" placeholder="Select class filter"></p-select>
-        <span class="text-500 text-xs block mt-1.5"><i class="pi pi-info-circle mr-1"></i>Leaving empty generates this
-          structure globally for all students.</span>
+          optionValue="value" class="w-full border-round-md" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_16' | translate"></p-select>
+        <span class="text-500 text-xs block mt-1.5"><i class="pi pi-info-circle mr-1"></i>{{ 'FEES.FEE_STRUCTURES.TEXT_17' | translate }}</span>
       </div>
 
       <!-- Amount -->
       <div>
-        <label for="amount" class="text-700 font-semibold text-sm block mb-1.5">Billing Amount (INR) <span
+        <label for="amount" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_18' | translate }} <span
             class="text-red-500">*</span></label>
-        <input id="amount" type="number" pInputText formControlName="amount" placeholder="e.g. 5000"
+        <input id="amount" type="number" pInputText formControlName="amount" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_19' | translate"
           class="p-inputtext-sm border-round-md" />
         <small class="text-red-500 mt-1 block"
           *ngIf="structureForm.get('amount')?.touched && structureForm.get('amount')?.invalid">
-          Please enter a valid billing amount (> 0).
+          {{ 'FEES.FEE_STRUCTURES.TEXT_20' | translate }}
         </small>
       </div>
 
       <!-- Frequency -->
       <div>
-        <label for="frequency" class="text-700 font-semibold text-sm block mb-1.5">Billing Cycle Frequency <span
+        <label for="frequency" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_21' | translate }} <span
             class="text-red-500">*</span></label>
         <p-select id="frequency" [options]="frequencies" formControlName="frequency" optionLabel="label"
-          optionValue="value" class="w-full border-round-md" placeholder="Select frequency"></p-select>
+          optionValue="value" class="w-full border-round-md" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_22' | translate"></p-select>
       </div>
 
       <!-- Due Day -->
       <div>
-        <label for="dueDay" class="text-700 font-semibold text-sm block mb-1.5">Payment Due Day of Cycle <span
+        <label for="dueDay" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_23' | translate }} <span
             class="text-red-500">*</span></label>
-        <input id="dueDay" type="number" pInputText formControlName="dueDay" placeholder="e.g. 10"
+        <input id="dueDay" type="number" pInputText formControlName="dueDay" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_24' | translate"
           class="p-inputtext-sm border-round-md" />
         <small class="text-red-500 mt-1 block"
           *ngIf="structureForm.get('dueDay')?.touched && structureForm.get('dueDay')?.invalid">
-          Please specify a valid cycle day (1 to 28).
+          {{ 'FEES.FEE_STRUCTURES.TEXT_25' | translate }}
         </small>
       </div>
 
       <!-- Footer Buttons -->
       <div class="flex gap-2 justify-content-end mt-4">
-        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+        <button pButton type="button" [label]="'FEES.FEE_STRUCTURES.LABEL_26' | translate" class="p-button-text p-button-sm"
           (click)="displayDialog.set(false)"></button>
         <button pButton type="submit" [disabled]="structureForm.invalid || feesService.loading()"
           class="p-button-sm px-4">
@@ -187,40 +186,40 @@
     <form [formGroup]="billingForm" (ngSubmit)="submitBillingRun()" class="py-2 flex flex-column gap-3">
       
       <div class="p-3 bg-gray-50 border-round-lg border-1 surface-border mb-2 text-xs text-600 line-height-3">
-        <div class="font-bold text-700 text-sm mb-1 uppercase">Billing Template Target</div>
-        <div><strong>Category:</strong> {{ selectedStructure() ? getFeeTypeLabel(selectedStructure().feeType) : '' }}</div>
-        <div><strong>Amount:</strong> ₹{{ (selectedStructure()?.amount || 0) | number:'1.2-2' }}</div>
-        <div><strong>Class:</strong> {{ selectedStructure()?.class ? (selectedStructure().class.name + ' ' + selectedStructure().class.section) : 'Global (All Enrolled)' }}</div>
+        <div class="font-bold text-700 text-sm mb-1 uppercase">{{ 'FEES.FEE_STRUCTURES.TEXT_27' | translate }}</div>
+        <div><strong>{{ 'FEES.FEE_STRUCTURES.TEXT_28' | translate }}</strong> {{ selectedStructure() ? getFeeTypeLabel(selectedStructure().feeType) : '' }}</div>
+        <div><strong>{{ 'FEES.FEE_STRUCTURES.TEXT_29' | translate }}</strong> ₹{{ (selectedStructure()?.amount || 0) | number:'1.2-2' }}</div>
+        <div><strong>{{ 'FEES.FEE_STRUCTURES.TEXT_30' | translate }}</strong> {{ selectedStructure()?.class ? (selectedStructure().class.name + ' ' + selectedStructure().class.section) : 'Global (All Enrolled)' }}</div>
       </div>
 
       <!-- Session Selection -->
       <div>
-        <label for="billSession" class="text-700 font-semibold text-sm block mb-1.5">Academic Session Year <span class="text-red-500">*</span></label>
+        <label for="billSession" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_31' | translate }} <span class="text-red-500">*</span></label>
         <p-select id="billSession" [options]="feesService.sessions()" formControlName="sessionId" optionLabel="name" optionValue="id"
-          class="w-full border-round-md" placeholder="Select session"></p-select>
+          class="w-full border-round-md" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_32' | translate"></p-select>
       </div>
 
       <!-- Month Selection -->
       <div>
-        <label for="billMonth" class="text-700 font-semibold text-sm block mb-1.5">Billing Month <span class="text-red-500">*</span></label>
+        <label for="billMonth" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_33' | translate }} <span class="text-red-500">*</span></label>
         <p-select id="billMonth" [options]="monthsList" formControlName="month" optionLabel="label" optionValue="value"
-          class="w-full border-round-md" placeholder="Select month"></p-select>
+          class="w-full border-round-md" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_34' | translate"></p-select>
       </div>
 
       <!-- Year Input -->
       <div>
-        <label for="billYear" class="text-700 font-semibold text-sm block mb-1.5">Billing Year <span class="text-red-500">*</span></label>
-        <input id="billYear" type="number" pInputText formControlName="year" placeholder="e.g. 2026"
+        <label for="billYear" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_STRUCTURES.TEXT_35' | translate }} <span class="text-red-500">*</span></label>
+        <input id="billYear" type="number" pInputText formControlName="year" [placeholder]="'FEES.FEE_STRUCTURES.PLACEHOLDER_36' | translate"
           class="p-inputtext-sm border-round-md" />
         <small class="text-red-500 mt-1 block"
           *ngIf="billingForm.get('year')?.touched && billingForm.get('year')?.invalid">
-          Please enter a valid billing year (2020 - 2100).
+          {{ 'FEES.FEE_STRUCTURES.TEXT_37' | translate }}
         </small>
       </div>
 
       <!-- Footer Buttons -->
       <div class="flex gap-2 justify-content-end mt-4">
-        <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+        <button pButton type="button" [label]="'FEES.FEE_STRUCTURES.LABEL_38' | translate" class="p-button-text p-button-sm"
           (click)="displayBillingDialog.set(false)"></button>
         <button pButton type="submit" [disabled]="billingForm.invalid || feesService.loading()"
           class="p-button-sm px-4">

@@ -6,13 +6,13 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-book text-primary"></i>
-        <span class="text-500 text-sm">Staff Directory</span>
+        <span class="text-500 text-sm">{{ 'TEACHERS.TEACHER_LIST.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Teachers Directory</h2>
-      <span class="text-500 text-sm">Manage school teachers, details, department specializations, and assignments</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'TEACHERS.TEACHER_LIST.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'TEACHERS.TEACHER_LIST.TEXT_3' | translate }}</span>
     </div>
     <div>
-      <button pButton label="Add Teacher" icon="pi pi-plus" class="p-button-primary border-round-md" (click)="openAddModal()"></button>
+      <button pButton [label]="'TEACHERS.TEACHER_LIST.LABEL_4' | translate" icon="pi pi-plus" class="p-button-primary border-round-md" (click)="openAddModal()"></button>
     </div>
   </div>
 
@@ -22,7 +22,7 @@
     <div class="col-12 sm:col-4">
       <div class="surface-card shadow-1 border-round-xl p-3 border-left-3 border-blue-500 flex align-items-center justify-content-between">
         <div>
-          <span class="text-500 text-xs font-semibold block mb-1">TOTAL STAFF</span>
+          <span class="text-500 text-xs font-semibold block mb-1">{{ 'TEACHERS.TEACHER_LIST.TEXT_5' | translate }}</span>
           <span class="text-xl font-bold text-900">{{ teachersService.teachers().length }}</span>
         </div>
         <i class="pi pi-users text-blue-500 text-2xl"></i>
@@ -33,7 +33,7 @@
     <div class="col-12 sm:col-4">
       <div class="surface-card shadow-1 border-round-xl p-3 border-left-3 border-green-500 flex align-items-center justify-content-between">
         <div>
-          <span class="text-500 text-xs font-semibold block mb-1">ACTIVE STATUS</span>
+          <span class="text-500 text-xs font-semibold block mb-1">{{ 'TEACHERS.TEACHER_LIST.TEXT_6' | translate }}</span>
           <span class="text-xl font-bold text-green-700">
             {{ activeTeachersCount() }}
           </span>
@@ -46,7 +46,7 @@
     <div class="col-12 sm:col-4">
       <div class="surface-card shadow-1 border-round-xl p-3 border-left-3 border-orange-500 flex align-items-center justify-content-between">
         <div>
-          <span class="text-500 text-xs font-semibold block mb-1">INACTIVE / ON LEAVE</span>
+          <span class="text-500 text-xs font-semibold block mb-1">{{ 'TEACHERS.TEACHER_LIST.TEXT_7' | translate }}</span>
           <span class="text-xl font-bold text-orange-700">
             {{ inactiveTeachersCount() }}
           </span>
@@ -61,7 +61,7 @@
     <!-- Search -->
     <div class="flex-grow-1 relative max-w-box" >
       <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base translate-y-half" ></i>
-      <input type="text" pInputText placeholder="Search name or subject..." (input)="onSearch($event)" class="w-full pl-5 p-inputtext-sm border-round-md search-input-padded"  />
+      <input type="text" pInputText [placeholder]="'TEACHERS.TEACHER_LIST.PLACEHOLDER_8' | translate" (input)="onSearch($event)" class="w-full pl-5 p-inputtext-sm border-round-md search-input-padded"  />
     </div>
   </div>
 
@@ -75,8 +75,8 @@
     <!-- Empty State -->
     <div *ngIf="!teachersService.loading() && teachersService.teachers().length === 0" class="text-center py-6">
       <i class="pi pi-users text-200 text-5xl block mb-3"></i>
-      <h3 class="text-900 font-semibold text-lg m-0 mb-1">No Teachers Found</h3>
-      <p class="text-500 m-0">There are no teachers registered or matching the search filters.</p>
+      <h3 class="text-900 font-semibold text-lg m-0 mb-1">{{ 'TEACHERS.TEACHER_LIST.TEXT_9' | translate }}</h3>
+      <p class="text-500 m-0">{{ 'TEACHERS.TEACHER_LIST.TEXT_10' | translate }}</p>
     </div>
 
     <!-- Table data -->
@@ -84,12 +84,12 @@
       <table class="w-full text-sm erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-left">
-            <th class="p-3 text-500 font-semibold">Teacher</th>
-            <th class="p-3 text-500 font-semibold">Phone</th>
-            <th class="p-3 text-500 font-semibold">Specialization</th>
-            <th class="p-3 text-500 font-semibold">Joining Date</th>
-            <th class="p-3 text-500 font-semibold text-center">Status</th>
-            <th class="p-3 text-500 font-semibold text-center">Actions</th>
+            <th class="p-3 text-500 font-semibold">{{ 'TEACHERS.TEACHER_LIST.TEXT_11' | translate }}</th>
+            <th class="p-3 text-500 font-semibold">{{ 'TEACHERS.TEACHER_LIST.TEXT_12' | translate }}</th>
+            <th class="p-3 text-500 font-semibold">{{ 'TEACHERS.TEACHER_LIST.TEXT_13' | translate }}</th>
+            <th class="p-3 text-500 font-semibold">{{ 'TEACHERS.TEACHER_LIST.TEXT_14' | translate }}</th>
+            <th class="p-3 text-500 font-semibold text-center">{{ 'TEACHERS.TEACHER_LIST.TEXT_15' | translate }}</th>
+            <th class="p-3 text-500 font-semibold text-center">{{ 'TEACHERS.TEACHER_LIST.TEXT_16' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -155,58 +155,58 @@
       <form [formGroup]="teacherForm" (ngSubmit)="saveTeacher()" class="flex flex-column gap-3">
         <!-- Name -->
         <div>
-          <label for="teacherName" class="text-700 font-semibold text-sm block mb-1.5">Teacher Name <span class="text-red-500">*</span></label>
-          <input id="teacherName" type="text" pInputText formControlName="name" placeholder="Enter teacher name" class="w-full border-round-md" />
+          <label for="teacherName" class="text-700 font-semibold text-sm block mb-1.5">{{ 'TEACHERS.TEACHER_LIST.TEXT_17' | translate }} <span class="text-red-500">*</span></label>
+          <input id="teacherName" type="text" pInputText formControlName="name" [placeholder]="'TEACHERS.TEACHER_LIST.PLACEHOLDER_18' | translate" class="w-full border-round-md" />
           <small class="text-red-500" *ngIf="teacherForm.get('name')?.touched && teacherForm.get('name')?.invalid">
-            Name is required (min 3 characters).
+            {{ 'TEACHERS.TEACHER_LIST.TEXT_19' | translate }}
           </small>
         </div>
 
         <!-- Email -->
         <div>
-          <label for="teacherEmail" class="text-700 font-semibold text-sm block mb-1.5">Email Address</label>
-          <input id="teacherEmail" type="email" pInputText formControlName="email" placeholder="email@school.com" class="w-full border-round-md" />
+          <label for="teacherEmail" class="text-700 font-semibold text-sm block mb-1.5">{{ 'TEACHERS.TEACHER_LIST.TEXT_20' | translate }}</label>
+          <input id="teacherEmail" type="email" pInputText formControlName="email" [placeholder]="'TEACHERS.TEACHER_LIST.PLACEHOLDER_21' | translate" class="w-full border-round-md" />
           <small class="text-red-500" *ngIf="teacherForm.get('email')?.touched && teacherForm.get('email')?.invalid">
-            Please enter a valid email.
+            {{ 'TEACHERS.TEACHER_LIST.TEXT_22' | translate }}
           </small>
         </div>
 
         <!-- Phone -->
         <div>
-          <label for="teacherPhone" class="text-700 font-semibold text-sm block mb-1.5">Phone Number</label>
-          <input id="teacherPhone" type="text" pInputText formControlName="phone" placeholder="+91 9999999999" class="w-full border-round-md" />
+          <label for="teacherPhone" class="text-700 font-semibold text-sm block mb-1.5">{{ 'TEACHERS.TEACHER_LIST.TEXT_23' | translate }}</label>
+          <input id="teacherPhone" type="text" pInputText formControlName="phone" [placeholder]="'TEACHERS.TEACHER_LIST.PLACEHOLDER_24' | translate" class="w-full border-round-md" />
           <small class="text-red-500" *ngIf="teacherForm.get('phone')?.touched && teacherForm.get('phone')?.invalid">
-            Please enter a valid phone number (10-15 digits).
+            {{ 'TEACHERS.TEACHER_LIST.TEXT_25' | translate }}
           </small>
         </div>
 
         <!-- Subject/Specialization -->
         <div>
-          <label for="teacherSubject" class="text-700 font-semibold text-sm block mb-1.5">Department / Subject Specialization</label>
-          <input id="teacherSubject" type="text" pInputText formControlName="subject" placeholder="e.g. Mathematics, Science" class="w-full border-round-md" />
+          <label for="teacherSubject" class="text-700 font-semibold text-sm block mb-1.5">{{ 'TEACHERS.TEACHER_LIST.TEXT_26' | translate }}</label>
+          <input id="teacherSubject" type="text" pInputText formControlName="subject" [placeholder]="'TEACHERS.TEACHER_LIST.PLACEHOLDER_27' | translate" class="w-full border-round-md" />
         </div>
 
         <!-- Joining Date -->
         <div>
-          <label for="teacherJoiningDate" class="text-700 font-semibold text-sm block mb-1.5">Joining Date</label>
+          <label for="teacherJoiningDate" class="text-700 font-semibold text-sm block mb-1.5">{{ 'TEACHERS.TEACHER_LIST.TEXT_28' | translate }}</label>
           <input id="teacherJoiningDate" type="date" pInputText formControlName="joiningDate" class="w-full border-round-md" />
         </div>
 
         <!-- Photo URL -->
         <div>
-          <label for="teacherPhoto" class="text-700 font-semibold text-sm block mb-1.5">Photo URL</label>
-          <input id="teacherPhoto" type="text" pInputText formControlName="photoUrl" placeholder="https://example.com/avatar.jpg" class="w-full border-round-md" />
+          <label for="teacherPhoto" class="text-700 font-semibold text-sm block mb-1.5">{{ 'TEACHERS.TEACHER_LIST.TEXT_29' | translate }}</label>
+          <input id="teacherPhoto" type="text" pInputText formControlName="photoUrl" [placeholder]="'TEACHERS.TEACHER_LIST.PLACEHOLDER_30' | translate" class="w-full border-round-md" />
         </div>
 
         <!-- Status -->
         <div>
-          <label for="teacherStatus" class="text-700 font-semibold text-sm block mb-1.5">Status <span class="text-red-500">*</span></label>
-          <p-select id="teacherStatus" [options]="statusOptions" formControlName="isActive" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select status"></p-select>
+          <label for="teacherStatus" class="text-700 font-semibold text-sm block mb-1.5">{{ 'TEACHERS.TEACHER_LIST.TEXT_31' | translate }} <span class="text-red-500">*</span></label>
+          <p-select id="teacherStatus" [options]="statusOptions" formControlName="isActive" optionLabel="label" optionValue="value" class="w-full border-round-md" [placeholder]="'TEACHERS.TEACHER_LIST.PLACEHOLDER_32' | translate"></p-select>
         </div>
 
         <!-- Actions -->
         <div class="flex gap-2 justify-content-end mt-4">
-          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm" (click)="teacherDialog.set(false)" [disabled]="teachersService.loading()"></button>
+          <button pButton type="button" [label]="'TEACHERS.TEACHER_LIST.LABEL_33' | translate" class="p-button-text p-button-sm" (click)="teacherDialog.set(false)" [disabled]="teachersService.loading()"></button>
           <button pButton type="submit" [label]="isEditMode() ? 'Save Details' : 'Register'" class="p-button-sm px-4" [disabled]="teacherForm.invalid || teachersService.loading()"></button>
         </div>
       </form>

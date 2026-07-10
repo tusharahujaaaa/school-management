@@ -17,14 +17,14 @@ import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badge
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { AttendanceStatus } from '../../models/attendance.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-attendance',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, RouterModule, SelectModule, InputTextModule, ButtonModule, ToastModule,
-    ProgressBarModule, ConfirmDialogModule, PageHeaderComponent, StatusBadgeComponent, ErpTableComponent, HasPermissionDirective
-  ],
+        CommonModule, FormsModule, RouterModule, SelectModule, InputTextModule, ButtonModule, ToastModule, ProgressBarModule, ConfirmDialogModule, PageHeaderComponent, StatusBadgeComponent, ErpTableComponent, HasPermissionDirective, TranslatePipe
+    ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './student-attendance.component.html',
   styleUrls: ['./student-attendance.component.scss']

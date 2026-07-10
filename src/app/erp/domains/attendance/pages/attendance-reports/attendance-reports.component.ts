@@ -7,14 +7,14 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AttendanceService } from '../../services/attendance.service';
 import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badges/status-badge.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-attendance-reports',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, SelectModule, ButtonModule, ToastModule, 
-    StatusBadgeComponent
-  ],
+        CommonModule, FormsModule, SelectModule, ButtonModule, ToastModule, StatusBadgeComponent, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './attendance-reports.component.html',
   styleUrls: ['./attendance-reports.component.scss']

@@ -5,14 +5,14 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-user text-primary"></i>
-        <span class="text-500 text-sm">Parent Dashboard</span>
+        <span class="text-500 text-sm">{{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_1' | translate }}</span>
       </div>
       <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ child().name }}'s Attendance</h2>
       <span class="text-500 text-sm">{{ child().class }} — Section {{ child().section }}</span>
     </div>
     <div class="flex gap-2">
       <button class="flex align-items-center gap-2 px-3 py-2 surface-100 border-round-lg text-700 text-sm font-medium border-none cursor-pointer hover:surface-200 transition-colors">
-        <i class="pi pi-download"></i> Download Report
+        <i class="pi pi-download"></i> {{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_2' | translate }}
       </button>
     </div>
   </div>
@@ -27,8 +27,7 @@
         {{ alert()!.severity === 'critical' ? 'Critical Low Attendance' : 'Low Attendance Warning' }}
       </div>
       <div class="text-700 text-sm">
-        {{ child().name }}'s attendance is <strong>{{ alert()!.attendancePercentage }}%</strong>.
-        Minimum required is 75%. Please ensure regular attendance.
+        {{ child().name }}'s attendance is <strong>{{ alert()!.attendancePercentage }}%</strong>{{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_3' | translate }}
       </div>
     </div>
   </div>
@@ -40,7 +39,7 @@
     <div class="col-12 md:col-4">
       <app-attendance-percentage-widget
         [percentage]="child().attendancePercentage"
-        label="Overall Attendance"
+        [label]="'ATTENDANCE.PARENT_ATTENDANCE.LABEL_4' | translate"
         [subLabel]="child().class + ' — Sec ' + child().section"
         [presentDays]="child().presentDays"
         [totalDays]="child().totalDays">
@@ -50,23 +49,23 @@
     <!-- Quick Stats -->
     <div class="col-12 md:col-8">
       <div class="surface-card shadow-1 border-round-xl p-4 h-full">
-        <h3 class="text-900 font-semibold text-lg m-0 mb-4">Attendance Breakdown</h3>
+        <h3 class="text-900 font-semibold text-lg m-0 mb-4">{{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_5' | translate }}</h3>
         <div class="grid">
           <div class="col-6">
             <div class="p-3 bg-green-50 border-round-xl text-center">
               <div class="text-green-600 font-bold text-3xl">{{ child().presentDays }}</div>
-              <div class="text-500 text-sm mt-1">Days Present</div>
+              <div class="text-500 text-sm mt-1">{{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_6' | translate }}</div>
             </div>
           </div>
           <div class="col-6">
             <div class="p-3 bg-red-50 border-round-xl text-center">
               <div class="text-red-500 font-bold text-3xl">{{ child().totalDays - child().presentDays }}</div>
-              <div class="text-500 text-sm mt-1">Days Absent</div>
+              <div class="text-500 text-sm mt-1">{{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_7' | translate }}</div>
             </div>
           </div>
           <div class="col-12 mt-3">
             <div class="flex justify-content-between text-sm mb-2">
-              <span class="text-500 font-medium">Progress to 100%</span>
+              <span class="text-500 font-medium">{{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_8' | translate }}</span>
               <span class="font-bold"
                     [ngClass]="child().attendancePercentage >= 90 ? 'text-green-500' : child().attendancePercentage >= 75 ? 'text-orange-500' : 'text-red-500'">
                 {{ child().attendancePercentage }}%
@@ -79,7 +78,7 @@
             </div>
             <div class="text-400 text-xs mt-2">
               <i class="pi pi-info-circle mr-1"></i>
-              Minimum 75% attendance required for examinations
+              {{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_9' | translate }}
             </div>
           </div>
         </div>
@@ -91,7 +90,7 @@
       <div class="surface-card shadow-1 border-round-xl p-4">
         <h3 class="text-900 font-semibold text-lg m-0 mb-4">
           <i class="pi pi-history mr-2 text-primary"></i>
-          Recent Class Attendance Records
+          {{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_10' | translate }}
         </h3>
         <div *ngIf="recentHistory().length > 0" class="grid">
           <div class="col-12 md:col-6 lg:col-4" *ngFor="let record of recentHistory()">
@@ -100,7 +99,7 @@
         </div>
         <div *ngIf="recentHistory().length === 0" class="text-center py-5">
           <i class="pi pi-calendar text-200 text-4xl block mb-3"></i>
-          <p class="text-500 m-0">No history available yet.</p>
+          <p class="text-500 m-0">{{ 'ATTENDANCE.PARENT_ATTENDANCE.TEXT_11' | translate }}</p>
         </div>
       </div>
     </div>

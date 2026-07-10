@@ -10,22 +10,22 @@
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
     <div class="grid align-items-end">
       <div class="col-12 md:col-3">
-        <label class="block text-700 font-medium mb-2">Date</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.ATTENDANCE_HISTORY.TEXT_1' | translate }}</label>
         <input pInputText type="date" [ngModel]="filterDate()" (ngModelChange)="filterDate.set($event)"
                class="w-full border-round-lg py-2 px-3">
       </div>
       <div class="col-12 md:col-3">
-        <label class="block text-700 font-medium mb-2">Class</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.ATTENDANCE_HISTORY.TEXT_2' | translate }}</label>
         <p-select [options]="classOptions" [ngModel]="filterClass()" (ngModelChange)="filterClass.set($event)"
-                    styleClass="w-full" placeholder="All Classes"></p-select>
+                    styleClass="w-full" [placeholder]="'ATTENDANCE.ATTENDANCE_HISTORY.PLACEHOLDER_3' | translate"></p-select>
       </div>
       <div class="col-12 md:col-3">
-        <label class="block text-700 font-medium mb-2">Section</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.ATTENDANCE_HISTORY.TEXT_4' | translate }}</label>
         <p-select [options]="sectionOptions" [ngModel]="filterSection()" (ngModelChange)="filterSection.set($event)"
-                    styleClass="w-full" placeholder="All Sections"></p-select>
+                    styleClass="w-full" [placeholder]="'ATTENDANCE.ATTENDANCE_HISTORY.PLACEHOLDER_5' | translate"></p-select>
       </div>
       <div class="col-12 md:col-3">
-        <button pButton label="Reset Filters" icon="pi pi-filter-slash" class="p-button-outlined p-button-secondary w-full" (click)="resetFilters()"></button>
+        <button pButton [label]="'ATTENDANCE.ATTENDANCE_HISTORY.LABEL_6' | translate" icon="pi pi-filter-slash" class="p-button-outlined p-button-secondary w-full" (click)="resetFilters()"></button>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
     [actionTemplate]="actionTmpl"
   >
     <div tableActions>
-       <button pButton label="Export" icon="pi pi-download" class="p-button-sm p-button-outlined"></button>
+       <button pButton [label]="'ATTENDANCE.ATTENDANCE_HISTORY.LABEL_7' | translate" icon="pi pi-download" class="p-button-sm p-button-outlined"></button>
     </div>
 
     <ng-template #dateTmpl let-record>

@@ -12,20 +12,14 @@ import { EventCardComponent } from '../components/event-card/event-card.componen
 import { ProgressBarModule } from 'primeng/progressbar';
 import { UIChart } from 'primeng/chart';
 import { TooltipModule } from 'primeng/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-erp-home',
   standalone: true,
   imports: [
-    CommonModule,
-    SectionHeaderComponent,
-    StatCardComponent,
-    ActivityListComponent,
-    EventCardComponent,
-    ProgressBarModule,
-    UIChart,
-    TooltipModule
-  ],
+        CommonModule, SectionHeaderComponent, StatCardComponent, ActivityListComponent, EventCardComponent, ProgressBarModule, UIChart, TooltipModule, TranslatePipe
+    ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

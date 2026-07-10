@@ -5,6 +5,7 @@ import { AuthService } from '../../../../auth/services/auth.service';
 import { StudentService } from '../../../../students/services/student.service';
 import { AttendanceHttpService } from '../../../services/attendance-http.service';
 import { forkJoin } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /**
  * Student Portal — Attendance View
@@ -15,7 +16,9 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-student-attendance-view',
   standalone: true,
-  imports: [CommonModule, AttendancePercentageWidgetComponent],
+  imports: [
+        CommonModule, AttendancePercentageWidgetComponent, TranslatePipe
+    ],
   templateUrl: './student-attendance-view.component.html',
   styleUrls: ['./student-attendance-view.component.scss']
 })

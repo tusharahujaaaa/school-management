@@ -6,16 +6,14 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-fee-dashboard',
   standalone: true,
   imports: [
-    CommonModule,
-    TooltipModule,
-    ButtonModule,
-    ToastModule
-  ],
+        CommonModule, TooltipModule, ButtonModule, ToastModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './fee-dashboard.component.html',
   styleUrls: ['./fee-dashboard.component.scss']

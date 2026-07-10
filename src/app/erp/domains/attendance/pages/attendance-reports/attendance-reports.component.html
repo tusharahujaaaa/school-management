@@ -6,10 +6,10 @@
   <div class="surface-card p-4 border-round-xl shadow-1 mb-4 border-1 surface-border">
     <div class="flex flex-column md:flex-row justify-content-between md:align-items-center gap-3">
       <div>
-        <h2 class="text-900 font-bold text-2xl m-0 mb-1">Attendance Reports</h2>
-        <span class="text-500">Generate, filter, and export school-wide attendance metrics</span>
+        <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_1' | translate }}</h2>
+        <span class="text-500">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_2' | translate }}</span>
       </div>
-      <button pButton label="Export Active Report" icon="pi pi-download" 
+      <button pButton [label]="'ATTENDANCE.ATTENDANCE_REPORTS.LABEL_3' | translate" icon="pi pi-download" 
         class="p-button-outlined border-round-lg shadow-sm" (click)="exportCSV()"></button>
     </div>
   </div>
@@ -19,25 +19,25 @@
     <div class="col-12 sm:col-6 lg:col-3">
       <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-green-500 border-1 border-300">
         <div class="text-green-500 font-bold text-4xl mb-1">{{ stats().overallPercentage }}%</div>
-        <span class="text-600 font-semibold text-sm">Overall Attendance</span>
+        <span class="text-600 font-semibold text-sm">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_4' | translate }}</span>
       </div>
     </div>
     <div class="col-12 sm:col-6 lg:col-3">
       <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-blue-500 border-1 border-300">
         <div class="text-blue-600 font-bold text-4xl mb-1">{{ stats().presentToday }}</div>
-        <span class="text-600 font-semibold text-sm">Students Present Today</span>
+        <span class="text-600 font-semibold text-sm">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_5' | translate }}</span>
       </div>
     </div>
     <div class="col-12 sm:col-6 lg:col-3">
       <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-red-500 border-1 border-300">
         <div class="text-red-500 font-bold text-4xl mb-1">{{ stats().absentToday }}</div>
-        <span class="text-600 font-semibold text-sm">Students Absent Today</span>
+        <span class="text-600 font-semibold text-sm">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_6' | translate }}</span>
       </div>
     </div>
     <div class="col-12 sm:col-6 lg:col-3">
       <div class="surface-card shadow-1 border-round-xl p-4 text-center border-top-3 border-orange-500 border-1 border-300">
         <div class="text-orange-500 font-bold text-4xl mb-1">{{ alerts().length }}</div>
-        <span class="text-600 font-semibold text-sm">Low Attendance Alerts</span>
+        <span class="text-600 font-semibold text-sm">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_7' | translate }}</span>
       </div>
     </div>
   </div>
@@ -45,28 +45,28 @@
   <!-- Interactive Filters Card -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border">
     <h3 class="m-0 text-900 font-semibold text-lg mb-3 flex align-items-center gap-2">
-      <i class="pi pi-filter text-primary text-xl"></i> Filter Criteria
+      <i class="pi pi-filter text-primary text-xl"></i> {{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_8' | translate }}
     </h3>
     <div class="grid">
       <div class="col-12 md:col-3">
-        <label class="block text-700 font-medium mb-2">Report Type</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_9' | translate }}</label>
         <p-select [options]="reportOptions" [ngModel]="selectedReportType()" (ngModelChange)="selectedReportType.set($event)"
-          styleClass="w-full border-round-lg" placeholder="Select Report"></p-select>
+          styleClass="w-full border-round-lg" [placeholder]="'ATTENDANCE.ATTENDANCE_REPORTS.PLACEHOLDER_10' | translate"></p-select>
       </div>
       <div class="col-12 md:col-3">
-        <label class="block text-700 font-medium mb-2">Class</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_11' | translate }}</label>
         <p-select [options]="classOptions" [ngModel]="selectedClass()" (ngModelChange)="selectedClass.set($event)"
-          styleClass="w-full border-round-lg" placeholder="Select Class"></p-select>
+          styleClass="w-full border-round-lg" [placeholder]="'ATTENDANCE.ATTENDANCE_REPORTS.PLACEHOLDER_12' | translate"></p-select>
       </div>
       <div class="col-12 md:col-3">
-        <label class="block text-700 font-medium mb-2">Section</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_13' | translate }}</label>
         <p-select [options]="sectionOptions" [ngModel]="selectedSection()" (ngModelChange)="selectedSection.set($event)"
-          styleClass="w-full border-round-lg" placeholder="Select Section"></p-select>
+          styleClass="w-full border-round-lg" [placeholder]="'ATTENDANCE.ATTENDANCE_REPORTS.PLACEHOLDER_14' | translate"></p-select>
       </div>
       <div class="col-12 md:col-3">
-        <label class="block text-700 font-medium mb-2">Month</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_15' | translate }}</label>
         <p-select [options]="monthOptions" [ngModel]="selectedMonth()" (ngModelChange)="selectedMonth.set($event)"
-          styleClass="w-full border-round-lg" placeholder="Select Month"></p-select>
+          styleClass="w-full border-round-lg" [placeholder]="'ATTENDANCE.ATTENDANCE_REPORTS.PLACEHOLDER_16' | translate"></p-select>
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@
           </div>
         </div>
         <div class="flex gap-2">
-          <button pButton label="Generate" icon="pi pi-chart-bar" class="p-button-sm p-button-outlined border-round-lg" 
+          <button pButton [label]="'ATTENDANCE.ATTENDANCE_REPORTS.LABEL_17' | translate" icon="pi pi-chart-bar" class="p-button-sm p-button-outlined border-round-lg" 
             (click)="generateReport(report.id === 'r5' ? 'low' : report.id === 'r4' ? 'staff' : report.id === 'r2' ? 'monthly' : report.id === 'r1' ? 'daily' : 'logs')"></button>
           <button pButton icon="pi pi-download" class="p-button-sm p-button-outlined border-round-lg" 
             (click)="exportCSV(report.id === 'r5' ? 'low' : report.id === 'r4' ? 'staff' : report.id === 'r2' ? 'monthly' : report.id === 'r1' ? 'daily' : 'logs')"></button>
@@ -104,12 +104,12 @@
       <table class="w-full erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
-            <th class="p-3 text-left">Class Unit</th>
-            <th class="p-3 text-center">Total Students</th>
-            <th class="p-3 text-center text-green-700 bg-green-50 border-round-top-lg">Present</th>
-            <th class="p-3 text-center text-red-700 bg-red-50 border-round-top-lg">Absent</th>
-            <th class="p-3 text-center text-orange-700 bg-orange-50 border-round-top-lg">Late</th>
-            <th class="p-3 text-center">Attendance %</th>
+            <th class="p-3 text-left">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_18' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_19' | translate }}</th>
+            <th class="p-3 text-center text-green-700 bg-green-50 border-round-top-lg">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_20' | translate }}</th>
+            <th class="p-3 text-center text-red-700 bg-red-50 border-round-top-lg">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_21' | translate }}</th>
+            <th class="p-3 text-center text-orange-700 bg-orange-50 border-round-top-lg">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_22' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_23' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -133,7 +133,7 @@
             </td>
           </tr>
           <tr *ngIf="filteredSummaries().length === 0">
-            <td colspan="6" class="p-8 text-center text-500 italic">No class summaries matched your filter. Try changing class options.</td>
+            <td colspan="6" class="p-8 text-center text-500 italic">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_24' | translate }}</td>
           </tr>
         </tbody>
       </table>
@@ -145,7 +145,7 @@
     <div class="flex justify-content-between align-items-center mb-4">
       <div class="flex align-items-center gap-2">
         <i class="pi pi-exclamation-triangle text-orange-500 text-xl animate-pulse"></i>
-        <h3 class="m-0 text-900 font-bold text-lg">Students Under 75% Attendance</h3>
+        <h3 class="m-0 text-900 font-bold text-lg">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_25' | translate }}</h3>
         <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 border-round-md shadow-sm">{{ filteredAlerts().length }} Student(s)</span>
       </div>
     </div>
@@ -153,11 +153,11 @@
       <table class="w-full erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
-            <th class="p-3 text-left">Student</th>
-            <th class="p-3 text-left">Class</th>
-            <th class="p-3 text-center">Present Days</th>
-            <th class="p-3 text-center">Attendance %</th>
-            <th class="p-3 text-center">Severity</th>
+            <th class="p-3 text-left">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_26' | translate }}</th>
+            <th class="p-3 text-left">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_27' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_28' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_29' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_30' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -190,7 +190,7 @@
             </td>
           </tr>
           <tr *ngIf="filteredAlerts().length === 0">
-            <td colspan="5" class="p-8 text-center text-500 italic">No low attendance students flagged for this class filter unit. Good standing!</td>
+            <td colspan="5" class="p-8 text-center text-500 italic">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_31' | translate }}</td>
           </tr>
         </tbody>
       </table>
@@ -200,8 +200,8 @@
   <!-- Report View: Staff Attendance -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border" *ngIf="selectedReportType() === 'staff'">
     <div class="flex justify-content-between align-items-center mb-4">
-      <h3 class="m-0 text-900 font-bold text-lg">Staff & Faculty Attendance</h3>
-      <span class="text-sm font-semibold text-500">Academic Term: 2026-27</span>
+      <h3 class="m-0 text-900 font-bold text-lg">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_32' | translate }}</h3>
+      <span class="text-sm font-semibold text-500">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_33' | translate }}</span>
     </div>
     <div class="grid">
       <div class="col-12 md:col-6 lg:col-4" *ngFor="let member of svc.staff()">
@@ -216,11 +216,11 @@
                 <span class="text-500 text-xs">{{ member.employeeId }}</span>
               </div>
             </div>
-            <app-erp-status-badge label="Present" severity="success"></app-erp-status-badge>
+            <app-erp-status-badge [label]="'ATTENDANCE.ATTENDANCE_REPORTS.LABEL_34' | translate" severity="success"></app-erp-status-badge>
           </div>
           <div class="flex justify-content-between text-sm text-600 border-top-1 surface-border pt-3">
-            <span>Department: <strong>{{ member.department }}</strong></span>
-            <span>Role: <strong>{{ member.role }}</strong></span>
+            <span>{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_35' | translate }} <strong>{{ member.department }}</strong></span>
+            <span>{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_36' | translate }} <strong>{{ member.role }}</strong></span>
           </div>
         </div>
       </div>
@@ -230,19 +230,19 @@
   <!-- Report View: Logs -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4 border-1 surface-border" *ngIf="selectedReportType() === 'logs'">
     <div class="flex justify-content-between align-items-center mb-4">
-      <h3 class="m-0 text-900 font-bold text-lg">System Attendance Logs</h3>
-      <span class="text-sm font-semibold text-500">Historical logs</span>
+      <h3 class="m-0 text-900 font-bold text-lg">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_37' | translate }}</h3>
+      <span class="text-sm font-semibold text-500">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_38' | translate }}</span>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
-            <th class="p-3 text-left">Date</th>
-            <th class="p-3 text-left">Class Unit</th>
-            <th class="p-3 text-center">Total Students</th>
-            <th class="p-3 text-center">Present / Absent</th>
-            <th class="p-3 text-center">Attendance %</th>
-            <th class="p-3 text-left">Marked By</th>
+            <th class="p-3 text-left">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_39' | translate }}</th>
+            <th class="p-3 text-left">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_40' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_41' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_42' | translate }}</th>
+            <th class="p-3 text-center">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_43' | translate }}</th>
+            <th class="p-3 text-left">{{ 'ATTENDANCE.ATTENDANCE_REPORTS.TEXT_44' | translate }}</th>
           </tr>
         </thead>
         <tbody>

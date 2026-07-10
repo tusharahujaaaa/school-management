@@ -13,6 +13,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { AuthService } from '../services/auth.service';
 import { Eye } from '@primeicons/angular/eye';
 import { EyeSlash } from '@primeicons/angular/eye-slash';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const newPassword = control.get('newPassword');
@@ -27,19 +28,8 @@ export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): V
   selector: 'app-reset-password',
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    ProgressBarModule,
-    ToastModule,
-    PasswordModule,
-    IconFieldModule,
-    InputIconModule,
-    Eye,
-    EyeSlash
-  ],
+        CommonModule, RouterModule, ReactiveFormsModule, InputTextModule, ButtonModule, ProgressBarModule, ToastModule, PasswordModule, IconFieldModule, InputIconModule, Eye, EyeSlash, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss'],

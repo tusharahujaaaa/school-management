@@ -16,10 +16,13 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Eye } from '@primeicons/angular/eye';
 import { EyeSlash } from '@primeicons/angular/eye-slash';
+import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-erp-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule, RippleModule, PasswordModule, ProgressBarModule, ToastModule, IconFieldModule, InputIconModule, Eye, EyeSlash],
+  imports: [
+        CommonModule, RouterModule, ReactiveFormsModule, InputTextModule, ButtonModule, CheckboxModule, RippleModule, PasswordModule, ProgressBarModule, ToastModule, IconFieldModule, InputIconModule, Eye, EyeSlash, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']

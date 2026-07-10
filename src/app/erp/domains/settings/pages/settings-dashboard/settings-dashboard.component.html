@@ -6,17 +6,17 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-cog text-primary"></i>
-        <span class="text-500 text-sm">System Administration</span>
+        <span class="text-500 text-sm">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Website Configuration</h2>
-      <span class="text-500 text-sm">Customize school portal homepage descriptions, contact details, gallery, and principal statements</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_3' | translate }}</span>
     </div>
   </div>
 
   <!-- Loading State Spinner -->
   <div *ngIf="settingsService.loading() && !settingsService.config()" class="surface-card shadow-1 border-round-xl p-6 text-center">
     <i class="pi pi-spin pi-spinner text-primary text-3xl"></i>
-    <div class="text-500 text-sm mt-2">Loading website configuration...</div>
+    <div class="text-500 text-sm mt-2">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_4' | translate }}</div>
   </div>
 
   <!-- Form Layout -->
@@ -24,10 +24,10 @@
     <div class="surface-card shadow-1 border-round-xl overflow-hidden mb-4">
       <p-tabs value="0">
         <p-tablist>
-          <p-tab value="0">Portal Profile</p-tab>
-          <p-tab value="1">Editorial Stories</p-tab>
-          <p-tab value="2">Administration</p-tab>
-          <p-tab value="3">Socials & Media</p-tab>
+          <p-tab value="0">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_5' | translate }}</p-tab>
+          <p-tab value="1">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_6' | translate }}</p-tab>
+          <p-tab value="2">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_7' | translate }}</p-tab>
+          <p-tab value="3">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_8' | translate }}</p-tab>
         </p-tablist>
 
         <p-tabpanels>
@@ -36,31 +36,31 @@
             <div class="p-4 grid">
               <!-- Tagline -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="portalTagline" class="text-700 font-semibold text-sm block mb-1.5">School Tagline / Motto</label>
-                <input id="portalTagline" type="text" pInputText formControlName="tagline" placeholder="e.g. Inspiring Excellence, Empowering Minds" class="w-full border-round-md" />
+                <label for="portalTagline" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_9' | translate }}</label>
+                <input id="portalTagline" type="text" pInputText formControlName="tagline" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_10' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- Established Year -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="estYear" class="text-700 font-semibold text-sm block mb-1.5">Established Year</label>
-                <input id="estYear" type="number" pInputText formControlName="establishedYear" placeholder="e.g. 1995" class="w-full border-round-md" />
+                <label for="estYear" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_11' | translate }}</label>
+                <input id="estYear" type="number" pInputText formControlName="establishedYear" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_12' | translate" class="w-full border-round-md" />
                 <small class="text-red-500" *ngIf="configForm.get('establishedYear')?.touched && configForm.get('establishedYear')?.invalid">
-                  Must be between 1800 and 2100.
+                  {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_13' | translate }}
                 </small>
               </div>
 
               <!-- Contact Phone -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="contactPhone" class="text-700 font-semibold text-sm block mb-1.5">Contact Phone Number</label>
-                <input id="contactPhone" type="text" pInputText formControlName="contactPhone" placeholder="+91 98765 43210" class="w-full border-round-md" />
+                <label for="contactPhone" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_14' | translate }}</label>
+                <input id="contactPhone" type="text" pInputText formControlName="contactPhone" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_15' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- Contact Email -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="contactEmail" class="text-700 font-semibold text-sm block mb-1.5">Contact Email Address</label>
-                <input id="contactEmail" type="email" pInputText formControlName="contactEmail" placeholder="admissions@school.com" class="w-full border-round-md" />
+                <label for="contactEmail" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_16' | translate }}</label>
+                <input id="contactEmail" type="email" pInputText formControlName="contactEmail" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_17' | translate" class="w-full border-round-md" />
                 <small class="text-red-500" *ngIf="configForm.get('contactEmail')?.touched && configForm.get('contactEmail')?.invalid">
-                  Please enter a valid email.
+                  {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_18' | translate }}
                 </small>
               </div>
             </div>
@@ -71,20 +71,20 @@
             <div class="p-4 flex flex-column gap-3">
               <!-- About Text -->
               <div>
-                <label for="aboutUs" class="text-700 font-semibold text-sm block mb-1.5">About Our School</label>
-                <textarea id="aboutUs" pTextarea formControlName="aboutText" rows="4" placeholder="Enter a descriptive history and overview of the school..." class="w-full border-round-md p-2"></textarea>
+                <label for="aboutUs" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_19' | translate }}</label>
+                <textarea id="aboutUs" pTextarea formControlName="aboutText" rows="4" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_20' | translate" class="w-full border-round-md p-2"></textarea>
               </div>
 
               <!-- Mission Text -->
               <div>
-                <label for="schoolMission" class="text-700 font-semibold text-sm block mb-1.5">Mission Statement</label>
-                <textarea id="schoolMission" pTextarea formControlName="missionText" rows="3" placeholder="Our mission is to..." class="w-full border-round-md p-2"></textarea>
+                <label for="schoolMission" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_21' | translate }}</label>
+                <textarea id="schoolMission" pTextarea formControlName="missionText" rows="3" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_22' | translate" class="w-full border-round-md p-2"></textarea>
               </div>
 
               <!-- Vision Text -->
               <div>
-                <label for="schoolVision" class="text-700 font-semibold text-sm block mb-1.5">Vision Statement</label>
-                <textarea id="schoolVision" pTextarea formControlName="visionText" rows="3" placeholder="Our vision is to..." class="w-full border-round-md p-2"></textarea>
+                <label for="schoolVision" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_23' | translate }}</label>
+                <textarea id="schoolVision" pTextarea formControlName="visionText" rows="3" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_24' | translate" class="w-full border-round-md p-2"></textarea>
               </div>
             </div>
           </p-tabpanel>
@@ -94,14 +94,14 @@
             <div class="p-4 flex flex-column gap-3">
               <!-- Principal Name -->
               <div>
-                <label for="principalName" class="text-700 font-semibold text-sm block mb-1.5">Principal's Full Name</label>
-                <input id="principalName" type="text" pInputText formControlName="principalName" placeholder="Dr. Sarah Jenkins" class="w-full border-round-md" />
+                <label for="principalName" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_25' | translate }}</label>
+                <input id="principalName" type="text" pInputText formControlName="principalName" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_26' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- Principal Message -->
               <div>
-                <label for="principalMessage" class="text-700 font-semibold text-sm block mb-1.5">Principal's Address / Message</label>
-                <textarea id="principalMessage" pTextarea formControlName="principalMessage" rows="6" placeholder="Welcome message to prospective parents and students..." class="w-full border-round-md p-2"></textarea>
+                <label for="principalMessage" class="text-700 font-semibold text-sm block mb-1.5">{{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_27' | translate }}</label>
+                <textarea id="principalMessage" pTextarea formControlName="principalMessage" rows="6" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_28' | translate" class="w-full border-round-md p-2"></textarea>
               </div>
             </div>
           </p-tabpanel>
@@ -111,38 +111,38 @@
             <div class="p-4 grid">
               <!-- Facebook -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="linkFb" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-facebook mr-1 text-blue-600"></i> Facebook Page URL</label>
-                <input id="linkFb" type="text" pInputText formControlName="facebook" placeholder="https://facebook.com/yourschool" class="w-full border-round-md" />
+                <label for="linkFb" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-facebook mr-1 text-blue-600"></i> {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_29' | translate }}</label>
+                <input id="linkFb" type="text" pInputText formControlName="facebook" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_30' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- Twitter -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="linkTw" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-twitter mr-1 text-blue-400"></i> Twitter / X Profile URL</label>
-                <input id="linkTw" type="text" pInputText formControlName="twitter" placeholder="https://twitter.com/yourschool" class="w-full border-round-md" />
+                <label for="linkTw" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-twitter mr-1 text-blue-400"></i> {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_31' | translate }}</label>
+                <input id="linkTw" type="text" pInputText formControlName="twitter" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_32' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- Instagram -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="linkIg" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-instagram mr-1 text-pink-600"></i> Instagram Profile URL</label>
-                <input id="linkIg" type="text" pInputText formControlName="instagram" placeholder="https://instagram.com/yourschool" class="w-full border-round-md" />
+                <label for="linkIg" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-instagram mr-1 text-pink-600"></i> {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_33' | translate }}</label>
+                <input id="linkIg" type="text" pInputText formControlName="instagram" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_34' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- LinkedIn -->
               <div class="col-12 md:col-6 mb-3">
-                <label for="linkLi" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-linkedin mr-1 text-blue-800"></i> LinkedIn Page URL</label>
-                <input id="linkLi" type="text" pInputText formControlName="linkedin" placeholder="https://linkedin.com/company/yourschool" class="w-full border-round-md" />
+                <label for="linkLi" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-linkedin mr-1 text-blue-800"></i> {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_35' | translate }}</label>
+                <input id="linkLi" type="text" pInputText formControlName="linkedin" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_36' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- Map Embed URL -->
               <div class="col-12 mb-3">
-                <label for="mapEmbed" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-map-marker mr-1 text-red-500"></i> Google Maps Embed iframe Source URL (src attribute)</label>
-                <input id="mapEmbed" type="text" pInputText formControlName="mapEmbedUrl" placeholder="https://www.google.com/maps/embed?pb=..." class="w-full border-round-md" />
+                <label for="mapEmbed" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-map-marker mr-1 text-red-500"></i> {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_37' | translate }}</label>
+                <input id="mapEmbed" type="text" pInputText formControlName="mapEmbedUrl" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_38' | translate" class="w-full border-round-md" />
               </div>
 
               <!-- Gallery Images -->
               <div class="col-12 mb-3">
-                <label for="galleryImages" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-images mr-1 text-purple-500"></i> Gallery Image URLs (Enter one absolute image URL per line)</label>
-                <textarea id="galleryImages" pTextarea formControlName="galleryUrlsText" rows="6" placeholder="https://example.com/school-front.jpg&#10;https://example.com/classroom.jpg" class="w-full border-round-md p-2"></textarea>
+                <label for="galleryImages" class="text-700 font-semibold text-sm block mb-1.5"><i class="pi pi-images mr-1 text-purple-500"></i> {{ 'SETTINGS.SETTINGS_DASHBOARD.TEXT_39' | translate }}</label>
+                <textarea id="galleryImages" pTextarea formControlName="galleryUrlsText" rows="6" [placeholder]="'SETTINGS.SETTINGS_DASHBOARD.PLACEHOLDER_40' | translate" class="w-full border-round-md p-2"></textarea>
               </div>
             </div>
           </p-tabpanel>
@@ -152,7 +152,7 @@
 
     <!-- Centralized save panel -->
     <div class="flex justify-content-end mb-5">
-      <button pButton type="submit" label="Save Website Configuration" icon="pi pi-save" class="p-button-primary border-round-md w-auto px-5 py-2.5 font-bold" [disabled]="configForm.invalid || settingsService.saving()"></button>
+      <button pButton type="submit" [label]="'SETTINGS.SETTINGS_DASHBOARD.LABEL_41' | translate" icon="pi pi-save" class="p-button-primary border-round-md w-auto px-5 py-2.5 font-bold" [disabled]="configForm.invalid || settingsService.saving()"></button>
     </div>
   </form>
 </div>

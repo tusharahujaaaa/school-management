@@ -7,8 +7,8 @@
     subtitle="Mark daily attendance for teachers and staff members"
   >
     <div actions class="flex gap-2" *erpHasPermission="PERMS.STAFF.CREATE">
-      <button pButton label="Mark All Present" icon="pi pi-check" class="p-button-sm p-button-success p-button-outlined" (click)="markAllPresent()"></button>
-      <button pButton label="Reset" icon="pi pi-refresh" class="p-button-sm p-button-secondary p-button-outlined" (click)="reset()"></button>
+      <button pButton [label]="'ATTENDANCE.STAFF_ATTENDANCE.LABEL_1' | translate" icon="pi pi-check" class="p-button-sm p-button-success p-button-outlined" (click)="markAllPresent()"></button>
+      <button pButton [label]="'ATTENDANCE.STAFF_ATTENDANCE.LABEL_2' | translate" icon="pi pi-refresh" class="p-button-sm p-button-secondary p-button-outlined" (click)="reset()"></button>
     </div>
   </app-erp-page-header>
 
@@ -16,7 +16,7 @@
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
     <div class="grid">
       <div class="col-12 md:col-4">
-        <label class="block text-700 font-medium mb-2">Date</label>
+        <label class="block text-700 font-medium mb-2">{{ 'ATTENDANCE.STAFF_ATTENDANCE.TEXT_3' | translate }}</label>
         <input type="date" [value]="svc.selectedDate()" (change)="svc.selectedDate.set($any($event.target).value)"
           class="w-full p-3 border-1 surface-border border-round-lg surface-0 text-900 outline-none focus:border-primary transition-all">
       </div>
@@ -51,7 +51,7 @@
         [label]="getStatusLabel(getStatus(member.id))" 
         [severity]="getStatusSeverity(getStatus(member.id))"
       ></app-erp-status-badge>
-      <span *ngIf="!getStatus(member.id)" class="text-400 text-sm italic">Not marked</span>
+      <span *ngIf="!getStatus(member.id)" class="text-400 text-sm italic">{{ 'ATTENDANCE.STAFF_ATTENDANCE.TEXT_4' | translate }}</span>
     </ng-template>
 
     <ng-template #quickMarkTmpl let-member>
@@ -72,7 +72,7 @@
 
   <!-- Footer Actions -->
   <div class="mt-4 surface-card p-3 border-round-xl shadow-1 flex justify-content-end gap-2">
-    <button pButton label="Cancel" class="p-button-outlined p-button-secondary" routerLink="/erp/dashboard"></button>
-    <button *erpHasPermission="PERMS.STAFF.CREATE" pButton label="Save Staff Attendance" icon="pi pi-save" [loading]="isSubmitting()" (click)="submit()"></button>
+    <button pButton [label]="'ATTENDANCE.STAFF_ATTENDANCE.LABEL_5' | translate" class="p-button-outlined p-button-secondary" routerLink="/erp/dashboard"></button>
+    <button *erpHasPermission="PERMS.STAFF.CREATE" pButton [label]="'ATTENDANCE.STAFF_ATTENDANCE.LABEL_6' | translate" icon="pi pi-save" [loading]="isSubmitting()" (click)="submit()"></button>
   </div>
 </div>

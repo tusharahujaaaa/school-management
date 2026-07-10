@@ -14,6 +14,7 @@ import { StatusBadgeComponent, BadgeSeverity } from '../../../../../shared/ui/ba
 import { HasPermissionDirective } from '../../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../../core/permissions/constants/permission.constants';
 import { AttendanceStatus } from '../../../models/attendance.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /**
  * Teacher Attendance View
@@ -24,9 +25,8 @@ import { AttendanceStatus } from '../../../models/attendance.model';
   selector: 'app-teacher-attendance',
   standalone: true,
   imports: [
-    CommonModule, RouterModule, ProgressBarModule, ConfirmDialogModule, ButtonModule, ToastModule, 
-    PageHeaderComponent, ErpTableComponent, StatusBadgeComponent, HasPermissionDirective
-  ],
+        CommonModule, RouterModule, ProgressBarModule, ConfirmDialogModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent, HasPermissionDirective, TranslatePipe
+    ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './teacher-attendance.component.html',
   styleUrls: ['./teacher-attendance.component.scss']

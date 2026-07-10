@@ -8,20 +8,14 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-teacher-list',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ToastModule,
-    DialogModule,
-    ButtonModule,
-    InputTextModule,
-    SelectModule
-  ],
+        CommonModule, ReactiveFormsModule, FormsModule, ToastModule, DialogModule, ButtonModule, InputTextModule, SelectModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './teacher-list.component.html'
 })

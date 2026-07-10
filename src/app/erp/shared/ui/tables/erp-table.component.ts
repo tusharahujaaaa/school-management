@@ -5,18 +5,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SkeletonLoaderComponent } from '../loaders/skeleton-loader.component';
 import { EmptyStateComponent } from '../empty-states/empty-state.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-erp-table',
   standalone: true,
   imports: [
-    CommonModule, 
-    TableModule, 
-    ButtonModule, 
-    InputTextModule,
-    SkeletonLoaderComponent,
-    EmptyStateComponent
-  ],
+        CommonModule, TableModule, ButtonModule, InputTextModule, SkeletonLoaderComponent, EmptyStateComponent, TranslatePipe
+    ],
   templateUrl: './erp-table.component.html',
   styleUrls: ['./erp-table.component.scss']
 })

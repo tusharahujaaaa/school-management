@@ -7,18 +7,18 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-book text-primary"></i>
-        <span class="text-500 text-sm">Finance Portal</span>
+        <span class="text-500 text-sm">{{ 'FEES.FEE_RECORDS.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Fee Invoices & Ledger</h2>
-      <span class="text-500 text-sm">Track invoice payment statuses and manage fee collections</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'FEES.FEE_RECORDS.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'FEES.FEE_RECORDS.TEXT_3' | translate }}</span>
     </div>
     <div *erpHasPermission="PERMISSIONS.FEES.COLLECT" class="flex flex-column sm:align-items-end gap-1">
-      <button pButton type="button" label="Mark Overdue" icon="pi pi-clock"
+      <button pButton type="button" [label]="'FEES.FEE_RECORDS.LABEL_4' | translate" icon="pi pi-clock"
         class="p-button-warning p-button-sm"
         [loading]="feesService.markingOverdue()"
         [disabled]="feesService.markingOverdue()"
         (click)="markOverdueRecords()"></button>
-      <span class="text-500 text-xs">Scans pending invoices past due date</span>
+      <span class="text-500 text-xs">{{ 'FEES.FEE_RECORDS.TEXT_5' | translate }}</span>
     </div>
   </div>
 
@@ -30,7 +30,7 @@
     <div class="flex-grow-1 relative max-w-box" >
       <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base translate-y-half"
         ></i>
-      <input type="text" pInputText placeholder="Search student or roll number..." (input)="onSearch($event)"
+      <input type="text" pInputText [placeholder]="'FEES.FEE_RECORDS.PLACEHOLDER_6' | translate" (input)="onSearch($event)"
         class="w-full pl-5 p-inputtext-sm border-round-md search-input-padded"  />
     </div>
 
@@ -39,13 +39,13 @@
       <!-- Class select -->
       <div  class="custom-style-2">
         <p-select [options]="classesList()" [(ngModel)]="classFilter" (onChange)="onFilterChange()" optionLabel="label"
-          optionValue="value" placeholder="Select Class" class="w-full border-round-md"></p-select>
+          optionValue="value" [placeholder]="'FEES.FEE_RECORDS.PLACEHOLDER_7' | translate" class="w-full border-round-md"></p-select>
       </div>
 
       <!-- Status select -->
       <div  class="custom-style-3">
         <p-select [options]="statuses" [(ngModel)]="statusFilter" (onChange)="onFilterChange()" optionLabel="label"
-          optionValue="value" placeholder="Select Status" class="w-full border-round-md"></p-select>
+          optionValue="value" [placeholder]="'FEES.FEE_RECORDS.PLACEHOLDER_8' | translate" class="w-full border-round-md"></p-select>
       </div>
     </div>
 
@@ -62,8 +62,8 @@
     <!-- No Data Fallback -->
     <div *ngIf="!feesService.loading() && filteredRecords().length === 0" class="text-center py-6">
       <i class="pi pi-info-circle text-200 text-5xl block mb-3"></i>
-      <h3 class="text-900 font-semibold text-lg m-0 mb-1">No Invoices Found</h3>
-      <p class="text-500 m-0">No transaction records match the selected search filters.</p>
+      <h3 class="text-900 font-semibold text-lg m-0 mb-1">{{ 'FEES.FEE_RECORDS.TEXT_9' | translate }}</h3>
+      <p class="text-500 m-0">{{ 'FEES.FEE_RECORDS.TEXT_10' | translate }}</p>
     </div>
 
     <!-- Table Grid -->
@@ -71,13 +71,13 @@
       <table class="w-full text-sm erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-left">
-            <th class="p-3 text-500 font-semibold">Student Details</th>
-            <th class="p-3 text-500 font-semibold">Fee Profile</th>
-            <th class="p-3 text-500 font-semibold">Invoice Date</th>
-            <th class="p-3 text-500 font-semibold">Due Date</th>
-            <th class="p-3 text-500 font-semibold text-right">Amount</th>
-            <th class="p-3 text-500 font-semibold">Status</th>
-            <th class="p-3 text-500 font-semibold text-center">Actions</th>
+            <th class="p-3 text-500 font-semibold">{{ 'FEES.FEE_RECORDS.TEXT_11' | translate }}</th>
+            <th class="p-3 text-500 font-semibold">{{ 'FEES.FEE_RECORDS.TEXT_12' | translate }}</th>
+            <th class="p-3 text-500 font-semibold">{{ 'FEES.FEE_RECORDS.TEXT_13' | translate }}</th>
+            <th class="p-3 text-500 font-semibold">{{ 'FEES.FEE_RECORDS.TEXT_14' | translate }}</th>
+            <th class="p-3 text-500 font-semibold text-right">{{ 'FEES.FEE_RECORDS.TEXT_15' | translate }}</th>
+            <th class="p-3 text-500 font-semibold">{{ 'FEES.FEE_RECORDS.TEXT_16' | translate }}</th>
+            <th class="p-3 text-500 font-semibold text-center">{{ 'FEES.FEE_RECORDS.TEXT_17' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -117,15 +117,15 @@
             <!-- Action buttons -->
             <td class="p-3 text-center">
               <div class="flex justify-content-center gap-1.5">
-                <button *ngIf="record.status !== 'PAID' && record.status !== 'WAIVED'" pButton label="Collect" icon="pi pi-indian-rupee"
+                <button *ngIf="record.status !== 'PAID' && record.status !== 'WAIVED'" pButton [label]="'FEES.FEE_RECORDS.LABEL_18' | translate" icon="pi pi-indian-rupee"
                   class="p-button-outlined p-button-sm p-button-success" (click)="openPaymentModal(record)"></button>
 
                 <ng-container *erpHasPermission="PERMISSIONS.FEES.COLLECT">
-                  <button *ngIf="record.status !== 'PAID' && record.status !== 'WAIVED'" pButton label="Waive" icon="pi pi-tag"
+                  <button *ngIf="record.status !== 'PAID' && record.status !== 'WAIVED'" pButton [label]="'FEES.FEE_RECORDS.LABEL_19' | translate" icon="pi pi-tag"
                     class="p-button-outlined p-button-sm p-button-danger" (click)="openWaiveModal(record)"></button>
                 </ng-container>
 
-                <button *ngIf="record.status === 'PAID'" pButton label="Receipt" icon="pi pi-print"
+                <button *ngIf="record.status === 'PAID'" pButton [label]="'FEES.FEE_RECORDS.LABEL_20' | translate" icon="pi pi-print"
                   class="p-button-outlined p-button-sm p-button-secondary" (click)="openReceiptModal(record)"></button>
               </div>
             </td>
@@ -146,7 +146,7 @@
 
       <!-- Student Info Widget -->
       <div class="p-3 bg-surface-50 border-round-xl border-1 surface-border">
-        <span class="text-500 text-xs block mb-1">Billing Account</span>
+        <span class="text-500 text-xs block mb-1">{{ 'FEES.FEE_RECORDS.TEXT_21' | translate }}</span>
         <div class="text-900 font-bold text-base mb-1">{{ selectedRecord().student?.name }}</div>
         <div class="text-500 text-xs">
           Roll: {{ selectedRecord().student?.rollNumber || 'N/A' }} &bull; Class: {{
@@ -157,15 +157,15 @@
       <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()" class="flex flex-column gap-3">
 
         <div>
-          <label for="paymentMode" class="text-700 font-semibold text-sm block mb-1.5">Payment Method <span
+          <label for="paymentMode" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_RECORDS.TEXT_22' | translate }} <span
               class="text-red-500">*</span></label>
           <p-select id="paymentMode" [options]="paymentModes" formControlName="paymentMode" optionLabel="label"
-            optionValue="value" class="w-full border-round-md" placeholder="Select mode"></p-select>
+            optionValue="value" class="w-full border-round-md" [placeholder]="'FEES.FEE_RECORDS.PLACEHOLDER_23' | translate"></p-select>
         </div>
 
         <!-- Paid Date -->
         <div>
-          <label for="paidDate" class="text-700 font-semibold text-sm block mb-1.5">Date of Payment <span
+          <label for="paidDate" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_RECORDS.TEXT_24' | translate }} <span
               class="text-red-500">*</span></label>
           <input id="paidDate" type="date" pInputText formControlName="paidDate"
             class="p-inputtext-sm border-round-md" />
@@ -173,16 +173,16 @@
 
         <!-- Remarks -->
         <div>
-          <label for="remarks" class="text-700 font-semibold text-sm block mb-1.5">Remarks / Transaction Details</label>
-          <input id="remarks" type="text" pInputText formControlName="remarks" placeholder="e.g. Txn Id or Check Number"
+          <label for="remarks" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_RECORDS.TEXT_25' | translate }}</label>
+          <input id="remarks" type="text" pInputText formControlName="remarks" [placeholder]="'FEES.FEE_RECORDS.PLACEHOLDER_26' | translate"
             class="p-inputtext-sm border-round-md" />
         </div>
 
         <!-- Actions -->
         <div class="flex gap-2 justify-content-end mt-4">
-          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+          <button pButton type="button" [label]="'FEES.FEE_RECORDS.LABEL_27' | translate" class="p-button-text p-button-sm"
             (click)="paymentDialog.set(false)"></button>
-          <button pButton type="submit" label="Record Collections" class="p-button-success p-button-sm px-4"></button>
+          <button pButton type="submit" [label]="'FEES.FEE_RECORDS.LABEL_28' | translate" class="p-button-success p-button-sm px-4"></button>
         </div>
 
       </form>
@@ -199,41 +199,41 @@
 
       <!-- School Header -->
       <div class="text-center border-bottom-1 surface-border pb-3">
-        <h3 class="text-900 font-bold text-xl m-0 mb-1">DEMO PUBLIC SCHOOL</h3>
-        <span class="text-500 text-xs block">123 Education Lane, New Delhi, Delhi 110001</span>
-        <span class="text-500 text-xs block">Email: accounts@demo.campushandle.com &bull; Phone: 9876543210</span>
+        <h3 class="text-900 font-bold text-xl m-0 mb-1">{{ 'FEES.FEE_RECORDS.TEXT_29' | translate }}</h3>
+        <span class="text-500 text-xs block">{{ 'FEES.FEE_RECORDS.TEXT_30' | translate }}</span>
+        <span class="text-500 text-xs block">{{ 'FEES.FEE_RECORDS.TEXT_31' | translate }}</span>
       </div>
 
       <!-- Receipt Metadata -->
       <div class="flex justify-content-between text-xs text-600">
         <div>
-          <div class="mb-1"><strong>Receipt No:</strong> RCPT-{{ selectedRecord().id?.slice(0, 8)?.toUpperCase() }}
+          <div class="mb-1"><strong>{{ 'FEES.FEE_RECORDS.TEXT_32' | translate }}</strong> RCPT-{{ selectedRecord().id?.slice(0, 8)?.toUpperCase() }}
           </div>
-          <div><strong>Payment Date:</strong> {{ selectedRecord().paidDate | date:'dd MMM yyyy' }}</div>
+          <div><strong>{{ 'FEES.FEE_RECORDS.TEXT_33' | translate }}</strong> {{ selectedRecord().paidDate | date:'dd MMM yyyy' }}</div>
         </div>
         <div class="text-right">
-          <div class="mb-1"><strong>Invoice Date:</strong> {{ selectedRecord().createdAt | date:'dd MMM yyyy' }}</div>
-          <div><strong>Payment Status:</strong> <span class="text-green-600 font-bold">PAID</span></div>
+          <div class="mb-1"><strong>{{ 'FEES.FEE_RECORDS.TEXT_34' | translate }}</strong> {{ selectedRecord().createdAt | date:'dd MMM yyyy' }}</div>
+          <div><strong>{{ 'FEES.FEE_RECORDS.TEXT_35' | translate }}</strong> <span class="text-green-600 font-bold">{{ 'FEES.FEE_RECORDS.TEXT_36' | translate }}</span></div>
         </div>
       </div>
 
       <!-- Student details widget -->
       <div class="p-3 bg-surface-50 border-round-lg border-1 surface-border">
-        <h4 class="text-900 font-bold text-sm m-0 mb-2 uppercase tracking-wider text-500">Student Particulars</h4>
+        <h4 class="text-900 font-bold text-sm m-0 mb-2 uppercase tracking-wider text-500">{{ 'FEES.FEE_RECORDS.TEXT_37' | translate }}</h4>
         <div class="grid text-xs text-700">
-          <div class="col-6"><strong>Student Name:</strong> {{ selectedRecord().student?.name }}</div>
-          <div class="col-6"><strong>Roll Number:</strong> {{ selectedRecord().student?.rollNumber || 'N/A' }}</div>
-          <div class="col-6"><strong>Class & Section:</strong> {{ selectedRecord().student?.class?.name }} {{
+          <div class="col-6"><strong>{{ 'FEES.FEE_RECORDS.TEXT_38' | translate }}</strong> {{ selectedRecord().student?.name }}</div>
+          <div class="col-6"><strong>{{ 'FEES.FEE_RECORDS.TEXT_39' | translate }}</strong> {{ selectedRecord().student?.rollNumber || 'N/A' }}</div>
+          <div class="col-6"><strong>{{ 'FEES.FEE_RECORDS.TEXT_40' | translate }}</strong> {{ selectedRecord().student?.class?.name }} {{
             selectedRecord().student?.class?.section }}</div>
-          <div class="col-6"><strong>Payment Mode:</strong> {{ selectedRecord().paymentMode }}</div>
+          <div class="col-6"><strong>{{ 'FEES.FEE_RECORDS.TEXT_41' | translate }}</strong> {{ selectedRecord().paymentMode }}</div>
         </div>
       </div>
 
       <!-- Itemized billing details -->
       <div class="border-y-1 surface-border py-3">
         <div class="flex justify-content-between text-xs text-500 font-semibold mb-2 uppercase tracking-wider">
-          <span>Fee Description</span>
-          <span class="text-right">Amount</span>
+          <span>{{ 'FEES.FEE_RECORDS.TEXT_42' | translate }}</span>
+          <span class="text-right">{{ 'FEES.FEE_RECORDS.TEXT_43' | translate }}</span>
         </div>
         <div class="flex justify-content-between text-sm text-900 font-semibold">
           <span>{{ selectedRecord().feeType }} - Particulars billing</span>
@@ -244,29 +244,29 @@
       <!-- Totals & Notes -->
       <div class="flex justify-content-between align-items-center">
         <div>
-          <span class="text-500 text-xs block mb-0.5">Payment Remarks</span>
+          <span class="text-500 text-xs block mb-0.5">{{ 'FEES.FEE_RECORDS.TEXT_44' | translate }}</span>
           <span class="text-800 text-xs font-semibold italic">{{ selectedRecord().remarks || 'None' }}</span>
         </div>
         <div class="text-right">
-          <span class="text-500 text-xs block mb-1 font-semibold uppercase">Total Paid</span>
+          <span class="text-500 text-xs block mb-1 font-semibold uppercase">{{ 'FEES.FEE_RECORDS.TEXT_45' | translate }}</span>
           <span class="text-primary text-2xl font-extrabold">₹{{ selectedRecord().amount | number:'1.2-2' }}</span>
         </div>
       </div>
 
       <!-- Sign off -->
       <div class="flex justify-content-between align-items-end mt-4 pt-4 border-t-1 border-dashed surface-border">
-        <span class="text-400 text-xs italic">Computer generated invoice. No signature required.</span>
+        <span class="text-400 text-xs italic">{{ 'FEES.FEE_RECORDS.TEXT_46' | translate }}</span>
         <div class="text-center border-t-1 border-dashed surface-border pt-2 px-4">
-          <span class="text-700 text-xs font-semibold block">Authorized Cashier</span>
-          <span class="text-400 text-2xs block">Accounts Department</span>
+          <span class="text-700 text-xs font-semibold block">{{ 'FEES.FEE_RECORDS.TEXT_47' | translate }}</span>
+          <span class="text-400 text-2xs block">{{ 'FEES.FEE_RECORDS.TEXT_48' | translate }}</span>
         </div>
       </div>
 
       <!-- Actions (No Print) -->
       <div class="flex gap-2 justify-content-end mt-4 no-print border-t-1 surface-border pt-3">
-        <button pButton type="button" label="Close" class="p-button-text p-button-sm"
+        <button pButton type="button" [label]="'FEES.FEE_RECORDS.LABEL_49' | translate" class="p-button-text p-button-sm"
           (click)="receiptDialog.set(false)"></button>
-        <button pButton type="button" label="Print Invoice" icon="pi pi-print" class="p-button-sm px-4"
+        <button pButton type="button" [label]="'FEES.FEE_RECORDS.LABEL_50' | translate" icon="pi pi-print" class="p-button-sm px-4"
           (click)="printReceipt()"></button>
       </div>
 
@@ -283,11 +283,9 @@
 
       <!-- Student & Fee Particulars Info Widget -->
       <div class="p-3 bg-red-50 border-round-xl border-1 border-red-100 text-red-700">
-        <span class="text-xs font-semibold uppercase block mb-1">WAIVER WARNING</span>
+        <span class="text-xs font-semibold uppercase block mb-1">{{ 'FEES.FEE_RECORDS.TEXT_51' | translate }}</span>
         <div class="text-sm line-height-3">
-          You are about to waive the fee record for <strong>{{ selectedRecord().student?.name }}</strong>. 
-          This will set the invoice status of <strong>₹{{ selectedRecord().amount }}</strong> ({{ selectedRecord().feeType }}) to <strong>WAIVED</strong>. 
-          This transaction cannot be collected after waiving.
+          {{ 'FEES.FEE_RECORDS.TEXT_52' | translate }} <strong>{{ selectedRecord().student?.name }}</strong>{{ 'FEES.FEE_RECORDS.TEXT_53' | translate }} <strong>₹{{ selectedRecord().amount }}</strong> ({{ selectedRecord().feeType }}) to <strong>{{ 'FEES.FEE_RECORDS.TEXT_54' | translate }}</strong>{{ 'FEES.FEE_RECORDS.TEXT_55' | translate }}
         </div>
       </div>
 
@@ -295,21 +293,21 @@
 
         <!-- Waiver Remarks -->
         <div>
-          <label for="waiveRemarks" class="text-700 font-semibold text-sm block mb-1.5">Waiver Reason / Authorization Remarks <span
+          <label for="waiveRemarks" class="text-700 font-semibold text-sm block mb-1.5">{{ 'FEES.FEE_RECORDS.TEXT_56' | translate }} <span
               class="text-red-500">*</span></label>
-          <input id="waiveRemarks" type="text" pInputText formControlName="remarks" placeholder="e.g. Scholarship approved by Principal"
+          <input id="waiveRemarks" type="text" pInputText formControlName="remarks" [placeholder]="'FEES.FEE_RECORDS.PLACEHOLDER_57' | translate"
             class="p-inputtext-sm border-round-md" />
           <small class="text-red-500 mt-1 block"
             *ngIf="waiverForm.get('remarks')?.touched && waiverForm.get('remarks')?.invalid">
-            Please enter a waiver reason (min 3 characters).
+            {{ 'FEES.FEE_RECORDS.TEXT_58' | translate }}
           </small>
         </div>
 
         <!-- Actions -->
         <div class="flex gap-2 justify-content-end mt-4">
-          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
+          <button pButton type="button" [label]="'FEES.FEE_RECORDS.LABEL_59' | translate" class="p-button-text p-button-sm"
             (click)="waiveDialog.set(false)"></button>
-          <button pButton type="submit" [disabled]="waiverForm.invalid" label="Approve Waiver" class="p-button-danger p-button-sm px-4"></button>
+          <button pButton type="submit" [disabled]="waiverForm.invalid" [label]="'FEES.FEE_RECORDS.LABEL_60' | translate" class="p-button-danger p-button-sm px-4"></button>
         </div>
 
       </form>

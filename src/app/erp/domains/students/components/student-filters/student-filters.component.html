@@ -2,49 +2,49 @@
   <div [formGroup]="filterForm" class="grid p-fluid">
     <!-- Search Field -->
     <div class="col-12 md:col-3">
-      <label class="block text-900 font-medium mb-2 text-sm">Search</label>
+      <label class="block text-900 font-medium mb-2 text-sm">{{ 'STUDENTS.STUDENT_FILTERS.TEXT_1' | translate }}</label>
       <div class="relative flex align-items-center">
         <i class="pi pi-search absolute left-3 text-500"></i>
-        <input type="text" pInputText formControlName="searchTerm" placeholder="Name, Adm No, Roll No..." class="w-full pl-5 search-input-padded"  />
+        <input type="text" pInputText formControlName="searchTerm" [placeholder]="'STUDENTS.STUDENT_FILTERS.PLACEHOLDER_2' | translate" class="w-full pl-5 search-input-padded"  />
       </div>
     </div>
 
     <!-- Class Filter -->
     <div class="col-12 md:col-2">
-      <label class="block text-900 font-medium mb-2 text-sm">Class</label>
+      <label class="block text-900 font-medium mb-2 text-sm">{{ 'STUDENTS.STUDENT_FILTERS.TEXT_3' | translate }}</label>
       <p-select 
         formControlName="class" 
         [options]="classes" 
-        placeholder="Select Class"
+        [placeholder]="'STUDENTS.STUDENT_FILTERS.PLACEHOLDER_4' | translate"
         [showClear]="true"
       ></p-select>
     </div>
 
     <!-- Section Filter -->
     <div class="col-12 md:col-2">
-      <label class="block text-900 font-medium mb-2 text-sm">Section</label>
+      <label class="block text-900 font-medium mb-2 text-sm">{{ 'STUDENTS.STUDENT_FILTERS.TEXT_5' | translate }}</label>
       <p-select 
         formControlName="section" 
         [options]="sections" 
-        placeholder="Select Section"
+        [placeholder]="'STUDENTS.STUDENT_FILTERS.PLACEHOLDER_6' | translate"
         [showClear]="true"
       ></p-select>
     </div>
 
     <!-- Status Filter -->
     <div class="col-12 md:col-2">
-      <label class="block text-900 font-medium mb-2 text-sm">Status</label>
+      <label class="block text-900 font-medium mb-2 text-sm">{{ 'STUDENTS.STUDENT_FILTERS.TEXT_7' | translate }}</label>
       <p-select 
         formControlName="status" 
         [options]="statuses" 
-        placeholder="Select Status"
+        [placeholder]="'STUDENTS.STUDENT_FILTERS.PLACEHOLDER_8' | translate"
         [showClear]="true"
       ></p-select>
     </div>
 
     <!-- Action Buttons -->
     <div class="col-12 md:col-3 flex align-items-end">
-       <button pButton label="Reset Filters" icon="pi pi-filter-slash" class="p-button-outlined" (click)="clearFilters()"></button>
+       <button pButton [label]="'STUDENTS.STUDENT_FILTERS.LABEL_9' | translate" icon="pi pi-filter-slash" class="p-button-outlined" (click)="clearFilters()"></button>
     </div>
   </div>
 </div>

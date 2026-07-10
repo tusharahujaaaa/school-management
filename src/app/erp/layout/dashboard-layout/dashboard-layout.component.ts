@@ -7,17 +7,14 @@ import { GlobalSearchComponent } from '../../shared/components/global-search/glo
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { NotificationService } from '../../domains/dashboard/services/notification.service';
 import { NotificationCardComponent } from '../../domains/dashboard/components/notification-card/notification-card.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-erp-dashboard-layout',
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    GlobalSearchComponent,
-    SidebarComponent,
-    NotificationCardComponent
-  ],
+        CommonModule, RouterModule, GlobalSearchComponent, SidebarComponent, NotificationCardComponent, TranslatePipe
+    ],
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.scss']
 })

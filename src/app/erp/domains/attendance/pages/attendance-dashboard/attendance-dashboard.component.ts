@@ -9,14 +9,14 @@ import { ErpTableComponent } from '../../../../shared/ui/tables/erp-table.compon
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { AttendanceAlertCardComponent } from '../../components/attendance-alert-card/attendance-alert-card.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-attendance-dashboard',
   standalone: true,
   imports: [
-    CommonModule, RouterModule, ProgressBarModule,
-    PageHeaderComponent, StatCardComponent, ErpTableComponent, HasPermissionDirective, AttendanceAlertCardComponent
-  ],
+        CommonModule, RouterModule, ProgressBarModule, PageHeaderComponent, StatCardComponent, ErpTableComponent, HasPermissionDirective, AttendanceAlertCardComponent, TranslatePipe
+    ],
   templateUrl: './attendance-dashboard.component.html',
   styleUrls: ['./attendance-dashboard.component.scss']
 })

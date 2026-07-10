@@ -6,17 +6,14 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-report-card',
   standalone: true,
   imports: [
-    CommonModule,
-    ButtonModule,
-    TableModule,
-    ToastModule,
-    RouterModule
-  ],
+        CommonModule, ButtonModule, TableModule, ToastModule, RouterModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './report-card.component.html',
   styles: [`

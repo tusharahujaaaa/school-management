@@ -6,10 +6,10 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-wallet text-primary"></i>
-        <span class="text-500 text-sm">Finance Portal</span>
+        <span class="text-500 text-sm">{{ 'FEES.FEE_DASHBOARD.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Fees & Collections Dashboard</h2>
-      <span class="text-500 text-sm">Manage fee structures, invoices, and manual receipts</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'FEES.FEE_DASHBOARD.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'FEES.FEE_DASHBOARD.TEXT_3' | translate }}</span>
     </div>
     <div class="flex gap-2">
       <button pButton 
@@ -18,8 +18,8 @@
               class="p-button-outlined p-button-warning p-button-sm" 
               (click)="runMarkOverdue()" 
               [disabled]="markingOverdue()"></button>
-      <button pButton label="Define Structure" icon="pi pi-plus" class="p-button-outlined p-button-sm" (click)="navigateTo('structures')"></button>
-      <button pButton label="Collect Fees" icon="pi pi-indian-rupee" class="p-button-sm" (click)="navigateTo('records')"></button>
+      <button pButton [label]="'FEES.FEE_DASHBOARD.LABEL_4' | translate" icon="pi pi-plus" class="p-button-outlined p-button-sm" (click)="navigateTo('structures')"></button>
+      <button pButton [label]="'FEES.FEE_DASHBOARD.LABEL_5' | translate" icon="pi pi-indian-rupee" class="p-button-sm" (click)="navigateTo('records')"></button>
     </div>
   </div>
 
@@ -40,10 +40,10 @@
     <div class="col-12 md:col-4">
       <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border flex align-items-center justify-content-between">
         <div>
-          <span class="text-500 font-medium text-sm block mb-2">Total Paid Collections</span>
+          <span class="text-500 font-medium text-sm block mb-2">{{ 'FEES.FEE_DASHBOARD.TEXT_6' | translate }}</span>
           <div class="text-900 font-bold text-3xl">₹{{ feesService.totalCollected() | number:'1.2-2' }}</div>
           <span class="text-green-600 text-xs font-semibold mt-2 inline-flex align-items-center gap-1">
-            <i class="pi pi-arrow-up-right"></i> Completed transactions
+            <i class="pi pi-arrow-up-right"></i> {{ 'FEES.FEE_DASHBOARD.TEXT_7' | translate }}
           </span>
         </div>
         <div class="w-4rem h-4rem border-round bg-green-50 text-green-500 flex align-items-center justify-content-center flex-shrink-0">
@@ -56,10 +56,10 @@
     <div class="col-12 md:col-4">
       <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border flex align-items-center justify-content-between">
         <div>
-          <span class="text-500 font-medium text-sm block mb-2">Outstanding Dues</span>
+          <span class="text-500 font-medium text-sm block mb-2">{{ 'FEES.FEE_DASHBOARD.TEXT_8' | translate }}</span>
           <div class="text-900 font-bold text-3xl">₹{{ feesService.pendingDues() | number:'1.2-2' }}</div>
           <span class="text-orange-500 text-xs font-semibold mt-2 inline-flex align-items-center gap-1">
-            <i class="pi pi-clock"></i> Awaiting reconciliation
+            <i class="pi pi-clock"></i> {{ 'FEES.FEE_DASHBOARD.TEXT_9' | translate }}
           </span>
         </div>
         <div class="w-4rem h-4rem border-round bg-orange-50 text-orange-500 flex align-items-center justify-content-center flex-shrink-0">
@@ -72,10 +72,10 @@
     <div class="col-12 md:col-4">
       <div class="surface-card shadow-1 border-round-xl p-4 border-1 surface-border flex align-items-center justify-content-between">
         <div>
-          <span class="text-500 font-medium text-sm block mb-2">Overdue Invoices</span>
+          <span class="text-500 font-medium text-sm block mb-2">{{ 'FEES.FEE_DASHBOARD.TEXT_10' | translate }}</span>
           <div class="text-900 font-bold text-3xl">₹{{ feesService.overdueFees() | number:'1.2-2' }}</div>
           <span class="text-red-500 text-xs font-semibold mt-2 inline-flex align-items-center gap-1">
-            <i class="pi pi-exclamation-triangle"></i> Action required
+            <i class="pi pi-exclamation-triangle"></i> {{ 'FEES.FEE_DASHBOARD.TEXT_11' | translate }}
           </span>
         </div>
         <div class="w-4rem h-4rem border-round bg-red-50 text-red-500 flex align-items-center justify-content-center flex-shrink-0">
@@ -93,8 +93,8 @@
     <div class="col-12 lg:col-8">
       <div class="surface-card shadow-1 border-round-xl p-4 h-full">
         <div class="flex justify-content-between align-items-center mb-4">
-          <h3 class="text-900 font-semibold text-lg m-0">Recent Payments</h3>
-          <button pButton label="View All Records" icon="pi pi-list" class="p-button-text p-button-sm" (click)="navigateTo('records')"></button>
+          <h3 class="text-900 font-semibold text-lg m-0">{{ 'FEES.FEE_DASHBOARD.TEXT_12' | translate }}</h3>
+          <button pButton [label]="'FEES.FEE_DASHBOARD.LABEL_13' | translate" icon="pi pi-list" class="p-button-text p-button-sm" (click)="navigateTo('records')"></button>
         </div>
 
         <div *ngIf="feesService.loading()" class="flex flex-column gap-3">
@@ -103,7 +103,7 @@
 
         <div *ngIf="!feesService.loading() && feesService.recentPayments().length === 0" class="text-center py-5">
           <i class="pi pi-wallet text-200 text-5xl block mb-3"></i>
-          <p class="text-500 m-0">No payment logs found.</p>
+          <p class="text-500 m-0">{{ 'FEES.FEE_DASHBOARD.TEXT_14' | translate }}</p>
         </div>
 
         <div *ngIf="!feesService.loading() && feesService.recentPayments().length > 0" class="flex flex-column gap-3">
@@ -141,7 +141,7 @@
     <div class="col-12 lg:col-4">
       <div class="surface-card shadow-1 border-round-xl p-4 h-full flex flex-column justify-content-between">
         <div>
-          <h3 class="text-900 font-semibold text-lg m-0 mb-4">Financial Actions</h3>
+          <h3 class="text-900 font-semibold text-lg m-0 mb-4">{{ 'FEES.FEE_DASHBOARD.TEXT_15' | translate }}</h3>
           
           <div class="flex flex-column gap-3">
             
@@ -152,8 +152,8 @@
                   <i class="pi pi-building text-xl"></i>
                 </div>
                 <div>
-                  <div class="text-900 font-bold text-sm">Fee Configurations</div>
-                  <div class="text-500 text-xs mt-0.5">Map tuition, transport to classes</div>
+                  <div class="text-900 font-bold text-sm">{{ 'FEES.FEE_DASHBOARD.TEXT_16' | translate }}</div>
+                  <div class="text-500 text-xs mt-0.5">{{ 'FEES.FEE_DASHBOARD.TEXT_17' | translate }}</div>
                 </div>
               </div>
               <i class="pi pi-chevron-right text-400"></i>
@@ -166,8 +166,8 @@
                   <i class="pi pi-book text-xl"></i>
                 </div>
                 <div>
-                  <div class="text-900 font-bold text-sm">Billing Ledger</div>
-                  <div class="text-500 text-xs mt-0.5">Search invoices and mark collections</div>
+                  <div class="text-900 font-bold text-sm">{{ 'FEES.FEE_DASHBOARD.TEXT_18' | translate }}</div>
+                  <div class="text-500 text-xs mt-0.5">{{ 'FEES.FEE_DASHBOARD.TEXT_19' | translate }}</div>
                 </div>
               </div>
               <i class="pi pi-chevron-right text-400"></i>
@@ -179,7 +179,7 @@
         <div class="mt-4 p-3 bg-blue-50 border-round-xl border-1 border-blue-100 flex align-items-center gap-2">
           <i class="pi pi-info-circle text-blue-500"></i>
           <span class="text-blue-700 text-xs font-semibold line-height-2">
-            Tip: Run invoice batch generation from the Configurations screen to generate billing for new classes.
+            {{ 'FEES.FEE_DASHBOARD.TEXT_20' | translate }}
           </span>
         </div>
 

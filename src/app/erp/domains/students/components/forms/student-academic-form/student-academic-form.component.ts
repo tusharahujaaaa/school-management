@@ -10,19 +10,14 @@ import { ACADEMIC_SESSION_OPTIONS } from '../../../constants/student-form.consta
 import { StudentStore } from '../../../store/student.store';
 import { StudentService } from '../../../services/student.service';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-academic-form',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ErpInputComponent,
-    ErpSelectComponent,
-    ErpDatepickerComponent,
-    FormFieldComponent,
-    CheckboxModule
-  ],
+        CommonModule, ReactiveFormsModule, ErpInputComponent, ErpSelectComponent, ErpDatepickerComponent, FormFieldComponent, CheckboxModule, TranslatePipe
+    ],
   templateUrl: './student-academic-form.component.html'
 })
 export class StudentAcademicFormComponent implements OnInit {

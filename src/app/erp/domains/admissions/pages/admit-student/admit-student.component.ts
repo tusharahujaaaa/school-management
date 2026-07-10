@@ -11,21 +11,14 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admit-student',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ToastModule,
-    ButtonModule,
-    SelectModule,
-    TextareaModule,
-    InputTextModule,
-    CheckboxModule
-  ],
+        CommonModule, ReactiveFormsModule, FormsModule, ToastModule, ButtonModule, SelectModule, TextareaModule, InputTextModule, CheckboxModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './admit-student.component.html'
 })

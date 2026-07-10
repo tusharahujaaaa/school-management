@@ -6,11 +6,14 @@ import { GlobalSearchService } from './services/global-search.service';
 import { SearchResult, SearchCategory } from './models/global-search.model';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-global-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputTextModule, ProgressSpinnerModule],
+  imports: [
+        CommonModule, FormsModule, InputTextModule, ProgressSpinnerModule, TranslatePipe
+    ],
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss']
 })

@@ -5,7 +5,7 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-graduation-cap text-primary"></i>
-        <span class="text-500 text-sm">My Attendance</span>
+        <span class="text-500 text-sm">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_1' | translate }}</span>
       </div>
       <h2 class="text-900 font-bold text-2xl m-0 mb-1">Hello, {{ student().name }} 👋</h2>
       <span class="text-500 text-sm">{{ student().class }} — Section {{ student().section }} &bull; Roll No. {{ student().rollNumber }}</span>
@@ -19,7 +19,7 @@
     <div class="col-12 md:col-4">
       <app-attendance-percentage-widget
         [percentage]="student().attendancePercentage"
-        label="Your Attendance"
+        [label]="'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.LABEL_2' | translate"
         [presentDays]="student().presentDays"
         [totalDays]="student().totalDays">
       </app-attendance-percentage-widget>
@@ -28,12 +28,12 @@
     <!-- Status Summary -->
     <div class="col-12 md:col-8">
       <div class="surface-card shadow-1 border-round-xl p-4 h-full">
-        <h3 class="text-900 font-semibold text-lg m-0 mb-4">Attendance Status</h3>
+        <h3 class="text-900 font-semibold text-lg m-0 mb-4">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_3' | translate }}</h3>
 
         <!-- Status bar -->
         <div class="mb-4">
           <div class="flex justify-content-between align-items-center mb-2">
-            <span class="text-700 font-medium">Overall</span>
+            <span class="text-700 font-medium">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_4' | translate }}</span>
             <span class="font-bold text-xl"
                   [ngClass]="student().attendancePercentage >= 90 ? 'text-green-500' : student().attendancePercentage >= 75 ? 'text-orange-500' : 'text-red-500'">
               {{ student().attendancePercentage }}%
@@ -51,19 +51,19 @@
           <div class="col-4">
             <div class="surface-50 border-round-xl p-3 text-center">
               <div class="text-900 font-bold text-2xl">{{ student().presentDays }}</div>
-              <div class="text-green-600 text-xs font-medium mt-1">Days Present</div>
+              <div class="text-green-600 text-xs font-medium mt-1">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_5' | translate }}</div>
             </div>
           </div>
           <div class="col-4">
             <div class="surface-50 border-round-xl p-3 text-center">
               <div class="text-900 font-bold text-2xl">{{ student().totalDays - student().presentDays }}</div>
-              <div class="text-red-500 text-xs font-medium mt-1">Days Absent</div>
+              <div class="text-red-500 text-xs font-medium mt-1">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_6' | translate }}</div>
             </div>
           </div>
           <div class="col-4">
             <div class="surface-50 border-round-xl p-3 text-center">
               <div class="text-900 font-bold text-2xl">{{ student().totalDays }}</div>
-              <div class="text-500 text-xs font-medium mt-1">Total Days</div>
+              <div class="text-500 text-xs font-medium mt-1">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_7' | translate }}</div>
             </div>
           </div>
         </div>
@@ -84,17 +84,17 @@
     <div class="col-12">
       <div class="surface-card shadow-1 border-round-xl p-4">
         <h3 class="text-900 font-semibold text-lg m-0 mb-4">
-          <i class="pi pi-chart-bar mr-2 text-primary"></i>Month-wise Breakdown
+          <i class="pi pi-chart-bar mr-2 text-primary"></i>{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_8' | translate }}
         </h3>
         <div class="overflow-x-auto">
           <table class="w-full erp-table-responsive" >
             <thead>
               <tr class="surface-50">
-                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Month</th>
-                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Total Days</th>
-                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-green-600">Present</th>
-                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-red-500">Absent</th>
-                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Attendance %</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_9' | translate }}</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_10' | translate }}</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-green-600">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_11' | translate }}</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm text-red-500">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_12' | translate }}</th>
+                <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">{{ 'ATTENDANCE.STUDENT_ATTENDANCE_VIEW.TEXT_13' | translate }}</th>
               </tr>
             </thead>
             <tbody>

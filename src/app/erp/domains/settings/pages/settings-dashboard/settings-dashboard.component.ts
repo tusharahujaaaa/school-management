@@ -8,20 +8,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { TabsModule } from 'primeng/tabs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-settings-dashboard',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ToastModule,
-    ButtonModule,
-    InputTextModule,
-    TextareaModule,
-    TabsModule
-  ],
+        CommonModule, ReactiveFormsModule, FormsModule, ToastModule, ButtonModule, InputTextModule, TextareaModule, TabsModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './settings-dashboard.component.html'
 })

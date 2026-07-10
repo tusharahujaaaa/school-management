@@ -1,39 +1,39 @@
 <div [formGroup]="group" class="grid p-fluid">
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Admission Number" [required]="!!group.get('admissionNumber')?.enabled" [control]="group.get('admissionNumber')">
-            <app-erp-input formControlName="admissionNumber" placeholder="ADM-YYYY-XXX"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_1' | translate" [required]="!!group.get('admissionNumber')?.enabled" [control]="group.get('admissionNumber')">
+            <app-erp-input formControlName="admissionNumber" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_2' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Roll Number" [required]="!!group.get('rollNumber')?.enabled" [control]="group.get('rollNumber')">
-            <app-erp-input formControlName="rollNumber" placeholder="Enter roll number"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_3' | translate" [required]="!!group.get('rollNumber')?.enabled" [control]="group.get('rollNumber')">
+            <app-erp-input formControlName="rollNumber" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_4' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Academic Session" [required]="!!group.get('admissionNumber')?.enabled" [control]="group.get('academicSession')">
-            <app-erp-select formControlName="academicSession" [options]="sessionOptions" placeholder="Select session"></app-erp-select>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_5' | translate" [required]="!!group.get('admissionNumber')?.enabled" [control]="group.get('academicSession')">
+            <app-erp-select formControlName="academicSession" [options]="sessionOptions" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_6' | translate"></app-erp-select>
         </app-erp-form-field>
     </div>
 
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Class" [required]="true" [control]="group.get('class')">
-            <app-erp-select formControlName="class" [options]="classes" placeholder="Select class"></app-erp-select>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_7' | translate" [required]="true" [control]="group.get('class')">
+            <app-erp-select formControlName="class" [options]="classes" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_8' | translate"></app-erp-select>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Section" [required]="true" [control]="group.get('section')">
-            <app-erp-select formControlName="section" [options]="sections" placeholder="Select section"></app-erp-select>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_9' | translate" [required]="true" [control]="group.get('section')">
+            <app-erp-select formControlName="section" [options]="sections" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_10' | translate"></app-erp-select>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Admission Date" [required]="true" [control]="group.get('admissionDate')">
-            <app-erp-datepicker formControlName="admissionDate" placeholder="Select admission date"></app-erp-datepicker>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_11' | translate" [required]="true" [control]="group.get('admissionDate')">
+            <app-erp-datepicker formControlName="admissionDate" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_12' | translate"></app-erp-datepicker>
         </app-erp-form-field>
     </div>
     
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Status" [required]="true" [control]="group.get('status')">
-            <app-erp-select formControlName="status" [options]="statusOptions" placeholder="Select status"></app-erp-select>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_13' | translate" [required]="true" [control]="group.get('status')">
+            <app-erp-select formControlName="status" [options]="statusOptions" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_14' | translate"></app-erp-select>
         </app-erp-form-field>
     </div>
 
@@ -41,28 +41,28 @@
     <div class="col-12 mt-4 pt-2 border-top-1 surface-border">
         <h5 class="text-900 font-semibold text-base m-0 mb-3 flex align-items-center gap-2">
             <i class="pi pi-truck text-primary"></i>
-            School Transport Services
+            {{ 'STUDENTS.STUDENT_ACADEMIC_FORM.TEXT_15' | translate }}
         </h5>
         
         <div class="flex align-items-center gap-2 mb-3">
             <p-checkbox formControlName="usesTransport" [binary]="true" inputId="usesTransport"></p-checkbox>
-            <label for="usesTransport" class="text-700 font-medium text-sm cursor-pointer select-none">Enable school bus transport services for this student</label>
+            <label for="usesTransport" class="text-700 font-medium text-sm cursor-pointer select-none">{{ 'STUDENTS.STUDENT_ACADEMIC_FORM.TEXT_16' | translate }}</label>
         </div>
 
         <div *ngIf="group.get('usesTransport')?.value" class="grid mt-2">
             <div class="col-12 md:col-4">
-                <app-erp-form-field label="Bus Route / Vehicle" [required]="true" [control]="group.get('busId')">
-                    <app-erp-select formControlName="busId" [options]="busOptions()" placeholder="Select route & plate"></app-erp-select>
+                <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_17' | translate" [required]="true" [control]="group.get('busId')">
+                    <app-erp-select formControlName="busId" [options]="busOptions()" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_18' | translate"></app-erp-select>
                 </app-erp-form-field>
             </div>
             <div class="col-12 md:col-4">
-                <app-erp-form-field label="Pickup Point" [control]="group.get('pickupPoint')">
-                    <app-erp-input formControlName="pickupPoint" maxlength="100" placeholder="e.g. Sector 12 Crossing"></app-erp-input>
+                <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_19' | translate" [control]="group.get('pickupPoint')">
+                    <app-erp-input formControlName="pickupPoint" maxlength="100" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_20' | translate"></app-erp-input>
                 </app-erp-form-field>
             </div>
             <div class="col-12 md:col-4">
-                <app-erp-form-field label="Drop Point" [control]="group.get('dropPoint')">
-                    <app-erp-input formControlName="dropPoint" maxlength="100" placeholder="e.g. Main Gate"></app-erp-input>
+                <app-erp-form-field [label]="'STUDENTS.STUDENT_ACADEMIC_FORM.LABEL_21' | translate" [control]="group.get('dropPoint')">
+                    <app-erp-input formControlName="dropPoint" maxlength="100" [placeholder]="'STUDENTS.STUDENT_ACADEMIC_FORM.PLACEHOLDER_22' | translate"></app-erp-input>
                 </app-erp-form-field>
             </div>
         </div>

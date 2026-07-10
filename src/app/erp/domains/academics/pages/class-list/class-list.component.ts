@@ -12,22 +12,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TabsModule } from 'primeng/tabs';
 import { ConfirmDialogComponent } from '@/app/erp/shared/ui/confirm-dialog/confirm-dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-class-list',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ToastModule,
-    DialogModule,
-    ButtonModule,
-    InputTextModule,
-    SelectModule,
-    TabsModule,
-    ConfirmDialogComponent
-  ],
+        CommonModule, ReactiveFormsModule, FormsModule, ToastModule, DialogModule, ButtonModule, InputTextModule, SelectModule, TabsModule, ConfirmDialogComponent, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './class-list.component.html'
 })

@@ -19,28 +19,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { SkeletonLoaderComponent } from '@/app/erp/shared/ui/loaders/skeleton-loader.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-profile',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule,
-    ReactiveFormsModule,
-    PageHeaderComponent, 
-    StatusBadgeComponent,
-    AvatarModule, 
-    TabsModule, 
-    CardModule,
-    ButtonModule,
-    TableModule,
-    DialogModule,
-    SelectModule,
-    CheckboxModule,
-    InputTextModule,
-    HasPermissionDirective,
-    SkeletonLoaderComponent
-  ],
+        CommonModule, RouterModule, ReactiveFormsModule, PageHeaderComponent, StatusBadgeComponent, AvatarModule, TabsModule, CardModule, ButtonModule, TableModule, DialogModule, SelectModule, CheckboxModule, InputTextModule, HasPermissionDirective, SkeletonLoaderComponent, TranslatePipe
+    ],
   templateUrl: './student-profile.component.html',
   styleUrl: './student-profile.component.scss'
 })

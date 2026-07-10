@@ -2,7 +2,7 @@
   <!-- Search Input Wrapper -->
   <div class="search-input-wrapper flex align-items-center border-round-3xl surface-100 px-3 py-2 border-1 border-transparent focus-within:border-primary focus-within:surface-0 transition-colors shadow-none hover:surface-200">
     <i class="pi pi-search text-500 mr-2"></i>
-    <input #searchInput type="text" pInputText placeholder="Search students, staff, teachers..." 
+    <input #searchInput type="text" pInputText [placeholder]="'GLOBAL_SEARCH.PLACEHOLDER_1' | translate" 
            class="w-full border-none bg-transparent outline-none shadow-none text-900 p-0 text-sm md:text-base custom-style-1"
            [value]="query()" (input)="onSearch($event)" (focus)="onFocus()" >
     <i *ngIf="query()" class="pi pi-times text-500 cursor-pointer ml-2 hover:text-700 transition-colors" (click)="clearSearch()"></i>
@@ -47,7 +47,7 @@
     
     <!-- Footer / Advanced Search Link -->
     <div *ngIf="!isLoading() && results().length > 0" class="p-2 border-top-1 surface-border text-center bg-primary-50 hover:bg-primary-100 cursor-pointer transition-colors text-sm font-medium text-primary">
-      View all results
+      {{ 'GLOBAL_SEARCH.TEXT_2' | translate }}
     </div>
   </div>
 </div>

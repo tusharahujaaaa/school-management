@@ -6,10 +6,10 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-compass text-primary"></i>
-        <span class="text-500 text-sm">School Academics</span>
+        <span class="text-500 text-sm">{{ 'ACADEMICS.CLASS_LIST.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">School Structure & Calendar</h2>
-      <span class="text-500 text-sm">Manage active classes, assign class teachers, and configure academic session years</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'ACADEMICS.CLASS_LIST.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'ACADEMICS.CLASS_LIST.TEXT_3' | translate }}</span>
     </div>
   </div>
 
@@ -17,10 +17,10 @@
   <p-tabs value="0">
     <p-tablist>
       <p-tab value="0">
-        <i class="pi pi-book mr-2"></i>Classes & Sections
+        <i class="pi pi-book mr-2"></i>{{ 'ACADEMICS.CLASS_LIST.TEXT_4' | translate }}
       </p-tab>
       <p-tab value="1">
-        <i class="pi pi-calendar-plus mr-2"></i>Academic Sessions
+        <i class="pi pi-calendar-plus mr-2"></i>{{ 'ACADEMICS.CLASS_LIST.TEXT_5' | translate }}
       </p-tab>
     </p-tablist>
 
@@ -29,7 +29,7 @@
       <p-tabpanel value="0">
         <!-- Create Class Button Panel -->
         <div class="flex justify-content-end mb-4">
-          <button pButton label="Create Class" icon="pi pi-plus" class="p-button-primary border-round-md shadow-1" (click)="openAddModal()"></button>
+          <button pButton [label]="'ACADEMICS.CLASS_LIST.LABEL_6' | translate" icon="pi pi-plus" class="p-button-primary border-round-md shadow-1" (click)="openAddModal()"></button>
         </div>
 
         <!-- Classes Grid Cards -->
@@ -51,7 +51,7 @@
 
                 <!-- Class Teacher -->
                 <div class="border-top-1 surface-border pt-3 mt-2">
-                  <span class="text-500 text-3xs font-semibold block uppercase mb-1">Class Teacher</span>
+                  <span class="text-500 text-3xs font-semibold block uppercase mb-1">{{ 'ACADEMICS.CLASS_LIST.TEXT_7' | translate }}</span>
                   <div class="flex align-items-center gap-2">
                     <i class="pi pi-user text-600 text-xs"></i>
                     <span class="text-800 text-sm font-medium">{{ getTeacherName(cls.classTeacherId) }}</span>
@@ -82,8 +82,8 @@
         <!-- Empty State -->
         <div *ngIf="!classesService.loading() && classesService.classes().length === 0" class="surface-card shadow-1 border-round-xl text-center py-6 border-1 border-300 border-dashed">
           <i class="pi pi-book text-200 text-5xl block mb-3"></i>
-          <h3 class="text-900 font-semibold text-lg m-0 mb-1">No Classes Configured</h3>
-          <p class="text-500 m-0">Click the "Create Class" button to set up your first school class structure.</p>
+          <h3 class="text-900 font-semibold text-lg m-0 mb-1">{{ 'ACADEMICS.CLASS_LIST.TEXT_8' | translate }}</h3>
+          <p class="text-500 m-0">{{ 'ACADEMICS.CLASS_LIST.TEXT_9' | translate }}</p>
         </div>
       </p-tabpanel>
 
@@ -94,12 +94,12 @@
           <div class="col-12 md:col-6">
             <div class="surface-card shadow-1 border-round-xl p-4 h-full border-top-3 border-green-500 border-1 border-300 flex justify-content-between align-items-center">
               <div>
-                <span class="text-500 text-2xs uppercase font-bold block mb-1">Active Academic Term</span>
+                <span class="text-500 text-2xs uppercase font-bold block mb-1">{{ 'ACADEMICS.CLASS_LIST.TEXT_10' | translate }}</span>
                 <h3 class="text-900 font-black text-3xl m-0 flex align-items-center gap-2" *ngIf="classesService.activeSession() as active">
                   {{ active.name }}
-                  <span class="text-xs px-2.5 py-0.5 bg-green-100 text-green-700 font-bold border-round-xl uppercase">Active</span>
+                  <span class="text-xs px-2.5 py-0.5 bg-green-100 text-green-700 font-bold border-round-xl uppercase">{{ 'ACADEMICS.CLASS_LIST.TEXT_11' | translate }}</span>
                 </h3>
-                <h3 class="text-500 font-bold text-xl m-0" *ngIf="!classesService.activeSession()">No Active Session Selected</h3>
+                <h3 class="text-500 font-bold text-xl m-0" *ngIf="!classesService.activeSession()">{{ 'ACADEMICS.CLASS_LIST.TEXT_12' | translate }}</h3>
                 <span class="text-500 text-xs block mt-2" *ngIf="classesService.activeSession() as active">
                   Term Duration: {{ formatDate(active.startDate) }} to {{ formatDate(active.endDate) }}
                 </span>
@@ -112,11 +112,11 @@
           <div class="col-12 md:col-6">
             <div class="surface-card shadow-1 border-round-xl p-4 h-full border-1 border-300 flex flex-column justify-content-between gap-3">
               <div>
-                <h4 class="text-900 font-bold text-base m-0 mb-1">Session Creation & Archival</h4>
-                <p class="text-500 text-xs m-0">Adding and activating a new academic session will archive all current student registrations, marks rosters, and payment structures under the previous session year automatically.</p>
+                <h4 class="text-900 font-bold text-base m-0 mb-1">{{ 'ACADEMICS.CLASS_LIST.TEXT_13' | translate }}</h4>
+                <p class="text-500 text-xs m-0">{{ 'ACADEMICS.CLASS_LIST.TEXT_14' | translate }}</p>
               </div>
               <div class="flex justify-content-end">
-                <button pButton label="New Session" icon="pi pi-plus" class="p-button-outlined border-round-md" (click)="openSessionModal()"></button>
+                <button pButton [label]="'ACADEMICS.CLASS_LIST.LABEL_15' | translate" icon="pi pi-plus" class="p-button-outlined border-round-md" (click)="openSessionModal()"></button>
               </div>
             </div>
           </div>
@@ -125,18 +125,18 @@
         <!-- Academic Sessions List -->
         <div class="surface-card shadow-1 border-round-xl overflow-hidden border-1 border-300">
           <div class="p-4 border-bottom-1 surface-border">
-            <h3 class="text-lg font-bold text-900 m-0">Academic Sessions Directory</h3>
+            <h3 class="text-lg font-bold text-900 m-0">{{ 'ACADEMICS.CLASS_LIST.TEXT_16' | translate }}</h3>
           </div>
           
           <div class="overflow-x-auto">
             <table class="w-full text-sm erp-table-responsive" >
               <thead>
                 <tr class="surface-50 border-bottom-1 surface-border text-left">
-                  <th class="p-3 font-semibold text-600">Session Year</th>
-                  <th class="p-3 font-semibold text-600">Start Date</th>
-                  <th class="p-3 font-semibold text-600">End Date</th>
-                  <th class="p-3 font-semibold text-600 text-center">Status</th>
-                  <th class="p-3 font-semibold text-600 text-center">Actions</th>
+                  <th class="p-3 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_17' | translate }}</th>
+                  <th class="p-3 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_18' | translate }}</th>
+                  <th class="p-3 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_19' | translate }}</th>
+                  <th class="p-3 font-semibold text-600 text-center">{{ 'ACADEMICS.CLASS_LIST.TEXT_20' | translate }}</th>
+                  <th class="p-3 font-semibold text-600 text-center">{{ 'ACADEMICS.CLASS_LIST.TEXT_21' | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -150,16 +150,16 @@
                     </span>
                   </td>
                   <td class="p-3 text-center">
-                    <button *ngIf="!sess.isActive" pButton label="Set Active" icon="pi pi-check" 
+                    <button *ngIf="!sess.isActive" pButton [label]="'ACADEMICS.CLASS_LIST.LABEL_22' | translate" icon="pi pi-check" 
                       class="p-button-sm p-button-outlined border-round-md" 
                       (click)="activateSession(sess.id, sess.name)"></button>
                     <span *ngIf="sess.isActive" class="text-green-600 font-bold text-xs">
-                      <i class="pi pi-check-circle mr-1"></i>Currently Active
+                      <i class="pi pi-check-circle mr-1"></i>{{ 'ACADEMICS.CLASS_LIST.TEXT_23' | translate }}
                     </span>
                   </td>
                 </tr>
                 <tr *ngIf="classesService.sessions().length === 0">
-                  <td colspan="5" class="p-6 text-center text-500 italic">No academic sessions defined in the database. Please add a session.</td>
+                  <td colspan="5" class="p-6 text-center text-500 italic">{{ 'ACADEMICS.CLASS_LIST.TEXT_24' | translate }}</td>
                 </tr>
               </tbody>
             </table>
@@ -174,18 +174,18 @@
     <!-- Loading Detail Spinner -->
     <div *ngIf="classesService.loading() && !classesService.activeClassDetail()" class="text-center py-5">
       <i class="pi pi-spin pi-spinner text-primary text-3xl"></i>
-      <div class="text-500 text-sm mt-2">Loading class particulars...</div>
+      <div class="text-500 text-sm mt-2">{{ 'ACADEMICS.CLASS_LIST.TEXT_25' | translate }}</div>
     </div>
 
     <div *ngIf="classesService.activeClassDetail() as detail" class="py-2">
       <!-- Info Header Header -->
       <div class="p-3 bg-surface-50 border-round-xl border-1 surface-border mb-4 flex justify-content-between align-items-center">
         <div>
-          <span class="text-500 text-3xs uppercase font-semibold block">Class Teacher</span>
+          <span class="text-500 text-3xs uppercase font-semibold block">{{ 'ACADEMICS.CLASS_LIST.TEXT_26' | translate }}</span>
           <span class="text-900 font-bold text-base">{{ getTeacherName(detail.classTeacherId) }}</span>
         </div>
         <div class="text-right">
-          <span class="text-500 text-3xs uppercase font-semibold block">Total Students</span>
+          <span class="text-500 text-3xs uppercase font-semibold block">{{ 'ACADEMICS.CLASS_LIST.TEXT_27' | translate }}</span>
           <span class="text-900 font-bold text-base">{{ detail.students?.length || 0 }} Enrolled</span>
         </div>
       </div>
@@ -193,8 +193,8 @@
       <!-- Tabs -->
       <p-tabs value="0">
         <p-tablist>
-          <p-tab value="0">Student Roster</p-tab>
-          <p-tab value="1">Subjects & Curriculum</p-tab>
+          <p-tab value="0">{{ 'ACADEMICS.CLASS_LIST.TEXT_28' | translate }}</p-tab>
+          <p-tab value="1">{{ 'ACADEMICS.CLASS_LIST.TEXT_29' | translate }}</p-tab>
         </p-tablist>
         
         <p-tabpanels>
@@ -203,18 +203,18 @@
             <div class="pt-3">
               <div *ngIf="!detail.students || detail.students.length === 0" class="text-center py-5">
                 <i class="pi pi-users text-200 text-4xl block mb-2"></i>
-                <h4 class="text-800 font-semibold m-0">No Students Enrolled</h4>
-                <p class="text-500 text-xs m-0 mt-1">There are no active students enrolled in this class section.</p>
+                <h4 class="text-800 font-semibold m-0">{{ 'ACADEMICS.CLASS_LIST.TEXT_30' | translate }}</h4>
+                <p class="text-500 text-xs m-0 mt-1">{{ 'ACADEMICS.CLASS_LIST.TEXT_31' | translate }}</p>
               </div>
 
               <div class="overflow-y-auto max-h-20rem" *ngIf="detail.students && detail.students.length > 0">
                 <table class="w-full text-xs erp-table-responsive" >
                   <thead>
                     <tr class="surface-100 border-bottom-1 surface-border text-left">
-                      <th class="p-2.5 font-semibold text-600">Roll No</th>
-                      <th class="p-2.5 font-semibold text-600">Student Name</th>
-                      <th class="p-2.5 font-semibold text-600">Gender</th>
-                      <th class="p-2.5 font-semibold text-600 text-center">Status</th>
+                      <th class="p-2.5 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_32' | translate }}</th>
+                      <th class="p-2.5 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_33' | translate }}</th>
+                      <th class="p-2.5 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_34' | translate }}</th>
+                      <th class="p-2.5 font-semibold text-600 text-center">{{ 'ACADEMICS.CLASS_LIST.TEXT_35' | translate }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -238,23 +238,23 @@
           <p-tabpanel value="1">
             <div class="pt-3">
               <div class="flex justify-content-between align-items-center mb-3">
-                <h5 class="m-0 text-700 font-semibold text-xs uppercase tracking-wider">Linked Curriculum Subjects</h5>
-                <button pButton type="button" label="Add Subject" icon="pi pi-plus" class="p-button-sm p-button-outlined" (click)="openAddSubjectModal(detail.id)"></button>
+                <h5 class="m-0 text-700 font-semibold text-xs uppercase tracking-wider">{{ 'ACADEMICS.CLASS_LIST.TEXT_36' | translate }}</h5>
+                <button pButton type="button" [label]="'ACADEMICS.CLASS_LIST.LABEL_37' | translate" icon="pi pi-plus" class="p-button-sm p-button-outlined" (click)="openAddSubjectModal(detail.id)"></button>
               </div>
 
               <div *ngIf="!detail.subjects || detail.subjects.length === 0" class="text-center py-5">
                 <i class="pi pi-book text-200 text-4xl block mb-2"></i>
-                <h4 class="text-800 font-semibold m-0">No Subjects Linked</h4>
-                <p class="text-500 text-xs m-0 mt-1">No subjects have been linked to this class structure yet.</p>
+                <h4 class="text-800 font-semibold m-0">{{ 'ACADEMICS.CLASS_LIST.TEXT_38' | translate }}</h4>
+                <p class="text-500 text-xs m-0 mt-1">{{ 'ACADEMICS.CLASS_LIST.TEXT_39' | translate }}</p>
               </div>
 
               <div class="overflow-y-auto max-h-20rem" *ngIf="detail.subjects && detail.subjects.length > 0">
                 <table class="w-full text-xs erp-table-responsive" >
                   <thead>
                     <tr class="surface-100 border-bottom-1 surface-border text-left">
-                      <th class="p-2.5 font-semibold text-600">Subject Name</th>
-                      <th class="p-2.5 font-semibold text-600">Subject Teacher</th>
-                      <th class="p-2.5 font-semibold text-600 text-center">Actions</th>
+                      <th class="p-2.5 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_40' | translate }}</th>
+                      <th class="p-2.5 font-semibold text-600">{{ 'ACADEMICS.CLASS_LIST.TEXT_41' | translate }}</th>
+                      <th class="p-2.5 font-semibold text-600 text-center">{{ 'ACADEMICS.CLASS_LIST.TEXT_42' | translate }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -275,7 +275,7 @@
 
       <!-- Cancel Action -->
       <div class="flex justify-content-end mt-4 pt-2 border-top-1 surface-border">
-        <button pButton type="button" label="Close details" class="p-button-secondary p-button-outlined p-button-sm w-auto px-4" (click)="classDetailDialog.set(false)"></button>
+        <button pButton type="button" [label]="'ACADEMICS.CLASS_LIST.LABEL_43' | translate" class="p-button-secondary p-button-outlined p-button-sm w-auto px-4" (click)="classDetailDialog.set(false)"></button>
       </div>
     </div>
   </p-dialog>
@@ -286,31 +286,31 @@
       <form [formGroup]="classForm" (ngSubmit)="saveClass()" class="flex flex-column gap-3">
         <!-- Name -->
         <div>
-          <label for="className" class="text-700 font-semibold text-sm block mb-1.5">Class Name <span class="text-red-500">*</span></label>
-          <input id="className" type="text" pInputText formControlName="name" placeholder="e.g. Class 5, Grade 10" class="w-full border-round-md" />
+          <label for="className" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_44' | translate }} <span class="text-red-500">*</span></label>
+          <input id="className" type="text" pInputText formControlName="name" [placeholder]="'ACADEMICS.CLASS_LIST.PLACEHOLDER_45' | translate" class="w-full border-round-md" />
           <small class="text-red-500" *ngIf="classForm.get('name')?.touched && classForm.get('name')?.invalid">
-            Class name is required (min 3 chars).
+            {{ 'ACADEMICS.CLASS_LIST.TEXT_46' | translate }}
           </small>
         </div>
 
         <!-- Section -->
         <div>
-          <label for="classSection" class="text-700 font-semibold text-sm block mb-1.5">Section <span class="text-red-500">*</span></label>
-          <input id="classSection" type="text" pInputText formControlName="section" placeholder="e.g. A, B, Alpha" class="w-full border-round-md" />
+          <label for="classSection" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_47' | translate }} <span class="text-red-500">*</span></label>
+          <input id="classSection" type="text" pInputText formControlName="section" [placeholder]="'ACADEMICS.CLASS_LIST.PLACEHOLDER_48' | translate" class="w-full border-round-md" />
           <small class="text-red-500" *ngIf="classForm.get('section')?.touched && classForm.get('section')?.invalid">
-            Section is required (max 5 characters).
+            {{ 'ACADEMICS.CLASS_LIST.TEXT_49' | translate }}
           </small>
         </div>
 
         <!-- Class Teacher -->
         <div>
-          <label for="classTeacher" class="text-700 font-semibold text-sm block mb-1.5">Class Teacher</label>
-          <p-select id="classTeacher" [options]="teachersList()" formControlName="classTeacherId" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select Class Teacher" [showClear]="true"></p-select>
+          <label for="classTeacher" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_50' | translate }}</label>
+          <p-select id="classTeacher" [options]="teachersList()" formControlName="classTeacherId" optionLabel="label" optionValue="value" class="w-full border-round-md" [placeholder]="'ACADEMICS.CLASS_LIST.PLACEHOLDER_51' | translate" [showClear]="true"></p-select>
         </div>
 
         <!-- Actions -->
         <div class="flex gap-2 justify-content-end mt-4">
-          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm" (click)="classDialog.set(false)" [disabled]="classesService.loading()"></button>
+          <button pButton type="button" [label]="'ACADEMICS.CLASS_LIST.LABEL_52' | translate" class="p-button-text p-button-sm" (click)="classDialog.set(false)" [disabled]="classesService.loading()"></button>
           <button pButton type="submit" [label]="isEditMode() ? 'Save Details' : 'Create'" class="p-button-sm px-4" [disabled]="classForm.invalid || classesService.loading()"></button>
         </div>
       </form>
@@ -323,41 +323,41 @@
       <form [formGroup]="sessionForm" (ngSubmit)="saveSession()" class="flex flex-column gap-3">
         <!-- Name -->
         <div>
-          <label for="sessName" class="text-700 font-semibold text-sm block mb-1.5">Session Year Name <span class="text-red-500">*</span></label>
-          <input id="sessName" type="text" pInputText formControlName="name" placeholder="e.g. 2026-27" class="w-full border-round-md" />
+          <label for="sessName" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_53' | translate }} <span class="text-red-500">*</span></label>
+          <input id="sessName" type="text" pInputText formControlName="name" [placeholder]="'ACADEMICS.CLASS_LIST.PLACEHOLDER_54' | translate" class="w-full border-round-md" />
           <small class="text-red-500 block mt-1" *ngIf="sessionForm.get('name')?.touched && sessionForm.get('name')?.invalid">
-            Required. Format must be YYYY-YY (e.g. 2026-27).
+            {{ 'ACADEMICS.CLASS_LIST.TEXT_55' | translate }}
           </small>
         </div>
 
         <!-- Start Date -->
         <div>
-          <label for="sessStart" class="text-700 font-semibold text-sm block mb-1.5">Start Date <span class="text-red-500">*</span></label>
+          <label for="sessStart" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_56' | translate }} <span class="text-red-500">*</span></label>
           <input id="sessStart" type="date" formControlName="startDate" class="w-full p-2.5 border-1 surface-border border-round-md surface-0 text-950" />
           <small class="text-red-500" *ngIf="sessionForm.get('startDate')?.touched && sessionForm.get('startDate')?.invalid">
-            Start date is required.
+            {{ 'ACADEMICS.CLASS_LIST.TEXT_57' | translate }}
           </small>
         </div>
 
         <!-- End Date -->
         <div>
-          <label for="sessEnd" class="text-700 font-semibold text-sm block mb-1.5">End Date <span class="text-red-500">*</span></label>
+          <label for="sessEnd" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_58' | translate }} <span class="text-red-500">*</span></label>
           <input id="sessEnd" type="date" formControlName="endDate" class="w-full p-2.5 border-1 surface-border border-round-md surface-0 text-950" />
           <small class="text-red-500" *ngIf="sessionForm.get('endDate')?.touched && sessionForm.get('endDate')?.invalid">
-            End date is required.
+            {{ 'ACADEMICS.CLASS_LIST.TEXT_59' | translate }}
           </small>
         </div>
 
         <!-- Set Active Immediately -->
         <div class="flex align-items-center gap-2 mt-2">
           <input id="sessActive" type="checkbox" formControlName="isActive" class="w-1.5rem h-1.5rem cursor-pointer" />
-          <label for="sessActive" class="text-700 font-semibold text-sm cursor-pointer select-none">Set Active Immediately</label>
+          <label for="sessActive" class="text-700 font-semibold text-sm cursor-pointer select-none">{{ 'ACADEMICS.CLASS_LIST.TEXT_60' | translate }}</label>
         </div>
 
         <!-- Actions -->
         <div class="flex gap-2 justify-content-end mt-4">
-          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm" (click)="sessionDialog.set(false)" [disabled]="classesService.loading()"></button>
-          <button pButton type="submit" label="Create Session" class="p-button-sm px-4" [disabled]="sessionForm.invalid || classesService.loading()"></button>
+          <button pButton type="button" [label]="'ACADEMICS.CLASS_LIST.LABEL_61' | translate" class="p-button-text p-button-sm" (click)="sessionDialog.set(false)" [disabled]="classesService.loading()"></button>
+          <button pButton type="submit" [label]="'ACADEMICS.CLASS_LIST.LABEL_62' | translate" class="p-button-sm px-4" [disabled]="sessionForm.invalid || classesService.loading()"></button>
         </div>
       </form>
     </div>
@@ -382,23 +382,23 @@
       <form [formGroup]="subjectForm" (ngSubmit)="saveSubject()" class="flex flex-column gap-3">
         <!-- Name -->
         <div>
-          <label for="subName" class="text-700 font-semibold text-sm block mb-1.5">Subject Name <span class="text-red-500">*</span></label>
-          <input id="subName" type="text" pInputText formControlName="name" placeholder="e.g. English, Science" class="w-full border-round-md" />
+          <label for="subName" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_63' | translate }} <span class="text-red-500">*</span></label>
+          <input id="subName" type="text" pInputText formControlName="name" [placeholder]="'ACADEMICS.CLASS_LIST.PLACEHOLDER_64' | translate" class="w-full border-round-md" />
           <small class="text-red-500" *ngIf="subjectForm.get('name')?.touched && subjectForm.get('name')?.invalid">
-            Subject name is required.
+            {{ 'ACADEMICS.CLASS_LIST.TEXT_65' | translate }}
           </small>
         </div>
 
         <!-- Subject Teacher -->
         <div>
-          <label for="subTeacher" class="text-700 font-semibold text-sm block mb-1.5">Subject Teacher</label>
-          <p-select id="subTeacher" [options]="teachersList()" formControlName="teacherId" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select Subject Teacher" [showClear]="true"></p-select>
+          <label for="subTeacher" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ACADEMICS.CLASS_LIST.TEXT_66' | translate }}</label>
+          <p-select id="subTeacher" [options]="teachersList()" formControlName="teacherId" optionLabel="label" optionValue="value" class="w-full border-round-md" [placeholder]="'ACADEMICS.CLASS_LIST.PLACEHOLDER_67' | translate" [showClear]="true"></p-select>
         </div>
 
         <!-- Actions -->
         <div class="flex gap-2 justify-content-end mt-4">
-          <button pButton type="button" label="Cancel" class="p-button-text p-button-sm" (click)="subjectDialog.set(false)"></button>
-          <button pButton type="submit" label="Map Subject" class="p-button-sm px-4" [disabled]="subjectForm.invalid"></button>
+          <button pButton type="button" [label]="'ACADEMICS.CLASS_LIST.LABEL_68' | translate" class="p-button-text p-button-sm" (click)="subjectDialog.set(false)"></button>
+          <button pButton type="submit" [label]="'ACADEMICS.CLASS_LIST.LABEL_69' | translate" class="p-button-sm px-4" [disabled]="subjectForm.invalid"></button>
         </div>
       </form>
     </div>

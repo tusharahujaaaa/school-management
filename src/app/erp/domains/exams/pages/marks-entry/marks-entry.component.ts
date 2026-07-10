@@ -10,21 +10,14 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-marks-entry',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    PageHeaderComponent,
-    ButtonModule,
-    TableModule,
-    ToastModule,
-    InputTextModule,
-    TooltipModule,
-    RouterModule
-  ],
+        CommonModule, FormsModule, PageHeaderComponent, ButtonModule, TableModule, ToastModule, InputTextModule, TooltipModule, RouterModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './marks-entry.component.html'
 })

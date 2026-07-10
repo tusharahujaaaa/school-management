@@ -6,148 +6,148 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-user-plus text-primary"></i>
-        <span class="text-500 text-sm">Admissions Pipeline</span>
+        <span class="text-500 text-sm">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Admit New Student</h2>
-      <span class="text-500 text-sm">Manually enroll a new student into the active directory directory</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_3' | translate }}</span>
     </div>
   </div>
 
   <!-- ── Enrollment Form Card ───────────────────────────── -->
   <div class="surface-card shadow-1 border-round-xl p-5 max-w-box" >
     <h3 class="text-900 font-semibold text-lg border-bottom-1 surface-border pb-3 mb-4">
-      <i class="pi pi-id-card text-primary mr-2"></i>Official Registration Form
+      <i class="pi pi-id-card text-primary mr-2"></i>{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_4' | translate }}
     </h3>
 
     <form [formGroup]="admitForm" (ngSubmit)="onSubmit()" class="p-fluid">
       
       <!-- Section 1: Student Particulars -->
-      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">Student Particulars</h4>
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_5' | translate }}</h4>
       <div class="grid mb-4">
         <!-- Student Name -->
         <div class="col-12 md:col-6 field mb-3">
-          <label for="name" class="text-700 font-semibold text-sm block mb-1.5">Student Full Name <span class="text-red-500">*</span></label>
-          <input id="name" type="text" pInputText formControlName="name" placeholder="Enter student full name" class="p-inputtext-sm border-round-md" />
+          <label for="name" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_6' | translate }} <span class="text-red-500">*</span></label>
+          <input id="name" type="text" pInputText formControlName="name" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_7' | translate" class="p-inputtext-sm border-round-md" />
           <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('name')?.invalid && admitForm.get('name')?.touched">
-            Student name is required (min 3 characters).
+            {{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_8' | translate }}
           </small>
         </div>
 
         <!-- Class & Section Selection -->
         <div class="col-12 md:col-6 field mb-3">
-          <label for="classId" class="text-700 font-semibold text-sm block mb-1.5">Assign Class & Section <span class="text-red-500">*</span></label>
-          <p-select id="classId" [options]="classesList()" formControlName="classId" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select class group"></p-select>
+          <label for="classId" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_9' | translate }} <span class="text-red-500">*</span></label>
+          <p-select id="classId" [options]="classesList()" formControlName="classId" optionLabel="label" optionValue="value" class="w-full border-round-md" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_10' | translate"></p-select>
           <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('classId')?.invalid && admitForm.get('classId')?.touched">
-            Please assign a class.
+            {{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_11' | translate }}
           </small>
         </div>
 
         <!-- Roll Number / Admission Number -->
         <div class="col-12 md:col-4 field mb-3">
-          <label for="rollNumber" class="text-700 font-semibold text-sm block mb-1.5">Roll / Admission Number</label>
-          <input id="rollNumber" type="text" pInputText formControlName="rollNumber" placeholder="e.g. 101" class="p-inputtext-sm border-round-md" />
+          <label for="rollNumber" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_12' | translate }}</label>
+          <input id="rollNumber" type="text" pInputText formControlName="rollNumber" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_13' | translate" class="p-inputtext-sm border-round-md" />
         </div>
 
         <!-- Date of Birth -->
         <div class="col-12 md:col-4 field mb-3">
-          <label for="dateOfBirth" class="text-700 font-semibold text-sm block mb-1.5">Date of Birth</label>
+          <label for="dateOfBirth" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_14' | translate }}</label>
           <input id="dateOfBirth" type="date" pInputText formControlName="dateOfBirth" class="p-inputtext-sm border-round-md" />
         </div>
 
         <!-- Gender -->
         <div class="col-12 md:col-4 field mb-3">
-          <label for="gender" class="text-700 font-semibold text-sm block mb-1.5">Gender</label>
-          <p-select id="gender" [options]="genderOptions" formControlName="gender" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select gender"></p-select>
+          <label for="gender" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_15' | translate }}</label>
+          <p-select id="gender" [options]="genderOptions" formControlName="gender" optionLabel="label" optionValue="value" class="w-full border-round-md" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_16' | translate"></p-select>
         </div>
       </div>
 
       <!-- Section 2: Parent / Guardian Details -->
-      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">Parent / Guardian Details</h4>
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_17' | translate }}</h4>
       <div class="grid mb-4">
         <!-- Parent Name -->
         <div class="col-12 md:col-6 field mb-3">
-          <label for="parentName" class="text-700 font-semibold text-sm block mb-1.5">Parent / Guardian Name</label>
-          <input id="parentName" type="text" pInputText formControlName="parentName" placeholder="Enter parent full name" class="p-inputtext-sm border-round-md" />
+          <label for="parentName" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_18' | translate }}</label>
+          <input id="parentName" type="text" pInputText formControlName="parentName" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_19' | translate" class="p-inputtext-sm border-round-md" />
         </div>
 
         <!-- Parent Phone -->
         <div class="col-12 md:col-6 field mb-3">
-          <label for="parentPhone" class="text-700 font-semibold text-sm block mb-1.5">Contact Number <span class="text-red-500">*</span></label>
-          <input id="parentPhone" type="text" pInputText formControlName="parentPhone" maxlength="10" placeholder="Enter 10-digit number" class="p-inputtext-sm border-round-md" />
+          <label for="parentPhone" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_20' | translate }} <span class="text-red-500">*</span></label>
+          <input id="parentPhone" type="text" pInputText formControlName="parentPhone" maxlength="10" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_21' | translate" class="p-inputtext-sm border-round-md" />
           <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('parentPhone')?.invalid && admitForm.get('parentPhone')?.touched">
-            Phone number must be exactly 10 digits.
+            {{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_22' | translate }}
           </small>
         </div>
 
         <!-- Parent Email -->
         <div class="col-12 field mb-3">
-          <label for="parentEmail" class="text-700 font-semibold text-sm block mb-1.5">Email Address</label>
-          <input id="parentEmail" type="email" pInputText formControlName="parentEmail" placeholder="e.g. parent@example.com" class="p-inputtext-sm border-round-md" />
+          <label for="parentEmail" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_23' | translate }}</label>
+          <input id="parentEmail" type="email" pInputText formControlName="parentEmail" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_24' | translate" class="p-inputtext-sm border-round-md" />
           <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('parentEmail')?.invalid && admitForm.get('parentEmail')?.touched">
-            Please enter a valid email address.
+            {{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_25' | translate }}
           </small>
         </div>
       </div>
 
       <!-- Section 3: Extra Info -->
-      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">Address & Status</h4>
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_26' | translate }}</h4>
       <div class="grid mb-4">
         <!-- Address -->
         <div class="col-12 field mb-3">
-          <label for="address" class="text-700 font-semibold text-sm block mb-1.5">Residential Address</label>
-          <textarea id="address" pTextarea formControlName="address" rows="3" placeholder="Enter complete home address" class="w-full border-round-md p-2"></textarea>
+          <label for="address" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_27' | translate }}</label>
+          <textarea id="address" pTextarea formControlName="address" rows="3" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_28' | translate" class="w-full border-round-md p-2"></textarea>
         </div>
 
         <!-- Photo URL -->
         <div class="col-12 md:col-6 field mb-3">
-          <label for="photoUrl" class="text-700 font-semibold text-sm block mb-1.5">Photo URL</label>
-          <input id="photoUrl" type="text" pInputText formControlName="photoUrl" placeholder="Paste student image URL" class="p-inputtext-sm border-round-md" />
+          <label for="photoUrl" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_29' | translate }}</label>
+          <input id="photoUrl" type="text" pInputText formControlName="photoUrl" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_30' | translate" class="p-inputtext-sm border-round-md" />
         </div>
 
         <!-- Enrollment Status -->
         <div class="col-12 md:col-6 field mb-3">
-          <label for="status" class="text-700 font-semibold text-sm block mb-1.5">Initial Status</label>
+          <label for="status" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_31' | translate }}</label>
           <p-select id="status" [options]="statusOptions" formControlName="status" optionLabel="label" optionValue="value" class="w-full border-round-md"></p-select>
         </div>
       </div>
 
       <!-- Section 4: School Transport Services -->
-      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">School Transport Services</h4>
+      <h4 class="text-800 font-bold text-sm uppercase tracking-wider mb-3 text-500">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_32' | translate }}</h4>
       <div class="grid mb-4">
         <div class="col-12 field mb-3">
           <div class="flex align-items-center gap-2">
             <p-checkbox formControlName="usesTransport" [binary]="true" inputId="usesTransport"></p-checkbox>
-            <label for="usesTransport" class="text-700 font-medium text-sm cursor-pointer select-none">Enable school bus transport services for this student</label>
+            <label for="usesTransport" class="text-700 font-medium text-sm cursor-pointer select-none">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_33' | translate }}</label>
           </div>
         </div>
 
         <div *ngIf="admitForm.get('usesTransport')?.value" class="col-12 grid p-0 m-0">
           <!-- Bus Route / Vehicle -->
           <div class="col-12 md:col-4 field mb-3">
-            <label for="busId" class="text-700 font-semibold text-sm block mb-1.5">Bus Route / Vehicle <span class="text-red-500">*</span></label>
-            <p-select id="busId" [options]="busOptions()" formControlName="busId" optionLabel="label" optionValue="value" class="w-full border-round-md" placeholder="Select route & plate"></p-select>
+            <label for="busId" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_34' | translate }} <span class="text-red-500">*</span></label>
+            <p-select id="busId" [options]="busOptions()" formControlName="busId" optionLabel="label" optionValue="value" class="w-full border-round-md" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_35' | translate"></p-select>
             <small class="text-red-500 mt-1 block" *ngIf="admitForm.get('busId')?.invalid && admitForm.get('busId')?.touched">
-              Please select a bus route.
+              {{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_36' | translate }}
             </small>
           </div>
 
           <!-- Pickup Point -->
           <div class="col-12 md:col-4 field mb-3">
-            <label for="pickupPoint" class="text-700 font-semibold text-sm block mb-1.5">Pickup Point</label>
-            <input id="pickupPoint" type="text" pInputText formControlName="pickupPoint" placeholder="e.g. Sector 12 Crossing" class="p-inputtext-sm border-round-md" />
+            <label for="pickupPoint" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_37' | translate }}</label>
+            <input id="pickupPoint" type="text" pInputText formControlName="pickupPoint" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_38' | translate" class="p-inputtext-sm border-round-md" />
           </div>
 
           <!-- Drop Point -->
           <div class="col-12 md:col-4 field mb-3">
-            <label for="dropPoint" class="text-700 font-semibold text-sm block mb-1.5">Drop Point</label>
-            <input id="dropPoint" type="text" pInputText formControlName="dropPoint" placeholder="e.g. Main Gate" class="p-inputtext-sm border-round-md" />
+            <label for="dropPoint" class="text-700 font-semibold text-sm block mb-1.5">{{ 'ADMISSIONS.ADMIT_STUDENT.TEXT_39' | translate }}</label>
+            <input id="dropPoint" type="text" pInputText formControlName="dropPoint" [placeholder]="'ADMISSIONS.ADMIT_STUDENT.PLACEHOLDER_40' | translate" class="p-inputtext-sm border-round-md" />
           </div>
         </div>
       </div>
 
       <!-- Actions -->
       <div class="flex flex-column sm:flex-row gap-2 justify-content-end mt-4 pt-3 border-top-1 surface-border">
-        <button pButton type="button" label="Reset Form" class="p-button-outlined p-button-secondary sm:w-8rem" (click)="resetForm()" [disabled]="isLoading()"></button>
+        <button pButton type="button" [label]="'ADMISSIONS.ADMIT_STUDENT.LABEL_41' | translate" class="p-button-outlined p-button-secondary sm:w-8rem" (click)="resetForm()" [disabled]="isLoading()"></button>
         <button pButton type="submit" [label]="isLoading() ? 'Enrolling...' : 'Admit Student'" icon="pi pi-check" class="sm:w-12rem px-4" [disabled]="admitForm.invalid || isLoading()"></button>
       </div>
 

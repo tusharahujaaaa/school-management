@@ -1,22 +1,22 @@
 <div [formGroup]="group" class="grid p-fluid">
     <div class="col-12">
-        <app-erp-form-field label="Address Line" [required]="true" [control]="group.get('address')">
-            <app-erp-textarea formControlName="address" maxlength="250" placeholder="Enter full address"></app-erp-textarea>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ADDRESS_FORM.LABEL_1' | translate" [required]="true" [control]="group.get('address')">
+            <app-erp-textarea formControlName="address" maxlength="250" [placeholder]="'STUDENTS.STUDENT_ADDRESS_FORM.PLACEHOLDER_2' | translate"></app-erp-textarea>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="City" [required]="true" [control]="group.get('city')">
-            <app-erp-input formControlName="city" maxlength="100" placeholder="Enter city"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ADDRESS_FORM.LABEL_3' | translate" [required]="true" [control]="group.get('city')">
+            <app-erp-input formControlName="city" maxlength="100" [placeholder]="'STUDENTS.STUDENT_ADDRESS_FORM.PLACEHOLDER_4' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="State" [required]="true" [control]="group.get('state')">
-            <app-erp-input formControlName="state" maxlength="100" placeholder="Enter state"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ADDRESS_FORM.LABEL_5' | translate" [required]="true" [control]="group.get('state')">
+            <app-erp-input formControlName="state" maxlength="100" [placeholder]="'STUDENTS.STUDENT_ADDRESS_FORM.PLACEHOLDER_6' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Postal Code" [required]="true" [control]="group.get('postalCode')">
-            <app-erp-input formControlName="postalCode" maxlength="6" [numericOnly]="true" placeholder="Enter 6-digit postal code"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_ADDRESS_FORM.LABEL_7' | translate" [required]="true" [control]="group.get('postalCode')">
+            <app-erp-input formControlName="postalCode" maxlength="6" [numericOnly]="true" [placeholder]="'STUDENTS.STUDENT_ADDRESS_FORM.PLACEHOLDER_8' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
 </div>

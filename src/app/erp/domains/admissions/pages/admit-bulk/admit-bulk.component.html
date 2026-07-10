@@ -6,10 +6,10 @@
     <div>
       <div class="flex align-items-center gap-2 mb-1">
         <i class="pi pi-upload text-primary"></i>
-        <span class="text-500 text-sm">Admissions Pipeline</span>
+        <span class="text-500 text-sm">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_1' | translate }}</span>
       </div>
-      <h2 class="text-900 font-bold text-2xl m-0 mb-1">Bulk Admissions</h2>
-      <span class="text-500 text-sm">Upload a CSV template to admit multiple students into their classes simultaneously</span>
+      <h2 class="text-900 font-bold text-2xl m-0 mb-1">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_2' | translate }}</h2>
+      <span class="text-500 text-sm">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_3' | translate }}</span>
     </div>
   </div>
 
@@ -17,21 +17,21 @@
     <!-- ── Left Side: Upload Control Widget ──────────────── -->
     <div class="col-12 lg:col-4">
       <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
-        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-file text-primary mr-2"></i>1. Download Template</h3>
-        <p class="text-500 text-xs line-height-3 mb-3">Download our structured template containing pre-formatted headers to align your student registry records.</p>
-        <button pButton type="button" label="Download Template CSV" icon="pi pi-download" class="p-button-outlined p-button-sm w-full" (click)="downloadTemplate()"></button>
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-file text-primary mr-2"></i>{{ 'ADMISSIONS.ADMIT_BULK.TEXT_4' | translate }}</h3>
+        <p class="text-500 text-xs line-height-3 mb-3">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_5' | translate }}</p>
+        <button pButton type="button" [label]="'ADMISSIONS.ADMIT_BULK.LABEL_6' | translate" icon="pi pi-download" class="p-button-outlined p-button-sm w-full" (click)="downloadTemplate()"></button>
       </div>
 
       <div class="surface-card shadow-1 border-round-xl p-4">
-        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-cloud-upload text-primary mr-2"></i>2. Upload Registry</h3>
-        <p class="text-500 text-xs line-height-3 mb-4">Select or drop a CSV file containing your student records list. Make sure headers exactly match the template guidelines.</p>
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-cloud-upload text-primary mr-2"></i>{{ 'ADMISSIONS.ADMIT_BULK.TEXT_7' | translate }}</h3>
+        <p class="text-500 text-xs line-height-3 mb-4">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_8' | translate }}</p>
 
         <!-- Dropzone -->
         <div class="border-2 border-dashed border-300 border-round-lg text-center p-5 cursor-pointer hover:border-primary transition-colors mb-4" (click)="fileInput.click()">
           <input type="file" #fileInput (change)="onFileSelected($event)" accept=".csv"  class="custom-style-1" />
           <i class="pi pi-file-excel text-400 text-4xl block mb-2"></i>
-          <span class="text-800 text-sm font-semibold block mb-1">Choose CSV File</span>
-          <span class="text-500 text-2xs block">Max size: 5MB</span>
+          <span class="text-800 text-sm font-semibold block mb-1">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_9' | translate }}</span>
+          <span class="text-500 text-2xs block">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_10' | translate }}</span>
         </div>
 
         <div *ngIf="selectedFileName()" class="p-3 bg-surface-50 border-round-md border-1 surface-border flex align-items-center justify-content-between mb-4">
@@ -45,7 +45,7 @@
         <!-- Import Button / Progress -->
         <div *ngIf="parsedStudents().length > 0">
           <button pButton type="button" [label]="isImporting() ? 'Importing...' : 'Start Bulk Import'" icon="pi pi-play" class="p-button-success w-full mb-3" [disabled]="isImporting() || hasErrors()" (click)="startBulkImport()"></button>
-          <small class="text-red-500 text-xs block text-center mb-3" *ngIf="hasErrors()">Fix validation errors in the preview list to begin import.</small>
+          <small class="text-red-500 text-xs block text-center mb-3" *ngIf="hasErrors()">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_11' | translate }}</small>
         </div>
 
         <!-- Import Progress Widget -->
@@ -67,24 +67,24 @@
     <div class="col-12 lg:col-8">
       <!-- Preview Table -->
       <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
-        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-eye text-primary mr-2"></i>In-memory Registry Preview</h3>
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-eye text-primary mr-2"></i>{{ 'ADMISSIONS.ADMIT_BULK.TEXT_12' | translate }}</h3>
         
         <div *ngIf="parsedStudents().length === 0" class="text-center py-6 border-round-lg border-2 border-dashed border-200">
           <i class="pi pi-table text-200 text-5xl block mb-3"></i>
-          <h4 class="text-600 font-medium m-0">No File Uploaded</h4>
-          <span class="text-400 text-xs block mt-1">Upload a CSV on the left panel to review rows before enrollment runs.</span>
+          <h4 class="text-600 font-medium m-0">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_13' | translate }}</h4>
+          <span class="text-400 text-xs block mt-1">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_14' | translate }}</span>
         </div>
 
         <div *ngIf="parsedStudents().length > 0" class="overflow-x-auto custom-style-4">
           <table class="w-full text-xs erp-table-responsive" >
             <thead>
               <tr class="surface-100 border-bottom-1 surface-border text-left">
-                <th class="p-2 text-600 font-semibold">Row</th>
-                <th class="p-2 text-600 font-semibold">Student Name</th>
-                <th class="p-2 text-600 font-semibold">Target Class</th>
-                <th class="p-2 text-600 font-semibold">Gender</th>
-                <th class="p-2 text-600 font-semibold">Parent Phone</th>
-                <th class="p-2 text-600 font-semibold">Status/Error</th>
+                <th class="p-2 text-600 font-semibold">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_15' | translate }}</th>
+                <th class="p-2 text-600 font-semibold">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_16' | translate }}</th>
+                <th class="p-2 text-600 font-semibold">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_17' | translate }}</th>
+                <th class="p-2 text-600 font-semibold">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_18' | translate }}</th>
+                <th class="p-2 text-600 font-semibold">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_19' | translate }}</th>
+                <th class="p-2 text-600 font-semibold">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_20' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -96,14 +96,14 @@
                 </td>
                 <td class="p-2 text-700">
                   <span *ngIf="row.classResolved" class="font-medium text-900">{{ row.data.className }} {{ row.data.section }}</span>
-                  <span *ngIf="!row.classResolved" class="text-red-600 font-bold">Class Not Found</span>
+                  <span *ngIf="!row.classResolved" class="text-red-600 font-bold">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_21' | translate }}</span>
                 </td>
                 <td class="p-2 text-600">{{ row.data.gender }}</td>
                 <td class="p-2 text-600">{{ row.data.parentPhone }}</td>
                 <td class="p-2">
-                  <span *ngIf="!row.error && row.status === 'PENDING'" class="text-600 font-medium"><i class="pi pi-hourglass mr-1"></i>Pending</span>
+                  <span *ngIf="!row.error && row.status === 'PENDING'" class="text-600 font-medium"><i class="pi pi-hourglass mr-1"></i>{{ 'ADMISSIONS.ADMIT_BULK.TEXT_22' | translate }}</span>
                   <span *ngIf="row.error" class="text-red-700 font-bold"><i class="pi pi-exclamation-triangle mr-1"></i>{{ row.error }}</span>
-                  <span *ngIf="row.status === 'SUCCESS'" class="text-green-700 font-bold"><i class="pi pi-check-circle mr-1"></i>Enrolled</span>
+                  <span *ngIf="row.status === 'SUCCESS'" class="text-green-700 font-bold"><i class="pi pi-check-circle mr-1"></i>{{ 'ADMISSIONS.ADMIT_BULK.TEXT_23' | translate }}</span>
                   <span *ngIf="row.status === 'ERROR'" class="text-red-700 font-bold"><i class="pi pi-times-circle mr-1"></i>Failed: {{ row.errorMsg }}</span>
                 </td>
               </tr>
@@ -114,9 +114,9 @@
 
       <!-- Import Logs -->
       <div class="surface-card shadow-1 border-round-xl p-4" *ngIf="isImporting() || importLogs().length > 0">
-        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-list text-primary mr-2"></i>Execution Logs</h3>
+        <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-list text-primary mr-2"></i>{{ 'ADMISSIONS.ADMIT_BULK.TEXT_24' | translate }}</h3>
         <div class="bg-gray-900 border-round-lg p-3 overflow-y-auto text-green-400 font-mono text-xs flex flex-column gap-1.5 custom-style-3" >
-          <div *ngIf="importLogs().length === 0" class="text-500 italic">Initializing runner...</div>
+          <div *ngIf="importLogs().length === 0" class="text-500 italic">{{ 'ADMISSIONS.ADMIT_BULK.TEXT_25' | translate }}</div>
           <div *ngFor="let log of importLogs()" [ngClass]="{'text-red-400': log.includes('Failed'), 'text-green-400': log.includes('successfully')}">
             {{ log }}
           </div>

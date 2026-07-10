@@ -3,7 +3,7 @@
         title="Exams & Results" 
         subtitle="Manage exam schedules, workflow pipelines, marks sheets, and student rankings.">
         <div actions>
-            <button pButton label="New Exam" icon="pi pi-plus" class="p-button-primary border-round-md shadow-sm" (click)="openCreateExam()"></button>
+            <button pButton [label]="'EXAMS.EXAMS_DASHBOARD.LABEL_1' | translate" icon="pi pi-plus" class="p-button-primary border-round-md shadow-sm" (click)="openCreateExam()"></button>
         </div>
     </app-erp-page-header>
 
@@ -13,11 +13,11 @@
     <div class="flex align-items-center justify-content-between mb-4 mt-3 bg-blue-50 border-round-lg p-3">
         <div class="flex align-items-center gap-2">
             <i class="pi pi-calendar text-primary text-xl"></i>
-            <span class="text-900 font-semibold text-base">Scoping Academic Session:</span>
+            <span class="text-900 font-semibold text-base">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_2' | translate }}</span>
             <span class="bg-primary text-white text-xs font-bold px-2 py-1 border-round-md">{{ activeSession() }}</span>
         </div>
         <div class="flex gap-2">
-            <span class="text-600 text-sm font-medium">All results calculated dynamically under configured parameters.</span>
+            <span class="text-600 text-sm font-medium">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_3' | translate }}</span>
         </div>
     </div>
 
@@ -25,12 +25,12 @@
     <p-table [value]="store.exams()" [loading]="store.loading()" [rowHover]="true" styleClass="p-datatable-striped" [responsiveLayout]="'scroll'">
         <ng-template pTemplate="header">
             <tr>
-                <th class="font-bold text-sm text-800">Exam Term</th>
-                <th class="font-bold text-sm text-800">Exam Type</th>
-                <th class="font-bold text-sm text-800">Start Date</th>
-                <th class="font-bold text-sm text-800">End Date</th>
-                <th class="font-bold text-sm text-800">Pipeline Stage</th>
-                <th class="font-bold text-sm text-800 text-center">Actions</th>
+                <th class="font-bold text-sm text-800">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_4' | translate }}</th>
+                <th class="font-bold text-sm text-800">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_5' | translate }}</th>
+                <th class="font-bold text-sm text-800">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_6' | translate }}</th>
+                <th class="font-bold text-sm text-800">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_7' | translate }}</th>
+                <th class="font-bold text-sm text-800">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_8' | translate }}</th>
+                <th class="font-bold text-sm text-800 text-center">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_9' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-exam>
@@ -57,9 +57,9 @@
                                 *ngIf="!exam.publishResult"></button>
                         <ng-container *ngIf="exam.publishResult">
                             <span class="text-xs text-green-600 font-semibold flex align-items-center gap-1">
-                                <i class="pi pi-lock"></i> Published
+                                <i class="pi pi-lock"></i> {{ 'EXAMS.EXAMS_DASHBOARD.TEXT_10' | translate }}
                             </span>
-                            <button pButton icon="pi pi-eye" label="View Results" class="p-button-text p-button-info p-button-sm" pTooltip="Browse Results &amp; Print Report Cards" (click)="viewResults(exam)"></button>
+                            <button pButton icon="pi pi-eye" [label]="'EXAMS.EXAMS_DASHBOARD.LABEL_11' | translate" class="p-button-text p-button-info p-button-sm" pTooltip="Browse Results &amp; Print Report Cards" (click)="viewResults(exam)"></button>
                         </ng-container>
                         <button pButton icon="pi pi-send" class="p-button-text p-button-success p-button-sm" pTooltip="Publish Results &amp; Calculate Ranks" 
                                 *ngIf="!exam.publishResult && exam.currentStage?.name !== 'Locked'" (click)="publishExam(exam)"></button>
@@ -70,7 +70,7 @@
             <tr *ngIf="exam.examSubjects?.length > 0">
                 <td colspan="6" class="bg-gray-50 px-4 py-3">
                     <div class="border-left-2 border-primary pl-3">
-                        <h6 class="text-700 font-semibold text-xs mb-2 uppercase tracking-wider">Scheduled Exam Subjects</h6>
+                        <h6 class="text-700 font-semibold text-xs mb-2 uppercase tracking-wider">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_12' | translate }}</h6>
                         <div class="grid gap-2">
                             <div *ngFor="let es of exam.examSubjects" class="col-12 md:col-4 bg-white shadow-xs border-1 border-200 border-round-md p-2 flex justify-content-between align-items-center">
                                 <div>
@@ -94,7 +94,7 @@
             <tr>
                 <td colspan="6" class="text-center py-5">
                     <i class="pi pi-folder-open text-400 text-5xl mb-3 block"></i>
-                    <span class="text-600 font-medium">No exams scheduled for this academic session yet.</span>
+                    <span class="text-600 font-medium">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_13' | translate }}</span>
                 </td>
             </tr>
         </ng-template>
@@ -104,30 +104,30 @@
     <p-dialog header="Define New Exam Term" [(visible)]="examDialogVisible" [modal]="true" [style]="{width: '450px'}" class="p-fluid">
         <form [formGroup]="examForm" (ngSubmit)="saveExam()" class="grid mt-2">
             <div class="col-12 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Exam Term Name <span class="text-red-500">*</span></label>
-                <input pInputText type="text" formControlName="name" placeholder="e.g. Mid-Term Assessment" class="w-full border-round-md p-2 border-1 border-300" />
-                <small class="text-red-500 mt-1 block" *ngIf="examForm.get('name')?.invalid && examForm.get('name')?.touched">Exam name is required.</small>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_14' | translate }} <span class="text-red-500">*</span></label>
+                <input pInputText type="text" formControlName="name" [placeholder]="'EXAMS.EXAMS_DASHBOARD.PLACEHOLDER_15' | translate" class="w-full border-round-md p-2 border-1 border-300" />
+                <small class="text-red-500 mt-1 block" *ngIf="examForm.get('name')?.invalid && examForm.get('name')?.touched">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_16' | translate }}</small>
             </div>
             <div class="col-12 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Exam Type <span class="text-red-500">*</span></label>
-                <p-select [options]="examTypesOptions" formControlName="examTypeId" placeholder="Select Exam Type" class="w-full border-round-md"></p-select>
-                <small class="text-red-500 mt-1 block" *ngIf="examForm.get('examTypeId')?.invalid && examForm.get('examTypeId')?.touched">Exam Type is required.</small>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_17' | translate }} <span class="text-red-500">*</span></label>
+                <p-select [options]="examTypesOptions" formControlName="examTypeId" [placeholder]="'EXAMS.EXAMS_DASHBOARD.PLACEHOLDER_18' | translate" class="w-full border-round-md"></p-select>
+                <small class="text-red-500 mt-1 block" *ngIf="examForm.get('examTypeId')?.invalid && examForm.get('examTypeId')?.touched">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_19' | translate }}</small>
             </div>
             <div class="col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Start Date <span class="text-red-500">*</span></label>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_20' | translate }} <span class="text-red-500">*</span></label>
                 <input pInputText type="date" formControlName="startDate" class="w-full border-round-md p-2 border-1 border-300" />
             </div>
             <div class="col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">End Date <span class="text-red-500">*</span></label>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_21' | translate }} <span class="text-red-500">*</span></label>
                 <input pInputText type="date" formControlName="endDate" class="w-full border-round-md p-2 border-1 border-300" />
             </div>
             <div class="col-12 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Default Grading Scheme</label>
-                <p-select [options]="gradeSchemeOptions" formControlName="gradingSchemeId" placeholder="Select Grading Scheme" class="w-full border-round-md"></p-select>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_22' | translate }}</label>
+                <p-select [options]="gradeSchemeOptions" formControlName="gradingSchemeId" [placeholder]="'EXAMS.EXAMS_DASHBOARD.PLACEHOLDER_23' | translate" class="w-full border-round-md"></p-select>
             </div>
             <div class="col-12 flex justify-content-end gap-2 mt-3">
-                <button pButton type="button" label="Cancel" class="p-button-text p-button-secondary" (click)="examDialogVisible.set(false)"></button>
-                <button pButton type="submit" label="Save Term" class="p-button-primary border-round-md"></button>
+                <button pButton type="button" [label]="'EXAMS.EXAMS_DASHBOARD.LABEL_24' | translate" class="p-button-text p-button-secondary" (click)="examDialogVisible.set(false)"></button>
+                <button pButton type="submit" [label]="'EXAMS.EXAMS_DASHBOARD.LABEL_25' | translate" class="p-button-primary border-round-md"></button>
             </div>
         </form>
     </p-dialog>
@@ -136,36 +136,36 @@
     <p-dialog header="Schedule & Map Subject to Exam" [(visible)]="subjectDialogVisible" [modal]="true" [style]="{width: '500px'}" class="p-fluid">
         <form [formGroup]="subjectForm" (ngSubmit)="saveSubject()" class="grid mt-2">
             <div class="col-12 md:col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Class <span class="text-red-500">*</span></label>
-                <p-select [options]="classesList()" formControlName="classId" placeholder="Select Class" class="w-full border-round-md" (onChange)="getSubjects()"></p-select>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_26' | translate }} <span class="text-red-500">*</span></label>
+                <p-select [options]="classesList()" formControlName="classId" [placeholder]="'EXAMS.EXAMS_DASHBOARD.PLACEHOLDER_27' | translate" class="w-full border-round-md" (onChange)="getSubjects()"></p-select>
             </div>
             <div class="col-12 md:col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Subject <span class="text-red-500">*</span></label>
-                <p-select [options]="subjectsList()" formControlName="subjectId" placeholder="Select Subject" class="w-full border-round-md"></p-select>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_28' | translate }} <span class="text-red-500">*</span></label>
+                <p-select [options]="subjectsList()" formControlName="subjectId" [placeholder]="'EXAMS.EXAMS_DASHBOARD.PLACEHOLDER_29' | translate" class="w-full border-round-md"></p-select>
             </div>
             <div class="col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Maximum Marks <span class="text-red-500">*</span></label>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_30' | translate }} <span class="text-red-500">*</span></label>
                 <input pInputText type="number" formControlName="maxMarks" class="w-full border-round-md p-2 border-1 border-300" />
             </div>
             <div class="col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Passing Marks <span class="text-red-500">*</span></label>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_31' | translate }} <span class="text-red-500">*</span></label>
                 <input pInputText type="number" formControlName="passingMarks" class="w-full border-round-md p-2 border-1 border-300" />
             </div>
             <div class="col-12 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Exam Date</label>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_32' | translate }}</label>
                 <input pInputText type="date" formControlName="examDate" class="w-full border-round-md p-2 border-1 border-300" />
             </div>
             <div class="col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">Start Time</label>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_33' | translate }}</label>
                 <input pInputText type="time" formControlName="startTime" class="w-full border-round-md p-2 border-1 border-300" />
             </div>
             <div class="col-6 field mb-3">
-                <label class="text-700 font-semibold text-xs block mb-1.5">End Time</label>
+                <label class="text-700 font-semibold text-xs block mb-1.5">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_34' | translate }}</label>
                 <input pInputText type="time" formControlName="endTime" class="w-full border-round-md p-2 border-1 border-300" />
             </div>
             <div class="col-12 flex justify-content-end gap-2 mt-3">
-                <button pButton type="button" label="Cancel" class="p-button-text p-button-secondary" (click)="subjectDialogVisible.set(false)"></button>
-                <button pButton type="submit" label="Add Subject" class="p-button-primary border-round-md"></button>
+                <button pButton type="button" [label]="'EXAMS.EXAMS_DASHBOARD.LABEL_35' | translate" class="p-button-text p-button-secondary" (click)="subjectDialogVisible.set(false)"></button>
+                <button pButton type="submit" [label]="'EXAMS.EXAMS_DASHBOARD.LABEL_36' | translate" class="p-button-primary border-round-md"></button>
             </div>
         </form>
     </p-dialog>
@@ -179,18 +179,18 @@
         <!-- Loading spinner -->
         <div *ngIf="resultsLoading()" class="text-center py-6">
             <i class="pi pi-spin pi-spinner text-primary text-3xl"></i>
-            <div class="text-500 text-sm mt-2">Loading results...</div>
+            <div class="text-500 text-sm mt-2">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_37' | translate }}</div>
         </div>
 
         <div *ngIf="!resultsLoading() && selectedExamResults()">
             <!-- Summary strip -->
             <div class="flex gap-3 mb-4 p-3 bg-surface-50 border-round-lg border-1 surface-border">
                 <div class="flex flex-column">
-                    <span class="text-500 text-xs uppercase font-semibold">Exam Type</span>
+                    <span class="text-500 text-xs uppercase font-semibold">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_38' | translate }}</span>
                     <span class="text-900 font-bold text-sm">{{ selectedExamResults()?.exam?.examType?.name }}</span>
                 </div>
                 <div class="flex flex-column ml-4">
-                    <span class="text-500 text-xs uppercase font-semibold">Total Students</span>
+                    <span class="text-500 text-xs uppercase font-semibold">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_39' | translate }}</span>
                     <span class="text-900 font-bold text-sm">{{ selectedExamResults()?.summaries?.length || 0 }}</span>
                 </div>
             </div>
@@ -200,15 +200,15 @@
                 <table class="w-full text-xs erp-table-responsive" >
                     <thead>
                         <tr class="surface-100 border-bottom-1 surface-border text-left">
-                            <th class="p-2.5 font-semibold text-600">Rank</th>
-                            <th class="p-2.5 font-semibold text-600">Roll No</th>
-                            <th class="p-2.5 font-semibold text-600">Student Name</th>
-                            <th class="p-2.5 font-semibold text-600">Class / Sec</th>
-                            <th class="p-2.5 font-semibold text-600 text-center">Marks</th>
+                            <th class="p-2.5 font-semibold text-600">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_40' | translate }}</th>
+                            <th class="p-2.5 font-semibold text-600">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_41' | translate }}</th>
+                            <th class="p-2.5 font-semibold text-600">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_42' | translate }}</th>
+                            <th class="p-2.5 font-semibold text-600">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_43' | translate }}</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_44' | translate }}</th>
                             <th class="p-2.5 font-semibold text-600 text-center">%</th>
-                            <th class="p-2.5 font-semibold text-600 text-center">GPA</th>
-                            <th class="p-2.5 font-semibold text-600 text-center">Result</th>
-                            <th class="p-2.5 font-semibold text-600 text-center">Report</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_45' | translate }}</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_46' | translate }}</th>
+                            <th class="p-2.5 font-semibold text-600 text-center">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_47' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -240,7 +240,7 @@
 
         <div *ngIf="!resultsLoading() && !selectedExamResults()" class="text-center py-6">
             <i class="pi pi-inbox text-300 text-4xl block mb-2"></i>
-            <p class="text-500 text-sm">No results found for this exam.</p>
+            <p class="text-500 text-sm">{{ 'EXAMS.EXAMS_DASHBOARD.TEXT_48' | translate }}</p>
         </div>
     </p-dialog>
 </div>

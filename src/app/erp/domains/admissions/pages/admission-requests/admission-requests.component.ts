@@ -10,21 +10,14 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admission-requests',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    ToastModule,
-    DialogModule,
-    ButtonModule,
-    SelectModule,
-    TextareaModule,
-    InputTextModule
-  ],
+        CommonModule, ReactiveFormsModule, FormsModule, ToastModule, DialogModule, ButtonModule, SelectModule, TextareaModule, InputTextModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './admission-requests.component.html'
 })

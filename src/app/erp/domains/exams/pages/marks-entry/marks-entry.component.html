@@ -3,13 +3,13 @@
         title="Marks Entry Workspace" 
         [subtitle]="'Entering marks for ' + (examSubject()?.subject?.name || '') + ' - Class: ' + (examSubject()?.class?.name || '') + ' (' + (examSubject()?.class?.section || '') + ')'">
         <div actions class="flex gap-2">
-            <button pButton label="Back" icon="pi pi-arrow-left" class="p-button-text p-button-secondary" routerLink="/erp/exams"></button>
-            <button pButton label="Export CSV" icon="pi pi-download" class="p-button-outlined p-button-secondary border-round-md" (click)="exportToCSV()"></button>
+            <button pButton [label]="'EXAMS.MARKS_ENTRY.LABEL_1' | translate" icon="pi pi-arrow-left" class="p-button-text p-button-secondary" routerLink="/erp/exams"></button>
+            <button pButton [label]="'EXAMS.MARKS_ENTRY.LABEL_2' | translate" icon="pi pi-download" class="p-button-outlined p-button-secondary border-round-md" (click)="exportToCSV()"></button>
             <label for="csv-upload" class="p-button p-button-outlined p-button-info border-round-md flex align-items-center gap-2 cursor-pointer select-none">
-                <i class="pi pi-upload"></i> Import CSV
+                <i class="pi pi-upload"></i> {{ 'EXAMS.MARKS_ENTRY.TEXT_3' | translate }}
             </label>
             <input type="file" id="csv-upload" accept=".csv" (change)="onFileSelect($event)" class="hidden" />
-            <button pButton label="Save Marks" icon="pi pi-save" class="p-button-success border-round-md shadow-sm" (click)="saveMarks()"></button>
+            <button pButton [label]="'EXAMS.MARKS_ENTRY.LABEL_4' | translate" icon="pi pi-save" class="p-button-success border-round-md shadow-sm" (click)="saveMarks()"></button>
         </div>
     </app-erp-page-header>
 
@@ -19,19 +19,19 @@
     <div class="grid mb-4 mt-2">
         <div class="col-12 md:col-4">
             <div class="p-3 bg-gray-50 border-round-lg border-1 border-200">
-                <span class="text-500 text-xs block font-semibold uppercase">Exam Term</span>
+                <span class="text-500 text-xs block font-semibold uppercase">{{ 'EXAMS.MARKS_ENTRY.TEXT_5' | translate }}</span>
                 <span class="text-900 font-bold text-base mt-1 block">{{ examSubject()?.exam?.name || 'Loading...' }}</span>
             </div>
         </div>
         <div class="col-12 md:col-4">
             <div class="p-3 bg-gray-50 border-round-lg border-1 border-200">
-                <span class="text-500 text-xs block font-semibold uppercase">Subject Context</span>
+                <span class="text-500 text-xs block font-semibold uppercase">{{ 'EXAMS.MARKS_ENTRY.TEXT_6' | translate }}</span>
                 <span class="text-900 font-bold text-base mt-1 block">{{ examSubject()?.subject?.name || 'Loading...' }}</span>
             </div>
         </div>
         <div class="col-12 md:col-4">
             <div class="p-3 bg-blue-50 border-round-lg border-1 border-blue-200">
-                <span class="text-primary text-xs block font-semibold uppercase">Maximum Passing Boundary</span>
+                <span class="text-primary text-xs block font-semibold uppercase">{{ 'EXAMS.MARKS_ENTRY.TEXT_7' | translate }}</span>
                 <span class="text-primary font-bold text-base mt-1 block">{{ maxMarks() }} Max / {{ examSubject()?.passingMarks }} Pass</span>
             </div>
         </div>
@@ -41,12 +41,12 @@
     <p-table [value]="roster()" [loading]="loading()" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped">
         <ng-template pTemplate="header">
             <tr>
-                <th  class="font-bold text-sm text-800 col-width">Roll No.</th>
-                <th  class="font-bold text-sm text-800 col-width">Student Name</th>
-                <th  class="font-bold text-sm text-800 col-width">Marks Obtained</th>
-                <th  class="font-bold text-sm text-800 col-width">Grace Marks</th>
-                <th  class="font-bold text-sm text-800 text-center col-width">Score Preview</th>
-                <th  class="font-bold text-sm text-800 col-width">Remarks / Log Note</th>
+                <th  class="font-bold text-sm text-800 col-width">{{ 'EXAMS.MARKS_ENTRY.TEXT_8' | translate }}</th>
+                <th  class="font-bold text-sm text-800 col-width">{{ 'EXAMS.MARKS_ENTRY.TEXT_9' | translate }}</th>
+                <th  class="font-bold text-sm text-800 col-width">{{ 'EXAMS.MARKS_ENTRY.TEXT_10' | translate }}</th>
+                <th  class="font-bold text-sm text-800 col-width">{{ 'EXAMS.MARKS_ENTRY.TEXT_11' | translate }}</th>
+                <th  class="font-bold text-sm text-800 text-center col-width">{{ 'EXAMS.MARKS_ENTRY.TEXT_12' | translate }}</th>
+                <th  class="font-bold text-sm text-800 col-width">{{ 'EXAMS.MARKS_ENTRY.TEXT_13' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row>
@@ -56,7 +56,7 @@
                 <td>
                     <input pInputText type="number" [(ngModel)]="row.marksObtained" [placeholder]="'Max ' + maxMarks()" 
                            class="w-full p-inputtext-sm border-round-md" [ngClass]="{'border-red-500': !validateMarks(row)}" />
-                    <small class="text-red-500 text-xs block mt-1" *ngIf="!validateMarks(row)">Exceeds max marks!</small>
+                    <small class="text-red-500 text-xs block mt-1" *ngIf="!validateMarks(row)">{{ 'EXAMS.MARKS_ENTRY.TEXT_14' | translate }}</small>
                 </td>
                 <td>
                     <input pInputText type="number" [(ngModel)]="row.graceMarks" placeholder="0" class="w-full p-inputtext-sm border-round-md" />
@@ -77,16 +77,16 @@
                     </div>
                 </td>
                 <td>
-                    <input pInputText type="text" [(ngModel)]="row.teacherRemarks" placeholder="Optional comments..." class="w-full p-inputtext-sm border-round-md" />
+                    <input pInputText type="text" [(ngModel)]="row.teacherRemarks" [placeholder]="'EXAMS.MARKS_ENTRY.PLACEHOLDER_15' | translate" class="w-full p-inputtext-sm border-round-md" />
                     <!-- Grace marks reason reminder -->
-                    <small class="text-blue-500 text-xs block mt-1" *ngIf="row.graceMarks > 0">Reason for grace marks is logged in audit history.</small>
+                    <small class="text-blue-500 text-xs block mt-1" *ngIf="row.graceMarks > 0">{{ 'EXAMS.MARKS_ENTRY.TEXT_16' | translate }}</small>
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptystate">
             <tr>
                 <td colspan="6" class="text-center py-5">
-                    <span class="text-600 font-medium">No students registered in this class.</span>
+                    <span class="text-600 font-medium">{{ 'EXAMS.MARKS_ENTRY.TEXT_17' | translate }}</span>
                 </td>
             </tr>
         </ng-template>

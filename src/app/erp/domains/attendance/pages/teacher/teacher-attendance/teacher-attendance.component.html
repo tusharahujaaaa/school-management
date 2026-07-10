@@ -10,11 +10,11 @@
   >
     <div actions class="flex align-items-center gap-2" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
       <div class="surface-100 border-round-lg px-3 py-2 text-center mr-2 shadow-sm border-1 border-300">
-        <div class="text-900 font-bold text-sm">Class 10 — A</div>
-        <div class="text-500 text-xs mt-1">Assigned Class</div>
+        <div class="text-900 font-bold text-sm">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_1' | translate }}</div>
+        <div class="text-500 text-xs mt-1">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_2' | translate }}</div>
       </div>
       <div class="flex gap-2">
-        <button pButton label="All Present" icon="pi pi-check" 
+        <button pButton [label]="'ATTENDANCE.TEACHER_ATTENDANCE.LABEL_3' | translate" icon="pi pi-check" 
           class="p-button-sm p-button-success p-button-outlined border-round-lg"
           [disabled]="sheetStatus() === 'LOCKED' || isFutureDate()"
           (click)="markAllPresent()"></button>
@@ -34,8 +34,8 @@
         class="border-round-xl p-3 flex align-items-center gap-3 bg-red-50 border-1 border-red-200 text-red-700 shadow-sm animate-fadein">
         <i class="pi pi-exclamation-triangle text-2xl text-red-500"></i>
         <div>
-          <div class="font-bold text-md">Restricted Selection</div>
-          <div class="text-xs opacity-90">Daily attendance records cannot be set up or marked for future calendar dates.</div>
+          <div class="font-bold text-md">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_4' | translate }}</div>
+          <div class="text-xs opacity-90">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_5' | translate }}</div>
         </div>
       </div>
 
@@ -44,8 +44,8 @@
         class="border-round-xl p-3 flex align-items-center gap-3 bg-surface-100 border-1 border-300 text-700 shadow-sm animate-fadein">
         <i class="pi pi-lock text-2xl text-gray-500"></i>
         <div>
-          <div class="font-bold text-md text-900">Sheet Locked</div>
-          <div class="text-xs opacity-80">This session has been finalized and locked by the administrative office. Edits are disabled.</div>
+          <div class="font-bold text-md text-900">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_6' | translate }}</div>
+          <div class="text-xs opacity-80">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_7' | translate }}</div>
         </div>
       </div>
 
@@ -55,12 +55,12 @@
         <div class="flex align-items-center gap-3">
           <i class="pi pi-check-circle text-2xl text-blue-500"></i>
           <div>
-            <div class="font-bold text-md text-blue-900">Attendance Submitted</div>
-            <div class="text-xs opacity-80">Daily marks have already been recorded. Editing now will flag the sheet as <span class="font-semibold text-primary">Edited</span>.</div>
+            <div class="font-bold text-md text-blue-900">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_8' | translate }}</div>
+            <div class="text-xs opacity-80">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_9' | translate }} <span class="font-semibold text-primary">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_10' | translate }}</span>.</div>
           </div>
         </div>
         <div class="flex align-items-center gap-2">
-          <span class="text-sm font-medium text-600">Status:</span>
+          <span class="text-sm font-medium text-600">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_11' | translate }}</span>
           <app-erp-status-badge [label]="sheetStatusLabel()" [severity]="sheetStatusSeverity()"></app-erp-status-badge>
         </div>
       </div>
@@ -71,7 +71,7 @@
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4" *ngIf="students().length > 0">
     <div class="flex flex-column sm:flex-row justify-content-between sm:align-items-center gap-2 mb-3">
       <div>
-        <h4 class="m-0 text-800 font-semibold text-md mb-1">Roster Progress</h4>
+        <h4 class="m-0 text-800 font-semibold text-md mb-1">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_12' | translate }}</h4>
         <span class="text-sm text-500">{{ students().length - summary().unmarked }} of {{ students().length }} students marked</span>
       </div>
       <span class="text-lg font-bold text-primary">{{ markingProgress() }}% Complete</span>
@@ -85,22 +85,22 @@
       <div class="flex align-items-center gap-2 bg-green-50 border-round-xl px-3 py-2 border-1 border-green-200 shadow-sm">
         <i class="pi pi-check-circle text-green-600"></i>
         <span class="font-bold text-green-700">{{ summary().present }}</span>
-        <span class="text-500 text-sm">Present</span>
+        <span class="text-500 text-sm">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_13' | translate }}</span>
       </div>
       <div class="flex align-items-center gap-2 bg-red-50 border-round-xl px-3 py-2 border-1 border-red-200 shadow-sm">
         <i class="pi pi-times-circle text-red-600"></i>
         <span class="font-bold text-red-700">{{ summary().absent }}</span>
-        <span class="text-500 text-sm">Absent</span>
+        <span class="text-500 text-sm">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_14' | translate }}</span>
       </div>
       <div class="flex align-items-center gap-2 bg-orange-50 border-round-xl px-3 py-2 border-1 border-orange-200 shadow-sm">
         <i class="pi pi-clock text-orange-600"></i>
         <span class="font-bold text-orange-700">{{ summary().late }}</span>
-        <span class="text-500 text-sm">Late</span>
+        <span class="text-500 text-sm">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_15' | translate }}</span>
       </div>
       <div class="flex align-items-center gap-2 bg-surface-100 border-round-xl px-3 py-2 border-1 border-300 shadow-sm ml-sm-auto">
         <i class="pi pi-minus-circle text-500"></i>
         <span class="font-bold text-600">{{ summary().unmarked }}</span>
-        <span class="text-500 text-sm">Unmarked</span>
+        <span class="text-500 text-sm">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_16' | translate }}</span>
       </div>
     </div>
   </div>
@@ -136,7 +136,7 @@
           [label]="getStatusLabel(getStatus(student.id))" 
           [severity]="getStatusSeverity(getStatus(student.id))"
         ></app-erp-status-badge>
-        <span *ngIf="!getStatus(student.id)" class="text-400 text-xs italic">Unmarked</span>
+        <span *ngIf="!getStatus(student.id)" class="text-400 text-xs italic">{{ 'ATTENDANCE.TEACHER_ATTENDANCE.TEXT_17' | translate }}</span>
       </ng-template>
 
       <ng-template #quickMarkTmpl let-student>
@@ -168,14 +168,14 @@
       {{ summary().unmarked }} student(s) not yet marked in this session
     </span>
     <div class="flex gap-2 w-full sm:w-auto justify-content-end" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
-      <button pButton label="Reset" icon="pi pi-refresh" class="p-button-outlined p-button-secondary border-round-lg" 
+      <button pButton [label]="'ATTENDANCE.TEACHER_ATTENDANCE.LABEL_18' | translate" icon="pi pi-refresh" class="p-button-outlined p-button-secondary border-round-lg" 
         [disabled]="sheetStatus() === 'LOCKED' || isFutureDate()"
         (click)="reset()"></button>
-      <button pButton label="Save Draft" icon="pi pi-pencil" class="p-button-outlined p-button-warning border-round-lg" 
+      <button pButton [label]="'ATTENDANCE.TEACHER_ATTENDANCE.LABEL_19' | translate" icon="pi pi-pencil" class="p-button-outlined p-button-warning border-round-lg" 
         [loading]="isSavingDraft()"
         [disabled]="sheetStatus() === 'LOCKED' || isFutureDate() || students().length === 0"
         (click)="saveAsDraft()"></button>
-      <button pButton label="Submit Attendance" icon="pi pi-save" class="border-round-lg shadow-sm" 
+      <button pButton [label]="'ATTENDANCE.TEACHER_ATTENDANCE.LABEL_20' | translate" icon="pi pi-save" class="border-round-lg shadow-sm" 
         [loading]="isSubmitting()"
         [disabled]="sheetStatus() === 'LOCKED' || isFutureDate() || students().length === 0"
         (click)="submit()"></button>

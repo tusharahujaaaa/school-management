@@ -8,18 +8,14 @@ import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-fee-structures',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ToastModule,
-    DialogModule,
-    ButtonModule,
-    SelectModule
-  ],
+        CommonModule, ReactiveFormsModule, ToastModule, DialogModule, ButtonModule, SelectModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './fee-structures.component.html',
   styleUrls: ['./fee-structures.component.scss']

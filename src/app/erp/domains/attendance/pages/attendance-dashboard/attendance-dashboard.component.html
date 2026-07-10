@@ -7,10 +7,10 @@
   >
     <div actions class="flex gap-2">
       <a *erpHasPermission="PERMS.ATTENDANCE.CREATE" routerLink="/erp/attendance/students" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
-        <i class="pi pi-plus"></i> Mark Student Attendance
+        <i class="pi pi-plus"></i> {{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_1' | translate }}
       </a>
       <a *erpHasPermission="PERMS.STAFF.CREATE" routerLink="/erp/attendance/staff" class="p-button p-button-sm p-button-outlined no-underline flex align-items-center gap-2 px-3 py-2 border-round-lg border-1 border-primary text-primary font-medium hover:bg-primary-50 transition-colors">
-        <i class="pi pi-id-card"></i> Mark Staff Attendance
+        <i class="pi pi-id-card"></i> {{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_2' | translate }}
       </a>
     </div>
   </app-erp-page-header>
@@ -67,7 +67,7 @@
       <!-- Overall Progress -->
       <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
         <div class="flex justify-content-between align-items-center mb-3">
-          <h3 class="m-0 text-900 font-semibold text-lg">Overall Attendance Today</h3>
+          <h3 class="m-0 text-900 font-semibold text-lg">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_3' | translate }}</h3>
           <span class="text-3xl font-bold" [ngClass]="stats().overallPercentage >= 90 ? 'text-green-500' : 'text-orange-500'">
             {{ stats().overallPercentage }}%
           </span>
@@ -104,7 +104,7 @@
         [columnTemplates]="{ 'percentage': percentageTmpl }"
       >
         <div tableActions>
-           <a routerLink="/erp/attendance/history" class="text-primary text-sm font-medium no-underline hover:underline">View History <i class="pi pi-angle-right"></i></a>
+           <a routerLink="/erp/attendance/history" class="text-primary text-sm font-medium no-underline hover:underline">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_4' | translate }} <i class="pi pi-angle-right"></i></a>
         </div>
         
         <ng-template #percentageTmpl let-cls>
@@ -129,30 +129,30 @@
 
       <!-- Quick Actions -->
       <div class="surface-card shadow-1 border-round-xl p-4 mb-4">
-        <h3 class="m-0 text-900 font-semibold text-lg mb-3">Quick Actions</h3>
+        <h3 class="m-0 text-900 font-semibold text-lg mb-3">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_5' | translate }}</h3>
         <div class="grid">
           <div class="col-6" *erpHasPermission="PERMS.ATTENDANCE.CREATE">
             <a routerLink="/erp/attendance/students" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-blue-50 hover:bg-blue-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-users text-blue-500 text-2xl mb-2"></i>
-              <span class="text-blue-700 font-medium text-sm">Student Attendance</span>
+              <span class="text-blue-700 font-medium text-sm">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_6' | translate }}</span>
             </a>
           </div>
           <div class="col-6" *erpHasPermission="PERMS.STAFF.CREATE">
             <a routerLink="/erp/attendance/staff" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-purple-50 hover:bg-purple-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-id-card text-purple-500 text-2xl mb-2"></i>
-              <span class="text-purple-700 font-medium text-sm">Staff Attendance</span>
+              <span class="text-purple-700 font-medium text-sm">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_7' | translate }}</span>
             </a>
           </div>
           <div class="col-6 mt-3" *erpHasPermission="PERMS.ATTENDANCE.REPORTS">
             <a routerLink="/erp/attendance/reports" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-teal-50 hover:bg-teal-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-chart-bar text-teal-500 text-2xl mb-2"></i>
-              <span class="text-teal-700 font-medium text-sm">View Reports</span>
+              <span class="text-teal-700 font-medium text-sm">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_8' | translate }}</span>
             </a>
           </div>
           <div class="col-6 mt-3" *erpHasPermission="PERMS.ATTENDANCE.VIEW">
             <a routerLink="/erp/attendance/history" class="flex flex-column align-items-center justify-content-center p-3 border-round-xl bg-orange-50 hover:bg-orange-100 cursor-pointer text-center h-full transition-colors no-underline">
               <i class="pi pi-history text-orange-500 text-2xl mb-2"></i>
-              <span class="text-orange-700 font-medium text-sm">View History</span>
+              <span class="text-orange-700 font-medium text-sm">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_9' | translate }}</span>
             </a>
           </div>
         </div>
@@ -163,12 +163,12 @@
         <div class="flex justify-content-between align-items-center mb-3">
           <div class="flex align-items-center gap-2">
             <i class="pi pi-exclamation-triangle text-orange-500"></i>
-            <h3 class="m-0 text-900 font-semibold text-lg">Low Attendance Alerts</h3>
+            <h3 class="m-0 text-900 font-semibold text-lg">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_10' | translate }}</h3>
           </div>
           <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 border-round">{{ alerts().length }}</span>
         </div>
         <app-attendance-alert-card *ngFor="let alert of alerts() | slice:0:5" [alert]="alert"></app-attendance-alert-card>
-        <a routerLink="/erp/attendance/reports" class="text-primary text-sm font-medium no-underline hover:underline mt-2 block text-center">View all alerts <i class="pi pi-angle-right"></i></a>
+        <a routerLink="/erp/attendance/reports" class="text-primary text-sm font-medium no-underline hover:underline mt-2 block text-center">{{ 'ATTENDANCE.ATTENDANCE_DASHBOARD.TEXT_11' | translate }} <i class="pi pi-angle-right"></i></a>
       </div>
     </div>
 

@@ -7,11 +7,14 @@ import { SidebarGroup, SidebarNavItem } from './sidebar.model';
 import { AuthService } from '../../../domains/auth/services/auth.service';
 import { PermissionService } from '../../../core/permissions/services/permission.service';
 import { ERP_BRANDING_CONFIG } from '../../../config/branding.config';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-erp-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+        CommonModule, RouterModule, TranslatePipe
+    ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })

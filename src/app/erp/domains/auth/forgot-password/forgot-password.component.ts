@@ -8,19 +8,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../services/auth.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    ProgressBarModule,
-    ToastModule,
-  ],
+        CommonModule, RouterModule, ReactiveFormsModule, InputTextModule, ButtonModule, ProgressBarModule, ToastModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss'],

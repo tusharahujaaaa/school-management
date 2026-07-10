@@ -11,21 +11,14 @@ import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-fee-records',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ToastModule,
-    DialogModule,
-    ButtonModule,
-    SelectModule,
-    TableModule,
-    FormsModule,
-    HasPermissionDirective
-  ],
+        CommonModule, ReactiveFormsModule, ToastModule, DialogModule, ButtonModule, SelectModule, TableModule, FormsModule, HasPermissionDirective, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './fee-records.component.html',
   styleUrls: ['./fee-records.component.scss']

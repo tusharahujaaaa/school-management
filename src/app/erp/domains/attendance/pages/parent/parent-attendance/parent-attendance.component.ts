@@ -5,6 +5,7 @@ import { StudentService } from '../../../../students/services/student.service';
 import { AttendanceHttpService } from '../../../services/attendance-http.service';
 import { AttendancePercentageWidgetComponent } from '../../../components/shared/attendance-percentage-widget/attendance-percentage-widget.component';
 import { AttendanceHistoryCardComponent } from '../../../components/shared/attendance-history-card/attendance-history-card.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /**
  * Parent Portal — Attendance View
@@ -14,7 +15,9 @@ import { AttendanceHistoryCardComponent } from '../../../components/shared/atten
 @Component({
   selector: 'app-parent-attendance',
   standalone: true,
-  imports: [CommonModule, AttendancePercentageWidgetComponent, AttendanceHistoryCardComponent],
+  imports: [
+        CommonModule, AttendancePercentageWidgetComponent, AttendanceHistoryCardComponent, TranslatePipe
+    ],
   templateUrl: './parent-attendance.component.html',
   styleUrls: ['./parent-attendance.component.scss']
 })

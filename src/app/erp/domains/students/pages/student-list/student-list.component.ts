@@ -14,24 +14,14 @@ import { MessageService } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-list',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    PageHeaderComponent,
-    ErpTableComponent,
-    StudentFiltersComponent,
-    AvatarModule,
-    ButtonModule,
-    TooltipModule,
-    SelectModule,
-    ToastModule,
-    HasPermissionDirective,
-    RouterModule
-  ],
+        CommonModule, FormsModule, PageHeaderComponent, ErpTableComponent, StudentFiltersComponent, AvatarModule, ButtonModule, TooltipModule, SelectModule, ToastModule, HasPermissionDirective, RouterModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.scss'

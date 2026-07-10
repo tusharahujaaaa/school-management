@@ -6,11 +6,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { STUDENT_STATUS_OPTIONS, GENDER_OPTIONS } from '../../constants/student.constants';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-filters',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SelectModule, InputTextModule, ButtonModule],
+  imports: [
+        CommonModule, ReactiveFormsModule, SelectModule, InputTextModule, ButtonModule, TranslatePipe
+    ],
   templateUrl: './student-filters.component.html',
   styleUrl: './student-filters.component.scss'
 })

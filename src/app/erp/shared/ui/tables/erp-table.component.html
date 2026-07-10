@@ -7,7 +7,7 @@
 
     <div *ngIf="showSearch" class="relative w-full md:w-20rem flex align-items-center">
       <i class="pi pi-search absolute left-3 text-500"></i>
-      <input type="text" pInputText placeholder="Search..." class="w-full pl-5 search-input-padded"  (input)="onSearch($event)" />
+      <input type="text" pInputText [placeholder]="'ERP_TABLE.PLACEHOLDER_1' | translate" class="w-full pl-5 search-input-padded"  (input)="onSearch($event)" />
     </div>
 
     <div class="flex gap-2">
@@ -27,7 +27,7 @@
           {{ col.header }}
           <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
         </th>
-        <th *ngIf="hasActions" class="text-center">Actions</th>
+        <th *ngIf="hasActions" class="text-center">{{ 'ERP_TABLE.TEXT_2' | translate }}</th>
       </tr>
     </ng-template>
 

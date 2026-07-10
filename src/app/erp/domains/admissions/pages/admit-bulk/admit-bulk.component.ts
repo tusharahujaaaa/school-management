@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { TranslatePipe } from '@ngx-translate/core';
 
 interface ParsedStudentRow {
   data: {
@@ -30,12 +31,8 @@ interface ParsedStudentRow {
   selector: 'app-admit-bulk',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    ToastModule,
-    ButtonModule,
-    TableModule
-  ],
+        CommonModule, FormsModule, ToastModule, ButtonModule, TableModule, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './admit-bulk.component.html'
 })

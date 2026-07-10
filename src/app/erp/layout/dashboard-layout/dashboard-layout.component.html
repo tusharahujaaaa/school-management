@@ -42,9 +42,9 @@
         <div *ngIf="bellOpen()" class="notifications-dropdown-overlay surface-card shadow-5 border-round-xl border-1 surface-border p-3 flex flex-column">
           <!-- Dropdown Header -->
           <div class="flex justify-content-between align-items-center pb-2 border-bottom-1 surface-border mb-3">
-            <span class="text-900 font-bold text-base">Notifications</span>
+            <span class="text-900 font-bold text-base">{{ 'DASHBOARD_LAYOUT.TEXT_1' | translate }}</span>
             <button class="p-link text-primary font-bold text-xs hover:underline flex align-items-center gap-1" (click)="viewAll()">
-              <span>View All</span>
+              <span>{{ 'DASHBOARD_LAYOUT.TEXT_2' | translate }}</span>
               <i class="pi pi-arrow-right text-xs"></i>
             </button>
           </div>
@@ -67,8 +67,8 @@
               <div class="w-3rem h-3rem border-circle bg-gray-100 flex align-items-center justify-content-center mb-3">
                 <i class="pi pi-bell-slash text-400 text-xl"></i>
               </div>
-              <span class="text-700 font-semibold text-sm">No notifications yet</span>
-              <span class="text-500 text-xs mt-1">We'll alert you when something happens.</span>
+              <span class="text-700 font-semibold text-sm">{{ 'DASHBOARD_LAYOUT.TEXT_3' | translate }}</span>
+              <span class="text-500 text-xs mt-1">{{ 'DASHBOARD_LAYOUT.TEXT_4' | translate }}</span>
             </div>
 
             <!-- Notification cards -->
@@ -78,7 +78,7 @@
 
             <!-- Loading more spinner -->
             <div *ngIf="notificationService.loading() && notificationService.notifications().length > 0" class="text-center py-2 text-500 text-xs">
-              <i class="pi pi-spin pi-spinner mr-2 text-primary"></i>Loading more...
+              <i class="pi pi-spin pi-spinner mr-2 text-primary"></i>{{ 'DASHBOARD_LAYOUT.TEXT_5' | translate }}
             </div>
 
             <!-- Scroll load trigger fallback (if user doesn't scroll) -->

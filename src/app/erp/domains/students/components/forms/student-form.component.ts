@@ -8,20 +8,14 @@ import { StudentAddressFormComponent } from './student-address-form/student-addr
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { Student } from '../../models/student.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-form',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    StudentBasicInfoFormComponent,
-    StudentAcademicFormComponent,
-    StudentContactFormComponent,
-    StudentAddressFormComponent,
-    ButtonModule,
-    CardModule
-  ],
+        CommonModule, ReactiveFormsModule, StudentBasicInfoFormComponent, StudentAcademicFormComponent, StudentContactFormComponent, StudentAddressFormComponent, ButtonModule, CardModule, TranslatePipe
+    ],
   templateUrl: './student-form.component.html'
 })
 export class StudentFormComponent {

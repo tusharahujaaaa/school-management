@@ -7,18 +7,14 @@ import { ErpDatepickerComponent } from '../../../../../shared/forms/controls/erp
 import { FormFieldComponent } from '../../../../../shared/forms/wrappers/form-field.component';
 import { GENDER_OPTIONS } from '../../../constants/student.constants';
 import { BLOOD_GROUP_OPTIONS } from '../../../constants/student-form.constants';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-basic-info-form',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ErpInputComponent,
-    ErpSelectComponent,
-    ErpDatepickerComponent,
-    FormFieldComponent
-  ],
+        CommonModule, ReactiveFormsModule, ErpInputComponent, ErpSelectComponent, ErpDatepickerComponent, FormFieldComponent, TranslatePipe
+    ],
   templateUrl: './student-basic-info-form.component.html'
 })
 export class StudentBasicInfoFormComponent {

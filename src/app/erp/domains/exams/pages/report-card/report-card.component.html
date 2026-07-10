@@ -3,11 +3,11 @@
     <div class="no-print flex justify-content-between align-items-center mb-4 border-bottom-1 border-200 pb-3">
         <h5 class="m-0 text-900 font-bold flex align-items-center gap-2">
             <i class="pi pi-file-pdf text-primary text-xl"></i>
-            Report Card Preview
+            {{ 'EXAMS.REPORT_CARD.TEXT_1' | translate }}
         </h5>
         <div class="flex gap-2">
-            <button pButton label="Back" icon="pi pi-arrow-left" class="p-button-text p-button-secondary" routerLink="/erp/exams"></button>
-            <button pButton label="Print / Export PDF" icon="pi pi-print" class="p-button-primary border-round-md shadow-sm" (click)="triggerPrint()"></button>
+            <button pButton [label]="'EXAMS.REPORT_CARD.LABEL_2' | translate" icon="pi pi-arrow-left" class="p-button-text p-button-secondary" routerLink="/erp/exams"></button>
+            <button pButton [label]="'EXAMS.REPORT_CARD.LABEL_3' | translate" icon="pi pi-print" class="p-button-primary border-round-md shadow-sm" (click)="triggerPrint()"></button>
         </div>
     </div>
 
@@ -15,26 +15,26 @@
     <div class="p-5 border-1 border-300 border-round-lg bg-white text-900" id="printable-report-card">
         <!-- School Banner Header -->
         <div class="text-center mb-5 pb-3 border-bottom-2 border-primary">
-            <h2 class="text-900 font-bold m-0 tracking-wide uppercase text-2xl">CAMPUS HANDLE SCHOOL</h2>
-            <p class="text-500 text-sm mt-1 m-0">Annual Progress & Scholastic Performance Report</p>
+            <h2 class="text-900 font-bold m-0 tracking-wide uppercase text-2xl">{{ 'EXAMS.REPORT_CARD.TEXT_4' | translate }}</h2>
+            <p class="text-500 text-sm mt-1 m-0">{{ 'EXAMS.REPORT_CARD.TEXT_5' | translate }}</p>
         </div>
 
         <!-- Student Profile Information -->
         <div class="grid p-fluid mb-4 text-sm">
             <div class="col-12 md:col-6 py-1.5 flex gap-2">
-                <span class="text-500 font-semibold w-8rem">Student Name:</span>
+                <span class="text-500 font-semibold w-8rem">{{ 'EXAMS.REPORT_CARD.TEXT_6' | translate }}</span>
                 <span class="text-900 font-bold">{{ student()?.name }}</span>
             </div>
             <div class="col-12 md:col-6 py-1.5 flex gap-2">
-                <span class="text-500 font-semibold w-8rem">Roll Number:</span>
+                <span class="text-500 font-semibold w-8rem">{{ 'EXAMS.REPORT_CARD.TEXT_7' | translate }}</span>
                 <span class="text-900 font-bold">{{ student()?.rollNumber || '-' }}</span>
             </div>
             <div class="col-12 md:col-6 py-1.5 flex gap-2">
-                <span class="text-500 font-semibold w-8rem">Class / Section:</span>
+                <span class="text-500 font-semibold w-8rem">{{ 'EXAMS.REPORT_CARD.TEXT_8' | translate }}</span>
                 <span class="text-900 font-bold">{{ student()?.class?.name }} - {{ student()?.class?.section }}</span>
             </div>
             <div class="col-12 md:col-6 py-1.5 flex gap-2">
-                <span class="text-500 font-semibold w-8rem">Admission No.:</span>
+                <span class="text-500 font-semibold w-8rem">{{ 'EXAMS.REPORT_CARD.TEXT_9' | translate }}</span>
                 <span class="text-900 font-bold">{{ student()?.admissionNumber || '-' }}</span>
             </div>
         </div>
@@ -43,13 +43,13 @@
         <table class="w-full text-left text-sm border-collapse mb-5">
             <thead>
                 <tr class="bg-gray-100 border-top-1 border-bottom-1 border-300">
-                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200">Subject Name</th>
-                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">Max Marks</th>
-                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">Pass Marks</th>
-                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">Obtained</th>
-                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">Grace</th>
-                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">Grade</th>
-                    <th class="py-2.5 px-3 font-semibold text-800 text-center">Status</th>
+                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200">{{ 'EXAMS.REPORT_CARD.TEXT_10' | translate }}</th>
+                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">{{ 'EXAMS.REPORT_CARD.TEXT_11' | translate }}</th>
+                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">{{ 'EXAMS.REPORT_CARD.TEXT_12' | translate }}</th>
+                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">{{ 'EXAMS.REPORT_CARD.TEXT_13' | translate }}</th>
+                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">{{ 'EXAMS.REPORT_CARD.TEXT_14' | translate }}</th>
+                    <th class="py-2.5 px-3 font-semibold text-800 border-right-1 border-200 text-center">{{ 'EXAMS.REPORT_CARD.TEXT_15' | translate }}</th>
+                    <th class="py-2.5 px-3 font-semibold text-800 text-center">{{ 'EXAMS.REPORT_CARD.TEXT_16' | translate }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,28 +71,28 @@
         <!-- Summary Totals Section -->
         <div class="grid p-fluid border-1 border-300 border-round-md p-3 bg-gray-50 mb-5">
             <div class="col-6 md:col-3 py-1 flex flex-column">
-                <span class="text-500 font-semibold text-xs uppercase">Marks Compiled</span>
+                <span class="text-500 font-semibold text-xs uppercase">{{ 'EXAMS.REPORT_CARD.TEXT_17' | translate }}</span>
                 <span class="text-900 font-bold text-lg mt-1">
                     {{ summary()?.obtainedMarks || '0' }} / {{ summary()?.totalMarks || '0' }}
                 </span>
             </div>
             <div class="col-6 md:col-3 py-1 flex flex-column">
-                <span class="text-500 font-semibold text-xs uppercase">Overall Percentage</span>
+                <span class="text-500 font-semibold text-xs uppercase">{{ 'EXAMS.REPORT_CARD.TEXT_18' | translate }}</span>
                 <span class="text-900 font-bold text-lg mt-1">{{ summary()?.percentage }}%</span>
             </div>
             <div class="col-6 md:col-3 py-1 flex flex-column">
-                <span class="text-500 font-semibold text-xs uppercase">Grade Point Average</span>
+                <span class="text-500 font-semibold text-xs uppercase">{{ 'EXAMS.REPORT_CARD.TEXT_19' | translate }}</span>
                 <span class="text-900 font-bold text-lg mt-1">{{ summary()?.gpa || '0.0' }}</span>
             </div>
             <div class="col-6 md:col-3 py-1 flex flex-column">
-                <span class="text-500 font-semibold text-xs uppercase">Class Rank</span>
+                <span class="text-500 font-semibold text-xs uppercase">{{ 'EXAMS.REPORT_CARD.TEXT_20' | translate }}</span>
                 <span class="text-primary font-bold text-lg mt-1">Rank #{{ summary()?.classRank || '-' }}</span>
             </div>
         </div>
 
         <!-- Promotion Status & Outcomes -->
         <div class="mb-5 flex align-items-center gap-3">
-            <span class="text-700 font-semibold">Promotion Result Status:</span>
+            <span class="text-700 font-semibold">{{ 'EXAMS.REPORT_CARD.TEXT_21' | translate }}</span>
             <span class="px-3 py-1.5 text-sm font-bold border-round-md" 
                   [ngClass]="{
                      'bg-green-100 text-green-700': summary()?.overallResult?.name === 'Promoted',
@@ -106,13 +106,13 @@
         <!-- Verification Signatures Area -->
         <div class="grid mt-8 pt-5">
             <div class="col-4 text-center">
-                <div class="border-top-1 border-400 mx-3 pt-2 text-600 text-xs font-semibold">Class Teacher</div>
+                <div class="border-top-1 border-400 mx-3 pt-2 text-600 text-xs font-semibold">{{ 'EXAMS.REPORT_CARD.TEXT_22' | translate }}</div>
             </div>
             <div class="col-4 text-center">
-                <div class="border-top-1 border-400 mx-3 pt-2 text-600 text-xs font-semibold">Parent / Guardian</div>
+                <div class="border-top-1 border-400 mx-3 pt-2 text-600 text-xs font-semibold">{{ 'EXAMS.REPORT_CARD.TEXT_23' | translate }}</div>
             </div>
             <div class="col-4 text-center">
-                <div class="border-top-1 border-400 mx-3 pt-2 text-600 text-xs font-semibold">Principal / Authority</div>
+                <div class="border-top-1 border-400 mx-3 pt-2 text-600 text-xs font-semibold">{{ 'EXAMS.REPORT_CARD.TEXT_24' | translate }}</div>
             </div>
         </div>
     </div>

@@ -1,17 +1,17 @@
 <div [formGroup]="group" class="grid p-fluid">
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Student Mobile" [required]="true" [control]="group.get('contactNumber')">
-            <app-erp-input formControlName="contactNumber" maxlength="10" [numericOnly]="true" placeholder="Enter 10-digit mobile number"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_CONTACT_FORM.LABEL_1' | translate" [required]="true" [control]="group.get('contactNumber')">
+            <app-erp-input formControlName="contactNumber" maxlength="10" [numericOnly]="true" [placeholder]="'STUDENTS.STUDENT_CONTACT_FORM.PLACEHOLDER_2' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Email" [control]="group.get('email')">
-            <app-erp-input formControlName="email" type="email" maxlength="100" placeholder="student@example.com"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_CONTACT_FORM.LABEL_3' | translate" [control]="group.get('email')">
+            <app-erp-input formControlName="email" type="email" maxlength="100" [placeholder]="'STUDENTS.STUDENT_CONTACT_FORM.PLACEHOLDER_4' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
     <div class="col-12 md:col-4">
-        <app-erp-form-field label="Emergency Contact" [required]="true" [control]="group.get('emergencyContact')">
-            <app-erp-input formControlName="emergencyContact" maxlength="100" placeholder="Enter emergency contact"></app-erp-input>
+        <app-erp-form-field [label]="'STUDENTS.STUDENT_CONTACT_FORM.LABEL_5' | translate" [required]="true" [control]="group.get('emergencyContact')">
+            <app-erp-input formControlName="emergencyContact" maxlength="100" [placeholder]="'STUDENTS.STUDENT_CONTACT_FORM.PLACEHOLDER_6' | translate"></app-erp-input>
         </app-erp-form-field>
     </div>
 </div>

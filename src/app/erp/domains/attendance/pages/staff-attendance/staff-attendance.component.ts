@@ -13,11 +13,14 @@ import { StatusBadgeComponent, BadgeSeverity } from '../../../../shared/ui/badge
 import { HasPermissionDirective } from '../../../../core/permissions/directives/has-permission.directive';
 import { ERP_PERMISSIONS } from '../../../../core/permissions/constants/permission.constants';
 import { StaffAttendanceStatus } from '../../models/attendance.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-staff-attendance',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent, HasPermissionDirective],
+  imports: [
+        CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, ToastModule, PageHeaderComponent, ErpTableComponent, StatusBadgeComponent, HasPermissionDirective, TranslatePipe
+    ],
   providers: [MessageService],
   templateUrl: './staff-attendance.component.html',
   styleUrls: ['./staff-attendance.component.scss']
