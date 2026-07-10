@@ -3,6 +3,7 @@ import { BaseApiService } from '../../../core/api/base/base-api.service';
 import { NotificationData } from '../models/dashboard.model';
 import { MOCK_NOTIFICATIONS } from '../store/dashboard.mock';
 import { catchError, of, delay } from 'rxjs';
+import { API_ENDPOINTS } from '../../../core/api/constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class NotificationService extends BaseApiService {
     this.loading.set(true);
     
     // Using a slight artificial delay (500ms) to ensure the skeleton loaders are visible for premium UX
-    this.get<any>('/dashboard/admin/notifications')
+    this.get<any>(API_ENDPOINTS.DASHBOARD.ADMIN_NOTIFICATIONS)
       .pipe(
         delay(500),
         catchError(() => {

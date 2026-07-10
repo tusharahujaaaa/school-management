@@ -4,6 +4,7 @@ import { StatData, ActivityData, EventData, NotificationData, QuickAction } from
 import { MOCK_EVENTS, MOCK_NOTIFICATIONS, MOCK_QUICK_ACTIONS } from '../store/dashboard.mock';
 import { forkJoin, catchError, of, delay } from 'rxjs';
 import { AuthService } from '../../auth/services/auth.service';
+import { API_ENDPOINTS } from '../../../core/api/constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +45,7 @@ export class DashboardService extends BaseApiService {
     this.loading.set(true);
 
     if (role === 'student') {
-      this.get<any>('/dashboard/student').pipe(
+      this.get<any>(API_ENDPOINTS.DASHBOARD.STUDENT).pipe(
         delay(600),
         catchError(() => of(null))
       ).subscribe({
@@ -66,7 +67,7 @@ export class DashboardService extends BaseApiService {
         }
       });
     } else if (role === 'teacher') {
-      this.get<any>('/dashboard/teacher').pipe(
+      this.get<any>(API_ENDPOINTS.DASHBOARD.TEACHER).pipe(
         delay(600),
         catchError(() => of(null))
       ).subscribe({
@@ -89,12 +90,12 @@ export class DashboardService extends BaseApiService {
       });
     } else {
       forkJoin({
-        stats: this.get<any>('/dashboard/admin/stats').pipe(catchError(() => of(null))),
-        activities: this.get<any>('/dashboard/admin/recent-activities').pipe(catchError(() => of(null))),
-        notifications: this.get<any>('/dashboard/admin/notifications').pipe(catchError(() => of(null))),
-        events: this.get<any>('/dashboard/admin/events').pipe(catchError(() => of(null))),
-        attendanceOverview: this.get<any>('/dashboard/admin/attendance-overview').pipe(catchError(() => of(null))),
-        feeOverview: this.get<any>('/dashboard/admin/fee-overview').pipe(catchError(() => of(null)))
+        stats: this.get<any>(API_ENDPOINTS.DASHBOARD.ADMIN_STATS).pipe(catchError(() => of(null))),
+        activities: this.get<any>(API_ENDPOINTS.DASHBOARD.ADMIN_ACTIVITIES).pipe(catchError(() => of(null))),
+        notifications: this.get<any>(API_ENDPOINTS.DASHBOARD.ADMIN_NOTIFICATIONS).pipe(catchError(() => of(null))),
+        events: this.get<any>(API_ENDPOINTS.DASHBOARD.ADMIN_EVENTS).pipe(catchError(() => of(null))),
+        attendanceOverview: this.get<any>(API_ENDPOINTS.DASHBOARD.ADMIN_ATTENDANCE).pipe(catchError(() => of(null))),
+        feeOverview: this.get<any>(API_ENDPOINTS.DASHBOARD.ADMIN_FEES).pipe(catchError(() => of(null)))
       }).pipe(
         delay(600) // Premium UX loading transition
       ).subscribe({
