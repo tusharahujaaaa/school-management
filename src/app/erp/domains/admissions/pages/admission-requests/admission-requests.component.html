@@ -63,14 +63,14 @@
   <!-- ── Filter & Search Control Panel ─────────────────── -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column md:flex-row gap-3 md:align-items-center justify-content-between">
     <!-- Search -->
-    <div class="flex-grow-1 relative" style="max-width: 320px;">
-      <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base" style="transform: translateY(-50%);"></i>
-      <input type="text" pInputText placeholder="Search student name or phone..." (input)="onSearch($event)" class="w-full pl-5 p-inputtext-sm border-round-md" style="padding-left: 2.2rem;" />
+    <div class="flex-grow-1 relative max-w-box" >
+      <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base translate-y-half" ></i>
+      <input type="text" pInputText placeholder="Search student name or phone..." (input)="onSearch($event)" class="w-full pl-5 p-inputtext-sm border-round-md search-input-padded"  />
     </div>
 
     <!-- Pipeline Filter -->
     <div class="flex flex-wrap gap-2">
-      <div style="min-width: 180px;">
+      <div  class="custom-style-2">
         <p-select [options]="statusFilters" [(ngModel)]="selectedStatusFilter" (onChange)="onFilterChange()" optionLabel="label" optionValue="value" placeholder="Filter Status" class="w-full border-round-md"></p-select>
       </div>
     </div>
@@ -92,7 +92,7 @@
 
     <!-- Table data -->
     <div *ngIf="admissionsService.leads().length > 0" class="overflow-x-auto">
-      <table class="w-full text-sm" style="border-collapse: collapse; min-width: 900px;">
+      <table class="w-full text-sm erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-left">
             <th class="p-3 text-500 font-semibold">Student Particulars</th>
@@ -122,14 +122,14 @@
               <div class="font-medium text-800">{{ lead.parentName || 'N/A' }}</div>
               <div class="text-600 text-xs mt-0.5"><i class="pi pi-phone text-400 text-2xs mr-1"></i>{{ lead.parentPhone }}</div>
               <div class="text-600 text-2xs mt-0.5" *ngIf="lead.parentEmail"><i class="pi pi-envelope text-400 text-2xs mr-1"></i>{{ lead.parentEmail }}</div>
-              <div class="text-500 text-2xs mt-1 text-overflow-ellipsis overflow-hidden" *ngIf="lead.address" style="max-width: 200px;">
+              <div class="text-500 text-2xs mt-1 text-overflow-ellipsis overflow-hidden max-w-box" *ngIf="lead.address" >
                 <i class="pi pi-map-marker text-400 text-2xs mr-1"></i>{{ lead.address }}
               </div>
             </td>
 
             <!-- Message -->
             <td class="p-3">
-              <div class="text-700 text-xs line-height-3" style="max-width: 250px;">
+              <div class="text-700 text-xs line-height-3 max-w-box" >
                 {{ lead.message || 'No submission message.' }}
               </div>
               <div class="text-400 text-3xs mt-2">
@@ -146,7 +146,7 @@
 
             <!-- Coordinating Notes -->
             <td class="p-3 text-xs text-800">
-              <div *ngIf="lead.notes" class="bg-surface-50 p-2 border-round border-1 surface-border italic" style="max-width: 220px; word-break: break-word;">
+              <div *ngIf="lead.notes" class="bg-surface-50 p-2 border-round border-1 surface-border italic max-w-box" >
                 "{{ lead.notes }}"
               </div>
               <div *ngIf="!lead.notes" class="text-400 text-xs italic">

@@ -90,7 +90,7 @@
             <span class="font-semibold text-blue-700">{{ stats().onLeave }} Leave</span>
           </div>
         </div>
-        <div class="w-full bg-surface-200 border-round" style="height:10px">
+        <div class="w-full bg-surface-200 border-round custom-style-1" >
           <div class="bg-green-500 border-round h-full transition-all" [style.width.%]="stats().overallPercentage"></div>
         </div>
       </div>
@@ -109,7 +109,7 @@
         
         <ng-template #percentageTmpl let-cls>
           <div class="flex align-items-center gap-2">
-            <div class="flex-grow-1 bg-surface-200 border-round" style="height:6px; min-width:60px">
+            <div class="flex-grow-1 bg-surface-200 border-round custom-style-2" >
               <div class="border-round h-full"
                    [ngClass]="cls.percentage >= 90 ? 'bg-green-500' : cls.percentage >= 75 ? 'bg-orange-400' : 'bg-red-500'"
                    [style.width.%]="cls.percentage"></div>

@@ -4,3 +4,36 @@
 // @use '@/assets/demo/demo.scss';
 // @use '../app/theme/theme.scss';
 @use '../app/erp/theme/theme.scss';
+
+// ==========================================
+// Custom Utility Classes & Globals
+// ==========================================
+
+.tracking-tight { letter-spacing: -0.5px !important; }
+.tracking-wide { letter-spacing: 0.06em !important; }
+
+/* Custom Brand Colors (Auth) */
+.bg-purple-light { background: #f3f0ff !important; }
+.bg-purple-soft { background: #ede9fe !important; }
+.text-purple-brand { color: #7c3aed !important; }
+.bg-emerald-500 { background: #10b981 !important; }
+.text-emerald-500 { color: #10b981 !important; }
+.bg-green-light { background: #dcfce7 !important; }
+.text-green-brand { color: #22c55e !important; }
+.bg-cyan-light { background: #ecfeff !important; }
+.text-cyan-brand { color: #06b6d4 !important; }
+
+/* Gradients */
+.bg-gradient-login { background: linear-gradient(135deg, #f8fafc 0%, #eef7f3 100%) !important; }
+.bg-gradient-primary { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important; }
+.bg-gradient-teal { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%) !important; }
+
+/* Tables */
+.erp-table-responsive { border-collapse: collapse !important; min-width: 800px; }
+.erp-table-profile { border-collapse: collapse !important; min-width: 650px; }
+
+/* Layout adjustments */
+.absolute-center { transform: translate(-50%, -50%) !important; }
+.translate-y-half { transform: translateY(-50%) !important; }
+.translate-25-neg25 { transform: translate(25%, -25%) !important; }
+.search-input-padded { padding-left: 2.2rem !important; }

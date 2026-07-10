@@ -35,7 +35,7 @@
         <button class="p-link relative w-2rem h-2rem flex align-items-center justify-content-center hover:surface-100 border-round transition-colors" 
                 (click)="toggleBell()" title="Notifications" [class.bg-blue-50]="bellOpen()">
           <i class="pi pi-bell text-700" [class.text-primary]="bellOpen()"></i>
-          <span class="absolute top-0 right-0 w-0.5rem h-0.5rem bg-red-500 border-circle border-1 surface-card" style="transform: translate(25%, -25%)"></span>
+          <span class="absolute top-0 right-0 w-0.5rem h-0.5rem bg-red-500 border-circle border-1 surface-card translate-25-neg25" ></span>
         </button>
 
         <!-- Dropdown Card -->
@@ -50,7 +50,7 @@
           </div>
 
           <!-- Dropdown Body -->
-          <div class="notifications-list flex-grow-1 overflow-y-auto pr-1" style="max-height: 280px;" (scroll)="onDropdownScroll($event)">
+          <div class="notifications-list flex-grow-1 overflow-y-auto pr-1 custom-style-1"  (scroll)="onDropdownScroll($event)">
             <!-- Loading state Skeletons -->
             <div *ngIf="notificationService.loading() && notificationService.notifications().length === 0" class="flex flex-column gap-3 py-2">
               <div *ngFor="let i of [1,2,3]" class="flex align-items-start gap-3 p-3 border-round-xl surface-50 border-1 surface-border">

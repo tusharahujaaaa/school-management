@@ -104,7 +104,7 @@
                   Term Duration: {{ formatDate(active.startDate) }} to {{ formatDate(active.endDate) }}
                 </span>
               </div>
-              <div class="bg-green-50 border-circle p-3 flex align-items-center justify-content-center" style="width: 3.5rem; height: 3.5rem;">
+              <div class="bg-green-50 border-circle p-3 flex align-items-center justify-content-center avatar-box" >
                 <i class="pi pi-check-circle text-green-600 text-2xl"></i>
               </div>
             </div>
@@ -129,7 +129,7 @@
           </div>
           
           <div class="overflow-x-auto">
-            <table class="w-full text-sm" style="border-collapse: collapse;">
+            <table class="w-full text-sm erp-table-responsive" >
               <thead>
                 <tr class="surface-50 border-bottom-1 surface-border text-left">
                   <th class="p-3 font-semibold text-600">Session Year</th>
@@ -208,7 +208,7 @@
               </div>
 
               <div class="overflow-y-auto max-h-20rem" *ngIf="detail.students && detail.students.length > 0">
-                <table class="w-full text-xs" style="border-collapse: collapse;">
+                <table class="w-full text-xs erp-table-responsive" >
                   <thead>
                     <tr class="surface-100 border-bottom-1 surface-border text-left">
                       <th class="p-2.5 font-semibold text-600">Roll No</th>
@@ -249,7 +249,7 @@
               </div>
 
               <div class="overflow-y-auto max-h-20rem" *ngIf="detail.subjects && detail.subjects.length > 0">
-                <table class="w-full text-xs" style="border-collapse: collapse;">
+                <table class="w-full text-xs erp-table-responsive" >
                   <thead>
                     <tr class="surface-100 border-bottom-1 surface-border text-left">
                       <th class="p-2.5 font-semibold text-600">Subject Name</th>

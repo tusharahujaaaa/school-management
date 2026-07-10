@@ -59,9 +59,9 @@
   <!-- ── Filter & Search Control Panel ─────────────────── -->
   <div class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column md:flex-row gap-3 md:align-items-center justify-content-between">
     <!-- Search -->
-    <div class="flex-grow-1 relative" style="max-width: 320px;">
-      <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base" style="transform: translateY(-50%);"></i>
-      <input type="text" pInputText placeholder="Search name or subject..." (input)="onSearch($event)" class="w-full pl-5 p-inputtext-sm border-round-md" style="padding-left: 2.2rem;" />
+    <div class="flex-grow-1 relative max-w-box" >
+      <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base translate-y-half" ></i>
+      <input type="text" pInputText placeholder="Search name or subject..." (input)="onSearch($event)" class="w-full pl-5 p-inputtext-sm border-round-md search-input-padded"  />
     </div>
   </div>
 
@@ -81,7 +81,7 @@
 
     <!-- Table data -->
     <div *ngIf="teachersService.teachers().length > 0" class="overflow-x-auto">
-      <table class="w-full text-sm" style="border-collapse: collapse; min-width: 800px;">
+      <table class="w-full text-sm erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-left">
             <th class="p-3 text-500 font-semibold">Teacher</th>
@@ -98,7 +98,7 @@
             <!-- Teacher particulars -->
             <td class="p-3">
               <div class="flex align-items-center gap-3">
-                <div class="w-2.5rem h-2.5rem border-circle flex align-items-center justify-content-center bg-blue-100 text-blue-800 font-bold overflow-hidden" style="width: 40px; height: 40px;">
+                <div class="w-2.5rem h-2.5rem border-circle flex align-items-center justify-content-center bg-blue-100 text-blue-800 font-bold overflow-hidden custom-style-2" >
                   <img *ngIf="teacher.photoUrl" [src]="teacher.photoUrl" alt="photo" class="w-full h-full object-cover" />
                   <span *ngIf="!teacher.photoUrl">{{ teacher.name[0] }}</span>
                 </div>

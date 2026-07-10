@@ -76,7 +76,7 @@
       </div>
       <span class="text-lg font-bold text-primary">{{ markingProgress() }}% Complete</span>
     </div>
-    <p-progressbar [value]="markingProgress()" [showValue]="false" styleClass="w-full" style="height: 8px;"></p-progressbar>
+    <p-progressbar [value]="markingProgress()" [showValue]="false" styleClass="w-full"  class="custom-style-1"></p-progressbar>
   </div>
 
   <!-- Summary Chips -->
@@ -119,8 +119,8 @@
       <!-- Custom Templates -->
       <ng-template #nameTmpl let-student>
         <div class="flex align-items-center gap-3 py-1">
-          <div class="border-circle bg-primary-100 text-primary font-bold flex align-items-center justify-content-center text-sm shadow-sm"
-               style="width:2.25rem; height:2.25rem; flex-shrink:0">
+          <div class="border-circle bg-primary-100 text-primary font-bold flex align-items-center justify-content-center text-sm shadow-sm avatar-box"
+               >
             {{ student.name.charAt(0) }}
           </div>
           <div>

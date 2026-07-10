@@ -101,7 +101,7 @@
       <span class="text-sm font-semibold text-500">Filtered: {{ selectedClass() }}</span>
     </div>
     <div class="overflow-x-auto">
-      <table class="w-full" style="border-collapse: collapse;">
+      <table class="w-full erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
             <th class="p-3 text-left">Class Unit</th>
@@ -121,7 +121,7 @@
             <td class="p-3 text-center text-orange-800 bg-orange-50 font-bold">{{ summary.late }}</td>
             <td class="p-3">
               <div class="flex align-items-center justify-content-center gap-3">
-                <div class="w-6rem bg-surface-200 border-round hidden md:block" style="height: 6px;">
+                <div class="w-6rem bg-surface-200 border-round hidden md:block custom-style-1" >
                   <div class="border-round h-full"
                     [ngClass]="summary.percentage >= 90 ? 'bg-green-500' : 'bg-orange-500'"
                     [style.width.%]="summary.percentage"></div>
@@ -150,7 +150,7 @@
       </div>
     </div>
     <div class="overflow-x-auto">
-      <table class="w-full" style="border-collapse: collapse;">
+      <table class="w-full erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
             <th class="p-3 text-left">Student</th>
@@ -164,9 +164,9 @@
           <tr *ngFor="let alert of filteredAlerts()" class="hover:surface-50 transition-colors border-bottom-1 surface-border">
             <td class="p-3">
               <div class="flex align-items-center gap-3">
-                <div class="border-circle flex align-items-center justify-content-center text-sm font-bold shadow-sm"
+                <div class="border-circle flex align-items-center justify-content-center text-sm font-bold shadow-sm avatar-box"
                      [ngClass]="alert.severity === 'critical' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600'"
-                     style="width:2.5rem;height:2.5rem">
+                     >
                   {{ alert.studentName.charAt(0) }}
                 </div>
                 <div>
@@ -208,7 +208,7 @@
         <div class="border-round-xl p-4 surface-card border-1 border-300 shadow-1 hover:shadow-2 transition-all flex flex-column gap-3">
           <div class="flex justify-content-between align-items-start">
             <div class="flex align-items-center gap-3">
-              <div class="border-circle bg-purple-100 text-purple-700 font-bold flex align-items-center justify-content-center text-sm shadow-sm" style="width: 2.5rem; height: 2.5rem;">
+              <div class="border-circle bg-purple-100 text-purple-700 font-bold flex align-items-center justify-content-center text-sm shadow-sm avatar-box" >
                 {{ member.name.charAt(0) }}
               </div>
               <div>
@@ -234,7 +234,7 @@
       <span class="text-sm font-semibold text-500">Historical logs</span>
     </div>
     <div class="overflow-x-auto">
-      <table class="w-full" style="border-collapse: collapse;">
+      <table class="w-full erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-500 font-semibold text-sm">
             <th class="p-3 text-left">Date</th>

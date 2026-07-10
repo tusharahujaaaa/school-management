@@ -39,7 +39,7 @@
               {{ student().attendancePercentage }}%
             </span>
           </div>
-          <div class="w-full bg-surface-200 border-round" style="height:10px">
+          <div class="w-full bg-surface-200 border-round custom-style-1" >
             <div class="h-full border-round"
                  [ngClass]="student().attendancePercentage >= 90 ? 'bg-green-500' : student().attendancePercentage >= 75 ? 'bg-orange-400' : 'bg-red-500'"
                  [style.width.%]="student().attendancePercentage"></div>
@@ -87,7 +87,7 @@
           <i class="pi pi-chart-bar mr-2 text-primary"></i>Month-wise Breakdown
         </h3>
         <div class="overflow-x-auto">
-          <table class="w-full" style="border-collapse: collapse;">
+          <table class="w-full erp-table-responsive" >
             <thead>
               <tr class="surface-50">
                 <th class="p-3 text-left border-bottom-1 surface-border text-500 font-medium text-sm">Month</th>
@@ -105,7 +105,7 @@
                 <td class="p-3 text-red-500 font-semibold">{{ row.absent }}</td>
                 <td class="p-3">
                   <div class="flex align-items-center gap-2">
-                    <div class="flex-grow-1 bg-surface-200 border-round" style="height:6px; min-width:60px">
+                    <div class="flex-grow-1 bg-surface-200 border-round custom-style-2" >
                       <div class="border-round h-full"
                            [ngClass]="getPctClass(row.pct).replace('text-', 'bg-')"
                            [style.width.%]="row.pct"></div>

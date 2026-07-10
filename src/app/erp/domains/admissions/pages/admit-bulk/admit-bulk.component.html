@@ -28,7 +28,7 @@
 
         <!-- Dropzone -->
         <div class="border-2 border-dashed border-300 border-round-lg text-center p-5 cursor-pointer hover:border-primary transition-colors mb-4" (click)="fileInput.click()">
-          <input type="file" #fileInput (change)="onFileSelected($event)" accept=".csv" style="display: none;" />
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept=".csv"  class="custom-style-1" />
           <i class="pi pi-file-excel text-400 text-4xl block mb-2"></i>
           <span class="text-800 text-sm font-semibold block mb-1">Choose CSV File</span>
           <span class="text-500 text-2xs block">Max size: 5MB</span>
@@ -51,7 +51,7 @@
         <!-- Import Progress Widget -->
         <div *ngIf="isImporting() || importCompleted()" class="border-t-1 surface-border pt-4 mt-3">
           <span class="text-700 text-xs font-semibold block mb-2">Import Progress: {{ importProgress() }}%</span>
-          <div class="w-full bg-gray-100 border-round-md mb-3 overflow-hidden" style="height: 8px;">
+          <div class="w-full bg-gray-100 border-round-md mb-3 overflow-hidden custom-style-2" >
             <div class="bg-success h-full transition-all duration-300" [style.width.%]="importProgress()"></div>
           </div>
           <div class="flex justify-content-between text-2xs font-semibold">
@@ -75,8 +75,8 @@
           <span class="text-400 text-xs block mt-1">Upload a CSV on the left panel to review rows before enrollment runs.</span>
         </div>
 
-        <div *ngIf="parsedStudents().length > 0" class="overflow-x-auto" style="max-height: 400px;">
-          <table class="w-full text-xs" style="border-collapse: collapse; min-width: 800px;">
+        <div *ngIf="parsedStudents().length > 0" class="overflow-x-auto custom-style-4">
+          <table class="w-full text-xs erp-table-responsive" >
             <thead>
               <tr class="surface-100 border-bottom-1 surface-border text-left">
                 <th class="p-2 text-600 font-semibold">Row</th>
@@ -115,7 +115,7 @@
       <!-- Import Logs -->
       <div class="surface-card shadow-1 border-round-xl p-4" *ngIf="isImporting() || importLogs().length > 0">
         <h3 class="text-900 font-semibold text-base mb-3"><i class="pi pi-list text-primary mr-2"></i>Execution Logs</h3>
-        <div class="bg-gray-900 border-round-lg p-3 overflow-y-auto text-green-400 font-mono text-xs flex flex-column gap-1.5" style="height: 180px; line-height: 1.5;">
+        <div class="bg-gray-900 border-round-lg p-3 overflow-y-auto text-green-400 font-mono text-xs flex flex-column gap-1.5 custom-style-3" >
           <div *ngIf="importLogs().length === 0" class="text-500 italic">Initializing runner...</div>
           <div *ngFor="let log of importLogs()" [ngClass]="{'text-red-400': log.includes('Failed'), 'text-green-400': log.includes('successfully')}">
             {{ log }}

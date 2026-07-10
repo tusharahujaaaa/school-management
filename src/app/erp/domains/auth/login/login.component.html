@@ -9,9 +9,9 @@
 
       <!-- Logo -->
       <div class="flex align-items-center gap-2 mb-6">
-        <div class="w-3rem h-3rem border-circle flex align-items-center justify-content-center"
-          style="background:#f3f0ff;">
-          <i class="pi pi-graduation-cap text-xl" style="color:#7c3aed"></i>
+        <div class="w-3rem h-3rem border-circle flex align-items-center justify-content-center bg-purple-light"
+          >
+          <i class="pi pi-graduation-cap text-xl text-purple-brand" ></i>
         </div>
 
         <div>
@@ -26,7 +26,7 @@
 
       <!-- Heading -->
       <div class="mb-6">
-        <h1 class="text-4xl font-bold text-900 mb-3 line-height-2" style="letter-spacing:-0.5px">
+        <h1 class="text-4xl font-bold text-900 mb-3 line-height-2 tracking-tight" >
           Welcome Back 👋
         </h1>
 
@@ -45,7 +45,7 @@
           </label>
 
           <span class="p-input-icon-left w-full">
-            <i class="pi pi-envelope"></i>
+            <!-- <i class="pi pi-envelope"></i> -->
             <input pInputText type="email" placeholder="Enter your email" formControlName="email"
               class="w-full p-3 border-round-xl"
               [class.p-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
@@ -72,7 +72,7 @@
               class="w-full p-3 border-round-xl"
               [class.p-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
               placeholder="Enter your password" />
-            <p-inputicon (click)="toggleMask()" style="cursor: pointer">
+            <p-inputicon (click)="toggleMask()"  class="custom-style-1">
               @if (mask()) {
               <svg data-p-icon="eye"></svg>
               } @else {
@@ -82,17 +82,17 @@
           </p-iconfield>
           <!-- <p-iconfield>
             <p-inputicon>
-              <svg data-p-icon="lock" width="16" height="16" style="width: 16px; height: 16px;"></svg>
+              <svg data-p-icon="lock" width="16" height="16"  class="custom-style-2"></svg>
             </p-inputicon>
             <input pPassword [feedback]="false" [showPassword]="!mask()" [fluid]="true" formControlName="password"
               class="w-full p-3 border-round-xl" 
               [class.p-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
               placeholder="Enter your password" />
-            <p-inputicon (click)="toggleMask()" style="cursor: pointer">
+            <p-inputicon (click)="toggleMask()"  class="custom-style-3">
               @if (mask()) {
-                <svg data-p-icon="eye" width="16" height="16" style="width: 16px; height: 16px;"></svg>
+                <svg data-p-icon="eye" width="16" height="16"  class="custom-style-4"></svg>
               } @else {
-                <svg data-p-icon="eye-slash" width="16" height="16" style="width: 16px; height: 16px;"></svg>
+                <svg data-p-icon="eye-slash" width="16" height="16"  class="custom-style-5"></svg>
               }
             </p-inputicon>
           </p-iconfield> -->
@@ -117,7 +117,7 @@
             </span>
           </div>
 
-          <a routerLink="/erp/forgot-password" class="text-sm font-medium no-underline cursor-pointer" style="color:#10b981">
+          <a routerLink="/erp/forgot-password" class="text-sm font-medium no-underline cursor-pointer text-emerald-500" >
             Forgot Password?
           </a>
         </div>
@@ -125,10 +125,7 @@
 
         <!-- Login Button -->
         <button pButton type="submit" label="Sign In" icon="pi pi-arrow-right" iconPos="right" [loading]="loading()"
-          [disabled]="loading()" class="w-full p-button-lg border-round-xl" style="
-            background:#10b981;
-            border:none;
-          "></button>
+          [disabled]="loading()" class="w-full p-button-lg border-round-xl custom-style-6" ></button>
 
         <!-- Divider -->
         <div class="flex align-items-center my-2">
@@ -151,14 +148,7 @@
     </div>
 
     <!-- Right Section -->
-    <div class="hidden lg:flex lg:col-6 p-8 flex-column justify-content-center relative" style="
-        background:
-        linear-gradient(
-          135deg,
-          #f8fafc 0%,
-          #eef7f3 100%
-        );
-      ">
+    <div class="hidden lg:flex lg:col-6 p-8 flex-column justify-content-center relative custom-style-7" >
 
       <!-- Top Card -->
       <div class="surface-card border-round-2xl p-5 shadow-1 mb-4">
@@ -174,9 +164,9 @@
             </h2>
           </div>
 
-          <div class="w-4rem h-4rem border-round-2xl flex align-items-center justify-content-center"
-            style="background:#dcfce7;">
-            <i class="pi pi-check-circle text-2xl" style="color:#22c55e"></i>
+          <div class="w-4rem h-4rem border-round-2xl flex align-items-center justify-content-center bg-green-light"
+            >
+            <i class="pi pi-check-circle text-2xl text-green-brand" ></i>
           </div>
         </div>
 
@@ -188,9 +178,9 @@
 
         <div class="col-6">
           <div class="surface-card p-4 border-round-2xl shadow-1 h-full">
-            <div class="w-3rem h-3rem border-round-xl flex align-items-center justify-content-center mb-3"
-              style="background:#ede9fe;">
-              <i class="pi pi-users" style="color:#7c3aed"></i>
+            <div class="w-3rem h-3rem border-round-xl flex align-items-center justify-content-center mb-3 bg-purple-soft"
+              >
+              <i class="pi pi-users text-purple-brand" ></i>
             </div>
 
             <h3 class="text-2xl text-900 mb-1">
@@ -205,9 +195,9 @@
 
         <div class="col-6">
           <div class="surface-card p-4 border-round-2xl shadow-1 h-full">
-            <div class="w-3rem h-3rem border-round-xl flex align-items-center justify-content-center mb-3"
-              style="background:#ecfeff;">
-              <i class="pi pi-building" style="color:#06b6d4"></i>
+            <div class="w-3rem h-3rem border-round-xl flex align-items-center justify-content-center mb-3 bg-cyan-light"
+              >
+              <i class="pi pi-building text-cyan-brand" ></i>
             </div>
 
             <h3 class="text-2xl text-900 mb-1">

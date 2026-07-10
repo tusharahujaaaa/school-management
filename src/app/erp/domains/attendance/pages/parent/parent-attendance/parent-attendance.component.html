@@ -72,7 +72,7 @@
                 {{ child().attendancePercentage }}%
               </span>
             </div>
-            <div class="w-full bg-surface-200 border-round" style="height:10px">
+            <div class="w-full bg-surface-200 border-round custom-style-1" >
               <div class="border-round h-full transition-all"
                    [ngClass]="child().attendancePercentage >= 90 ? 'bg-green-500' : child().attendancePercentage >= 75 ? 'bg-orange-400' : 'bg-red-500'"
                    [style.width.%]="child().attendancePercentage"></div>

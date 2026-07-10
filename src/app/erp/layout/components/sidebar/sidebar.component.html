@@ -2,8 +2,8 @@
 
   <!-- Branding Header -->
   <div class="sidebar-brand px-4 py-4 border-bottom-1 surface-border flex align-items-center gap-3">
-    <div class="brand-icon flex align-items-center justify-content-center border-round-lg"
-         style="width:2.25rem; height:2.25rem; background:var(--primary-color)">
+    <div class="brand-icon flex align-items-center justify-content-center border-round-lg avatar-box"
+         >
       <i class="pi pi-graduation-cap text-white"></i>
     </div>
     <div class="overflow-hidden brand-text">
@@ -23,7 +23,7 @@
            (click)="toggleGroup(group.groupLabel)"
            [class.cursor-pointer]="!collapsed"
            class="sidebar-group-label px-2 mt-3 mb-1 flex align-items-center justify-content-between select-none">
-        <span class="text-400 text-xs font-semibold uppercase" style="letter-spacing: 0.06em">
+        <span class="text-400 text-xs font-semibold uppercase tracking-wide" >
           {{ group.groupLabel }}
         </span>
         <i *ngIf="!collapsed"

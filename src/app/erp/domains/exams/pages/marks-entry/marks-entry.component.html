@@ -41,12 +41,12 @@
     <p-table [value]="roster()" [loading]="loading()" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped">
         <ng-template pTemplate="header">
             <tr>
-                <th style="width: 10%" class="font-bold text-sm text-800">Roll No.</th>
-                <th style="width: 30%" class="font-bold text-sm text-800">Student Name</th>
-                <th style="width: 15%" class="font-bold text-sm text-800">Marks Obtained</th>
-                <th style="width: 12%" class="font-bold text-sm text-800">Grace Marks</th>
-                <th style="width: 13%" class="font-bold text-sm text-800 text-center">Score Preview</th>
-                <th style="width: 20%" class="font-bold text-sm text-800">Remarks / Log Note</th>
+                <th  class="font-bold text-sm text-800 col-width">Roll No.</th>
+                <th  class="font-bold text-sm text-800 col-width">Student Name</th>
+                <th  class="font-bold text-sm text-800 col-width">Marks Obtained</th>
+                <th  class="font-bold text-sm text-800 col-width">Grace Marks</th>
+                <th  class="font-bold text-sm text-800 text-center col-width">Score Preview</th>
+                <th  class="font-bold text-sm text-800 col-width">Remarks / Log Note</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row>

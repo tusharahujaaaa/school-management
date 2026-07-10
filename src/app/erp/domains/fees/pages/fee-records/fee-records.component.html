@@ -27,23 +27,23 @@
     class="surface-card shadow-1 border-round-xl p-4 mb-4 flex flex-column md:flex-row gap-3 md:align-items-center justify-content-between">
 
     <!-- Search Query -->
-    <div class="flex-grow-1 relative" style="max-width: 320px;">
-      <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base"
-        style="transform: translateY(-50%);"></i>
+    <div class="flex-grow-1 relative max-w-box" >
+      <i class="pi pi-search absolute top-50 left-3 translate-y-n50 text-400 text-base translate-y-half"
+        ></i>
       <input type="text" pInputText placeholder="Search student or roll number..." (input)="onSearch($event)"
-        class="w-full pl-5 p-inputtext-sm border-round-md" style="padding-left: 2.2rem;" />
+        class="w-full pl-5 p-inputtext-sm border-round-md search-input-padded"  />
     </div>
 
     <!-- Dropdown filters -->
     <div class="flex flex-wrap gap-2">
       <!-- Class select -->
-      <div style="min-width: 160px;">
+      <div  class="custom-style-2">
         <p-select [options]="classesList()" [(ngModel)]="classFilter" (onChange)="onFilterChange()" optionLabel="label"
           optionValue="value" placeholder="Select Class" class="w-full border-round-md"></p-select>
       </div>
 
       <!-- Status select -->
-      <div style="min-width: 160px;">
+      <div  class="custom-style-3">
         <p-select [options]="statuses" [(ngModel)]="statusFilter" (onChange)="onFilterChange()" optionLabel="label"
           optionValue="value" placeholder="Select Status" class="w-full border-round-md"></p-select>
       </div>
@@ -68,7 +68,7 @@
 
     <!-- Table Grid -->
     <div *ngIf="filteredRecords().length > 0" class="overflow-x-auto">
-      <table class="w-full text-sm" style="border-collapse: collapse; min-width: 800px;">
+      <table class="w-full text-sm erp-table-responsive" >
         <thead>
           <tr class="surface-50 border-bottom-1 surface-border text-left">
             <th class="p-3 text-500 font-semibold">Student Details</th>
