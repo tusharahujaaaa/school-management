@@ -1,5 +1,5 @@
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
+import { provideHttpClient, withFetch, withInterceptors, HttpClient } from '@angular/common/http';
+import { ApplicationConfig, provideZonelessChangeDetection, importProvidersFrom } from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation, withInMemoryScrolling } from '@angular/router';
 import Aura from '@primeuix/themes/aura';
 import { providePrimeNG } from 'primeng/config';
@@ -8,6 +8,9 @@ import { appRoutes } from './app.routes';
 import { authInterceptor } from './app/erp/core/api/interceptors/auth.interceptor';
 import { loadingInterceptor } from './app/erp/core/api/interceptors/loading.interceptor';
 import { errorInterceptor } from './app/erp/core/api/interceptors/error.interceptor';
+
+export function HttpLoaderFactory(http: HttpClient) {
+}
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -18,6 +21,8 @@ export const appConfig: ApplicationConfig = {
         ),
         provideZonelessChangeDetection(),
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
-        MessageService // Required for global error handling toasts
+        MessageService, // Required for global error handling toasts
+        importProvidersFrom(
+        )
     ]
 };
