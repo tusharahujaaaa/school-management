@@ -103,5 +103,10 @@ export const API_ENDPOINTS = {
   TEACHERS: {
     BASE: '/teachers',
     DETAILS: (id: string) => `/teachers/${id}`
+  },
+  TRANSPORT: {
+    BUSES: '/transport/buses',
+    DETAILS: (id: string) => `/transport/buses/${id}`,
+    ASSIGNMENTS: (id: string) => `/transport/buses/${id}/assignments`
   }
 };

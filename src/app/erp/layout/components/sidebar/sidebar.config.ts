@@ -232,6 +232,15 @@ export const ERP_SIDEBAR_CONFIG: SidebarGroup[] = [
         roles: ['admin', 'principal', 'teacher'],
         permissionKey: 'exams.view',
         moduleKey: 'exams'
+      },
+      {
+        type: 'link',
+        label: 'Transport',
+        icon: 'pi pi-truck',
+        route: '/erp/transport',
+        roles: ['admin', 'principal', 'teacher', 'student', 'parent'],
+        permissionKey: 'transport.view',
+        moduleKey: 'transport'
       }
     ]
   },

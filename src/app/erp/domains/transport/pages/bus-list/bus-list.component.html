@@ -1,0 +1,118 @@
+<p-toast></p-toast>
+
+<div class="card p-6 shadow-md rounded-lg bg-surface-card border border-border">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-semibold text-text-main">Transport & Fleet Management</h1>
+            <p class="text-sm text-text-muted">Register and configure school bus routes and manage student allocations.</p>
+        </div>
+        <button pButton label="Add New Bus" icon="pi pi-plus" class="p-button-primary" (click)="openAddModal()"></button>
+    </div>
+
+    <!-- Full-Width Buses Directory -->
+    <div class="w-full">
+        <p-table [value]="transportStore.buses()" [loading]="transportStore.loading()" [rows]="10" [paginator]="true" 
+                 selectionMode="single" (onRowSelect)="selectBusRow($event.data.id)" class="w-full">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Route Name</th>
+                    <th>Plate Number</th>
+                    <th>Driver Details</th>
+                    <th>Conductor</th>
+                    <th>Capacity</th>
+                    <th>Status</th>
+                    <th class="w-24">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-bus>
+                <tr [pSelectableRow]="bus" class="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+                    <td><strong>{{ bus.routeName }}</strong></td>
+                    <td>{{ bus.plateNumber }}</td>
+                    <td>
+                        <div>{{ bus.driverName || 'N/A' }}</div>
+                        <small class="text-text-muted">{{ bus.driverPhone || '' }}</small>
+                    </td>
+                    <td>{{ bus.conductorName || 'N/A' }}</td>
+                    <td>{{ bus.capacity || 'N/A' }}</td>
+                    <td>
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold"
+                              [ngClass]="bus.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                            {{ bus.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm" (click)="openEditModal(bus); $event.stopPropagation()"></button>
+                            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm" (click)="deleteBus(bus); $event.stopPropagation()"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" class="text-center p-6 text-text-muted">No bus routes registered. Click "Add New Bus" to start.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Bus Add/Edit Dialog -->
+<p-dialog [header]="isEditMode() ? 'Edit Bus Route' : 'Add New Bus Route'" [(visible)]="busDialog" [modal]="true" [style]="{ width: '450px' }" [draggable]="false" [resizable]="false">
+    <form [formGroup]="busForm" (ngSubmit)="saveBus()" class="flex flex-col gap-4 mt-2">
+        <div class="flex flex-col gap-1">
+            <label for="routeName" class="text-sm font-semibold text-text-main">Route Name *</label>
+            <input pInputText id="routeName" formControlName="routeName" placeholder="e.g. Sector 12 Express" />
+            @if (busForm.get('routeName')?.hasError('required') && busForm.get('routeName')?.touched) {
+                <small class="text-red-500 text-xs">Route name is required.</small>
+            }
+            @if (busForm.get('routeName')?.hasError('minlength') && busForm.get('routeName')?.touched) {
+                <small class="text-red-500 text-xs">Route name must be at least 3 characters.</small>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="plateNumber" class="text-sm font-semibold text-text-main">Plate Number *</label>
+            <input pInputText id="plateNumber" formControlName="plateNumber" placeholder="e.g. DL-1CA-1234" />
+            @if (busForm.get('plateNumber')?.hasError('required') && busForm.get('plateNumber')?.touched) {
+                <small class="text-red-500 text-xs">Plate number is required.</small>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="driverName" class="text-sm font-semibold text-text-main">Driver Name</label>
+            <input pInputText id="driverName" formControlName="driverName" placeholder="Enter driver name" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="driverPhone" class="text-sm font-semibold text-text-main">Driver Phone</label>
+            <input pInputText id="driverPhone" formControlName="driverPhone" maxlength="10" placeholder="10-digit mobile number" />
+            @if (busForm.get('driverPhone')?.hasError('pattern') && busForm.get('driverPhone')?.touched) {
+                <small class="text-red-500 text-xs">Phone number must be exactly 10 digits.</small>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="conductorName" class="text-sm font-semibold text-text-main">Conductor Name</label>
+            <input pInputText id="conductorName" formControlName="conductorName" placeholder="Enter conductor name" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="capacity" class="text-sm font-semibold text-text-main">Passenger Capacity</label>
+            <input pInputText type="number" id="capacity" formControlName="capacity" placeholder="e.g. 40" />
+            @if (busForm.get('capacity')?.hasError('min') && busForm.get('capacity')?.touched) {
+                <small class="text-red-500 text-xs">Capacity must be at least 1.</small>
+            }
+        </div>
+
+        <div class="flex items-center gap-3 mt-2">
+            <label class="text-sm font-semibold text-text-main">Route Status</label>
+            <p-toggleButton formControlName="isActive" onLabel="Active" offLabel="Inactive" onIcon="pi pi-check" offIcon="pi pi-times" class="w-32"></p-toggleButton>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <button pButton type="button" label="Cancel" class="p-button-text" (click)="busDialog.set(false)"></button>
+            <button pButton type="submit" label="Save Route" class="p-button-primary" [disabled]="busForm.invalid"></button>
+        </div>
+    </form>
+</p-dialog>

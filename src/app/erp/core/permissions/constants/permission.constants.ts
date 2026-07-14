@@ -62,6 +62,10 @@ export const ERP_PERMISSIONS = {
     CONFIG: 'exams.config',
     ENTER_MARKS: 'exams.enter_marks',
     PUBLISH: 'exams.publish',
+  },
+  TRANSPORT: {
+    VIEW: 'transport.view',
+    EDIT: 'transport.edit',
   }
 } as const;
 
@@ -101,4 +105,6 @@ export type ErpPermission =
   | typeof ERP_PERMISSIONS.ADMISSIONS.BULK_IMPORT
   | typeof ERP_PERMISSIONS.ADMISSIONS.PRINT
   | typeof ERP_PERMISSIONS.ACADEMICS.VIEW
-  | typeof ERP_PERMISSIONS.ACADEMICS.EDIT;
+  | typeof ERP_PERMISSIONS.ACADEMICS.EDIT
+  | typeof ERP_PERMISSIONS.TRANSPORT.VIEW
+  | typeof ERP_PERMISSIONS.TRANSPORT.EDIT;

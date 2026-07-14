@@ -4,6 +4,11 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-14: Implemented Transport Domain & Fleet Management Workspace
+- **Files added:** `src/app/erp/domains/transport/` (http service, signals store, bus list pages, bus detail pages, route layout configs).
+- **Files changed:** `src/app/erp/core/api/constants/api.constants.ts`, `src/app/erp/core/permissions/constants/permission.constants.ts`, `src/app/erp/core/permissions/models/permission.model.ts`, `src/app/erp/routes/erp.routes.ts`, `src/app/erp/layout/components/sidebar/sidebar.config.ts`, `src/app/erp/domains/students/pages/student-create-edit/student-create-edit.component.ts`.
+- **Changes made:** Constructed a full-featured Transport UI showing bus routes list, driver details, and student assignments. Configured navigation flow: clicking a bus row redirects to a dedicated details page displaying bus stats (utilization progress bar) and the passenger table log below.
+
 ### 2026-07-14: Updated Toast notifications for Auto-Generated Credentials
 - **File changed:** `src/app/erp/domains/admissions/pages/admit-student/admit-student.component.ts`
 - **File changed:** `src/app/erp/domains/teachers/pages/teacher-list/teacher-list.component.ts`

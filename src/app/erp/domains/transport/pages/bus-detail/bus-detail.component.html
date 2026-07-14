@@ -1,0 +1,113 @@
+<div class="flex flex-col gap-6">
+    <!-- Back Button & Header -->
+    <div class="flex items-center gap-4">
+        <button pButton icon="pi pi-arrow-left" class="p-button-rounded p-button-text p-button-secondary" (click)="goBack()"></button>
+        <div>
+            <h1 class="text-2xl font-semibold text-text-main">
+                {{ transportStore.selectedBus()?.routeName || 'Bus Route Details' }}
+            </h1>
+            <p class="text-sm text-text-muted">Detailed route view, driver metadata, and allocated passengers.</p>
+        </div>
+    </div>
+
+    <!-- Top Card: Bus Metadata details -->
+    <div class="card p-6 shadow-md rounded-lg bg-surface-card border border-border">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Basic info -->
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-primary">
+                    <i class="pi pi-truck text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-text-muted font-medium uppercase tracking-wider">Plate Number</div>
+                    <div class="text-lg font-semibold text-text-main mt-1">
+                        {{ transportStore.selectedBus()?.plateNumber || 'N/A' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver info -->
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-green-50 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
+                    <i class="pi pi-user text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-text-muted font-medium uppercase tracking-wider">Driver Contact</div>
+                    <div class="text-lg font-semibold text-text-main mt-1">
+                        {{ transportStore.selectedBus()?.driverName || 'Unassigned' }}
+                    </div>
+                    @if (transportStore.selectedBus()?.driverPhone) {
+                        <small class="text-text-muted block mt-0.5">{{ transportStore.selectedBus()?.driverPhone }}</small>
+                    }
+                </div>
+            </div>
+
+            <!-- Conductor info -->
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-amber-50 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
+                    <i class="pi pi-id-card text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-text-muted font-medium uppercase tracking-wider">Conductor</div>
+                    <div class="text-lg font-semibold text-text-main mt-1">
+                        {{ transportStore.selectedBus()?.conductorName || 'Unassigned' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Capacity progress bar -->
+            <div class="flex flex-col justify-center">
+                <div class="flex justify-between items-center text-xs text-text-muted font-medium uppercase tracking-wider mb-2">
+                    <span>Capacity Load</span>
+                    <span class="font-semibold text-text-main">
+                        {{ transportStore.assignments().length }} / {{ transportStore.selectedBus()?.capacity || 'N/A' }} Seats
+                    </span>
+                </div>
+                <p-progressbar [value]="utilizationPercentage()" [showValue]="true" class="w-full"></p-progressbar>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Card: Passenger list -->
+    <div class="card p-6 shadow-md rounded-lg bg-surface-card border border-border">
+        <h2 class="text-lg font-semibold text-text-main mb-4">Roster & Passenger List</h2>
+        
+        <p-table [value]="transportStore.assignments()" [rows]="10" [paginator]="transportStore.assignments().length > 10" class="w-full">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Student Name</th>
+                    <th>Roll Number</th>
+                    <th>Class / Section</th>
+                    <th>Pickup Stop</th>
+                    <th>Drop Stop</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-assignment>
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                    <td>
+                        <span class="font-semibold text-text-main">{{ assignment.student?.name }}</span>
+                    </td>
+                    <td>{{ assignment.student?.rollNumber || 'N/A' }}</td>
+                    <td>{{ assignment.student?.class?.name }} - {{ assignment.student?.class?.section }}</td>
+                    <td>
+                        <span class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-sm font-medium text-text-main">
+                            {{ assignment.pickupPoint || 'N/A' }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-sm font-medium text-text-main">
+                            {{ assignment.dropPoint || 'N/A' }}
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="5" class="text-center p-8 text-text-muted">
+                        No students have been assigned to this bus route yet.
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

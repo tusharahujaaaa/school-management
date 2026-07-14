@@ -111,7 +111,11 @@ export class StudentCreateEditComponent implements OnInit {
         status: studentData.status.toUpperCase(),
         photoUrl: studentData.photoUrl || null,
         emergencyContact: studentData.emergencyContact || null,
-        emergencyPhone: studentData.emergencyContact || null
+        emergencyPhone: studentData.emergencyContact || null,
+        usesTransport: studentData.usesTransport || false,
+        busId: studentData.usesTransport ? studentData.busId : null,
+        pickupPoint: studentData.usesTransport ? studentData.pickupPoint : '',
+        dropPoint: studentData.usesTransport ? studentData.dropPoint : ''
       };
     } else {
       // Backend createStudent expects nested structure (personalInfo, parentInfo, etc.)
