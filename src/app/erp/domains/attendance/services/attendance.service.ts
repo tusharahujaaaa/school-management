@@ -424,7 +424,7 @@ export class AttendanceService {
             const historyList = historyRes?.data?.data || [];
             const recordsMap = new Map<string, StaffAttendanceRecord>();
             historyList.forEach((item: any) => {
-              const teacherId = item.studentId; // stored in studentId column on backend schema
+              const teacherId = item.teacherId || item.studentId;
               recordsMap.set(teacherId, {
                 staffId: teacherId,
                 status: item.status.toLowerCase() as StaffAttendanceStatus,

@@ -214,6 +214,14 @@ export class AdmitStudentComponent implements OnInit {
         this.isLoading.set(false);
         if (res?.success) {
           this.messageService.add({ severity: 'success', summary: 'Student Admitted', detail: `${formVal.name} enrolled successfully!` });
+          
+          if (res.data?.studentAccount?.isDummy) {
+            this.messageService.add({ severity: 'info', summary: 'Student Credentials', detail: `Dummy Email: ${res.data.studentAccount.email}`, life: 10000 });
+          }
+          if (res.data?.parentAccount?.isDummy) {
+            this.messageService.add({ severity: 'info', summary: 'Parent Credentials', detail: `Dummy Email: ${res.data.parentAccount.email}`, life: 10000 });
+          }
+
           this.resetForm();
           
           // Optionally redirect to students directory

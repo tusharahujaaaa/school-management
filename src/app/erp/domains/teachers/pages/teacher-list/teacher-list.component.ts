@@ -158,6 +158,16 @@ export class TeacherListComponent implements OnInit {
               summary: 'Teacher Created',
               detail: `${formVal.name} created successfully.`
             });
+
+            if (res.data?.teacherAccount?.isDummy) {
+              this.messageService.add({
+                severity: 'info',
+                summary: 'Credentials Generated',
+                detail: `Dummy Email: ${res.data.teacherAccount.email}`,
+                life: 10000
+              });
+            }
+
             this.teacherDialog.set(false);
             this.teachersService.loadTeachers();
           }
