@@ -4,6 +4,19 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-15: Added Workspace AI Instruction Rules
+- **Files added:** `README.md`, `.cursorrules`, `.clinerules`, `.windsurfrules` in workspace root.
+- **Files changed:** `sakai-ng/README.md`, `sakai-ng/.cursorrules`, `sakai-ng/.clinerules`, `sakai-ng/.windsurfrules`.
+- **Changes made:** Created configuration rules files and a master workspace `README.md` listing ALL 6 files inside both frontend/backend projects `docs/` folders. Cloned rules files to project subdirectories and added instructions header in frontend `README.md` to force any active AI agent (including Cursor, Windsurf, Copilot, Cline, etc.) to read the project `docs/` files first, update `memory.md` on task completion, and refrain from running database migrations.
+
+### 2026-07-15: Replaced browser delete confirm with app-confirm-dialog
+- **Files changed:** `src/app/erp/domains/transport/pages/bus-list/bus-list.component.ts`, `src/app/erp/domains/transport/pages/bus-list/bus-list.component.html`.
+- **Changes made:** Imported `ConfirmDialogComponent` and replaced native JS `confirm(...)` browser dialog with the shared `app-confirm-dialog` popup when deleting bus routes.
+
+### 2026-07-15: Added Transport Destinations and Metrics
+- **Files changed:** `src/app/erp/domains/transport/pages/bus-list/bus-list.component.ts`, `src/app/erp/domains/transport/pages/bus-list/bus-list.component.html`.
+- **Changes made:** Added `startDestination` and `endDestination` form variables to the bus forms. Expanded the main directory grid with destinations route labels, seats occupied load counters, and pending requests indicators.
+
 ### 2026-07-14: Implemented Transport Domain & Fleet Management Workspace
 - **Files added:** `src/app/erp/domains/transport/` (http service, signals store, bus list pages, bus detail pages, route layout configs).
 - **Files changed:** `src/app/erp/core/api/constants/api.constants.ts`, `src/app/erp/core/permissions/constants/permission.constants.ts`, `src/app/erp/core/permissions/models/permission.model.ts`, `src/app/erp/routes/erp.routes.ts`, `src/app/erp/layout/components/sidebar/sidebar.config.ts`, `src/app/erp/domains/students/pages/student-create-edit/student-create-edit.component.ts`.

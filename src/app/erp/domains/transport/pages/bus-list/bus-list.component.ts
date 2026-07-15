@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TransportStore } from '../../store/transport.store';
@@ -11,6 +11,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TableModule } from 'primeng/table';
 
 import { Router } from '@angular/router';
+import { ConfirmDialogComponent } from '@/app/erp/shared/ui/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-bus-list',
@@ -24,7 +25,8 @@ import { Router } from '@angular/router';
     ButtonModule,
     InputTextModule,
     ToggleButtonModule,
-    TableModule
+    TableModule,
+    ConfirmDialogComponent
   ],
   providers: [MessageService],
   templateUrl: './bus-list.component.html'
@@ -38,6 +40,12 @@ export class BusListComponent implements OnInit {
   busDialog = signal<boolean>(false);
   isEditMode = signal<boolean>(false);
   selectedBusId = signal<string | null>(null);
+  confirmDeleteVisible = signal<boolean>(false);
+  busToDelete = signal<any | null>(null);
+  deleteConfirmationMessage = computed(() => {
+    const bus = this.busToDelete();
+    return bus ? `Are you sure you want to delete bus route ${bus.routeName} (${bus.plateNumber})?` : '';
+  });
   busForm!: FormGroup;
 
   ngOnInit() {
@@ -53,6 +61,8 @@ export class BusListComponent implements OnInit {
       conductorName: [''],
       plateNumber: ['', [Validators.required]],
       capacity: [null, [Validators.min(1)]],
+      startDestination: [''],
+      endDestination: [''],
       isActive: [true, Validators.required]
     });
   }
@@ -67,6 +77,8 @@ export class BusListComponent implements OnInit {
       conductorName: '',
       plateNumber: '',
       capacity: null,
+      startDestination: '',
+      endDestination: '',
       isActive: true
     });
     this.busDialog.set(true);
@@ -82,6 +94,8 @@ export class BusListComponent implements OnInit {
       conductorName: bus.conductorName || '',
       plateNumber: bus.plateNumber || '',
       capacity: bus.capacity,
+      startDestination: bus.startDestination || '',
+      endDestination: bus.endDestination || '',
       isActive: bus.isActive
     });
     this.busDialog.set(true);
@@ -143,26 +157,34 @@ export class BusListComponent implements OnInit {
   }
 
   deleteBus(bus: any) {
-    if (confirm(`Are you sure you want to delete bus route ${bus.routeName} (${bus.plateNumber})?`)) {
-      this.transportStore.deleteBus(bus.id).subscribe({
-        next: (res) => {
-          if (res?.success) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Bus route deleted successfully.'
-            });
-          }
-        },
-        error: (err) => {
+    this.busToDelete.set(bus);
+    this.confirmDeleteVisible.set(true);
+  }
+
+  onConfirmDeleteBus() {
+    const bus = this.busToDelete();
+    if (!bus) return;
+
+    this.transportStore.deleteBus(bus.id).subscribe({
+      next: (res) => {
+        if (res?.success) {
           this.messageService.add({
-            severity: 'error',
-            summary: 'Deletion Failed',
-            detail: err?.error?.message || 'Unable to delete bus.'
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Bus route deleted successfully.'
           });
         }
-      });
-    }
+        this.busToDelete.set(null);
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Deletion Failed',
+          detail: err?.error?.message || 'Unable to delete bus.'
+        });
+        this.busToDelete.set(null);
+      }
+    });
   }
 
   selectBusRow(busId: string) {

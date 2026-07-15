@@ -1,0 +1,33 @@
+# Frontend AI Coding Rules & Workspace Guidelines
+
+No matter which AI agent (Cursor, Windsurf, Cline, Roo Code, Copilot, etc.) you are, you MUST follow these instructions before starting any work in this project.
+
+---
+
+## 1. CRITICAL: Analyze ALL Docs Files First
+Before proposing any implementation plans, writing any code, or executing any terminal commands, you **must** read and analyze **ALL** documentation files located inside the `docs/` directory of this frontend project. Do not skip any file.
+
+* **Frontend Docs (`docs/`):**
+  * [prd.md](file:///d:/wall/SMS/sakai-ng/docs/prd.md) - User persona workflows and dashboard maps.
+  * [architecture.md](file:///d:/wall/SMS/sakai-ng/docs/architecture.md) - Angular layout routing configs and state patterns (Signals).
+  * [rules.md](file:///d:/wall/SMS/sakai-ng/docs/rules.md) - Standalone component criteria and PrimeNG rules.
+  * [design.md](file:///d:/wall/SMS/sakai-ng/docs/design.md) - Typography, CSS layout values, and HSL tokens.
+  * [phase.md](file:///d:/wall/SMS/sakai-ng/docs/phase.md) - Client-side feature release roadmap.
+  * [memory.md](file:///d:/wall/SMS/sakai-ng/docs/memory.md) - Historical logs and frontend updates tracker (must update on task completion).
+
+---
+
+## 2. Memory Log Maintenance Protocol
+* You **MUST** update the `docs/memory.md` file on **every single task completion**.
+* Do not wait for the developer to remind you.
+* Log:
+  * Date of implementation.
+  * Files created or modified.
+  * Brief description of the changes.
+
+---
+
+## 3. Coding & Design Standards
+* **No placeholders:** Write complete, production-ready code.
+* **Premium Design:** Ensure all UI matches the professional design palette, using smooth animations, cohesive borders, and active signals.
+* **Standalone Angular Components:** Ensure all new frontend modules are built using standalone components and signals state stores.

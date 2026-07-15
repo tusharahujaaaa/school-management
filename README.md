@@ -1,5 +1,8 @@
 # Campus Handle SMS Frontend
 
+> [!IMPORTANT]
+> **DEVELOPERS & AI ASSISTANTS:** You **MUST** read and follow **ALL** files in the [docs/](file:///d:/wall/SMS/sakai-ng/docs) directory before modifying any code. Pay close attention to [rules.md](file:///d:/wall/SMS/sakai-ng/docs/rules.md) and [memory.md](file:///d:/wall/SMS/sakai-ng/docs/memory.md) (which must be updated on task completion).
+
 Frontend ERP application for **Campus Handle SMS**, an enterprise school management SaaS platform.
 
 This project is built with **Angular 21**, **PrimeNG 21**, Angular Signals, and zoneless change detection. It connects to the `campus-handle-api` backend through the configured `/api/v1` API base URL.
