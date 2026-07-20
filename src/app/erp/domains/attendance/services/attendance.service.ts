@@ -7,10 +7,13 @@ import {
   AttendanceDashboardStats, ClassAttendanceSummary, AttendanceHistoryRecord,
   LowAttendanceAlert, AttendanceReport, AttendanceStatus, StaffAttendanceStatus
 } from '../models/attendance.model';
-import {
-  MOCK_STAFF, MOCK_ATTENDANCE_STATS, MOCK_CLASS_SUMMARIES,
-  MOCK_ATTENDANCE_HISTORY, MOCK_LOW_ATTENDANCE, MOCK_REPORTS
-} from '../mock-data/attendance.mock';
+const MOCK_REPORTS: AttendanceReport[] = [
+  { id: 'r1', title: 'Daily Attendance Report', description: 'Complete day-wise attendance for all classes', icon: 'pi pi-calendar', colorClass: 'bg-blue-50 text-blue-600' },
+  { id: 'r2', title: 'Monthly Summary Report', description: 'Month-over-month attendance trends and analysis', icon: 'pi pi-chart-bar', colorClass: 'bg-purple-50 text-purple-600' },
+  { id: 'r3', title: 'Class-wise Report', description: 'Per-class attendance statistics and breakdown', icon: 'pi pi-building', colorClass: 'bg-teal-50 text-teal-600' },
+  { id: 'r4', title: 'Staff Attendance Report', description: 'Staff and faculty attendance summary', icon: 'pi pi-id-card', colorClass: 'bg-orange-50 text-orange-600' },
+  { id: 'r5', title: 'Low Attendance Students', description: 'Students with attendance below 75% threshold', icon: 'pi pi-exclamation-triangle', colorClass: 'bg-red-50 text-red-600' }
+];
 
 import { TeachersHttpService } from '../../teachers/services/teachers-http.service';
 
@@ -154,7 +157,7 @@ export class AttendanceService {
   private _staffRecords = signal<Map<string, StaffAttendanceRecord>>(new Map());
   
   readonly students = signal<Student[]>([]);
-  readonly staff = signal<StaffMember[]>(MOCK_STAFF);
+  readonly staff = signal<StaffMember[]>([]);
 
   // ─── Computed ─────────────────────────────────────
   readonly currentClassId = computed(() => {

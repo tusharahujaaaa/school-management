@@ -1,7 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { BaseApiService } from '../../../core/api/base/base-api.service';
 import { NotificationData } from '../models/dashboard.model';
-import { MOCK_NOTIFICATIONS } from '../store/dashboard.mock';
 import { catchError, of, delay } from 'rxjs';
 import { API_ENDPOINTS } from '../../../core/api/constants/api.constants';
 
@@ -34,18 +33,15 @@ export class NotificationService extends BaseApiService {
       .pipe(
         delay(500),
         catchError(() => {
-          console.warn('Notifications API failed. Falling back to mock data.');
-          return of({ success: true, data: MOCK_NOTIFICATIONS });
+          console.warn('Notifications API failed.');
+          return of({ success: false, data: [] });
         })
       )
       .subscribe({
         next: (res) => {
           let data: NotificationData[] = [];
-          if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          if (res && res.success && Array.isArray(res.data)) {
             data = res.data;
-          } else {
-            console.log('No backend notifications found. Loading mock notifications.');
-            data = MOCK_NOTIFICATIONS;
           }
 
           this.allNotifications.set(data);
@@ -54,8 +50,8 @@ export class NotificationService extends BaseApiService {
           this.loading.set(false);
         },
         error: () => {
-          this.allNotifications.set(MOCK_NOTIFICATIONS);
-          this.notifications.set(MOCK_NOTIFICATIONS.slice(0, initialSize));
+          this.allNotifications.set([]);
+          this.notifications.set([]);
           this.loading.set(false);
         }
       });

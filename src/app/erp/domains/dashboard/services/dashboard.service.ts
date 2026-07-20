@@ -1,10 +1,17 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { BaseApiService } from '../../../core/api/base/base-api.service';
 import { StatData, ActivityData, EventData, NotificationData, QuickAction } from '../models/dashboard.model';
-import { MOCK_EVENTS, MOCK_NOTIFICATIONS, MOCK_QUICK_ACTIONS } from '../store/dashboard.mock';
 import { forkJoin, catchError, of, delay } from 'rxjs';
 import { AuthService } from '../../auth/services/auth.service';
 import { API_ENDPOINTS } from '../../../core/api/constants/api.constants';
+
+const QUICK_ACTIONS: QuickAction[] = [
+  { label: 'Add Student', icon: 'pi pi-user-plus', route: '/erp/students/create', colorClass: 'bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200' },
+  { label: 'Mark Attendance', icon: 'pi pi-check-square', route: '/erp/attendance/students', colorClass: 'bg-green-50 text-green-600 hover:bg-green-100 border-green-200' },
+  { label: 'Collect Fees', icon: 'pi pi-wallet', route: '/erp/dashboard', colorClass: 'bg-orange-50 text-orange-600 hover:bg-orange-100 border-orange-200' },
+  { label: 'Create Notice', icon: 'pi pi-bullhorn', route: '/erp/dashboard', colorClass: 'bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-200' },
+  { label: 'Generate ID', icon: 'pi pi-id-card', route: '/erp/dashboard', colorClass: 'bg-teal-50 text-teal-600 hover:bg-teal-100 border-teal-200' },
+];
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +23,9 @@ export class DashboardService extends BaseApiService {
   loading = signal<boolean>(false);
   stats = signal<StatData[]>([]);
   activities = signal<ActivityData[]>([]);
-  events = signal<EventData[]>(MOCK_EVENTS); // Dynamic placeholder fallback
-  notifications = signal<NotificationData[]>(MOCK_NOTIFICATIONS); // Dynamic placeholder fallback
-  quickActions = signal<QuickAction[]>(MOCK_QUICK_ACTIONS);
+  events = signal<EventData[]>([]); // Dynamic placeholder fallback
+  notifications = signal<NotificationData[]>([]); // Dynamic placeholder fallback
+  quickActions = signal<QuickAction[]>(QUICK_ACTIONS);
   attendanceOverview = signal<any>(null);
   feeOverview = signal<any>(null);
 

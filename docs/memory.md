@@ -4,6 +4,11 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-20: Cleaned up Mock Files and Optimized Production Bundle
+- **Files changed:** `src/app/erp/domains/attendance/services/attendance.service.ts`, `src/app/erp/domains/dashboard/services/dashboard.service.ts`, `src/app/erp/domains/dashboard/services/notification.service.ts`, `src/app/erp/shared/components/global-search/services/global-search.service.ts`
+- **Files deleted:** `src/app/erp/domains/attendance/mock-data/attendance.mock.ts`, `src/app/erp/domains/dashboard/store/dashboard.mock.ts`, `src/app/erp/domains/students/mock-data/students.mock.ts`, `src/app/erp/shared/components/global-search/mock-data/global-search.mock.ts`
+- **Changes made:** Removed heavy mock data file imports and fallback assignments across domain services and the global search component. Moved static structures like report layout cards metadata and dashboard quick actions configurations to local service constants. Initialized runtime signals (staff, events, notifications) as empty arrays `[]` (since they are fully populated dynamically via backend APIs). Deleted the unreferenced mock data files to clean the codebase and guarantee compiler tree-shaking, reducing final bundle size.
+
 ### 2026-07-15: Added Workspace AI Instruction Rules
 - **Files added:** `README.md`, `.cursorrules`, `.clinerules`, `.windsurfrules` in workspace root.
 - **Files changed:** `sakai-ng/README.md`, `sakai-ng/.cursorrules`, `sakai-ng/.clinerules`, `sakai-ng/.windsurfrules`.
