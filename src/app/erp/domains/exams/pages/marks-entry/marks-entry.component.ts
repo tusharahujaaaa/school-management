@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -34,6 +35,7 @@ export class MarksEntryComponent implements OnInit {
   private router = inject(Router);
   private examService = inject(ExamService);
   private messageService = inject(MessageService);
+  private destroyRef = inject(DestroyRef);
 
   examSubjectId = signal<string>('');
   examSubject = signal<any>(null);
@@ -42,7 +44,7 @@ export class MarksEntryComponent implements OnInit {
   maxMarks = signal<number>(100);
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       if (params['id']) {
         this.examSubjectId.set(params['id']);
         this.loadRoster();
@@ -53,6 +55,7 @@ export class MarksEntryComponent implements OnInit {
   loadRoster() {
     this.loading.set(true);
     this.examService.getRosterForMarksEntry(this.examSubjectId())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.loading.set(false);
@@ -105,6 +108,7 @@ export class MarksEntryComponent implements OnInit {
 
     this.loading.set(true);
     this.examService.bulkSaveExamResults(this.examSubjectId(), this.roster())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res: any) => {
           this.loading.set(false);

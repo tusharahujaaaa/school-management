@@ -4,6 +4,10 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-20: Resolved RxJS Subscription Memory Leaks
+- **Files changed:** `src/app/erp/domains/students/pages/student-list/student-list.component.ts`, `src/app/erp/domains/students/pages/student-profile/student-profile.component.ts`, `src/app/erp/domains/teachers/pages/teacher-list/teacher-list.component.ts`, `src/app/erp/domains/transport/pages/bus-list/bus-list.component.ts`, `src/app/erp/domains/exams/pages/marks-entry/marks-entry.component.ts`
+- **Changes made:** Injected `DestroyRef` and applied the RxJS `takeUntilDestroyed` operator on all component level subscriptions (router parameter maps, form value changes, and HTTP updates). This forces all active subscriptions to unsubscribe upon component destruction, preventing SPA cumulative memory leaks.
+
 ### 2026-07-20: Cleaned up Mock Files and Optimized Production Bundle
 - **Files changed:** `src/app/erp/domains/attendance/services/attendance.service.ts`, `src/app/erp/domains/dashboard/services/dashboard.service.ts`, `src/app/erp/domains/dashboard/services/notification.service.ts`, `src/app/erp/shared/components/global-search/services/global-search.service.ts`
 - **Files deleted:** `src/app/erp/domains/attendance/mock-data/attendance.mock.ts`, `src/app/erp/domains/dashboard/store/dashboard.mock.ts`, `src/app/erp/domains/students/mock-data/students.mock.ts`, `src/app/erp/shared/components/global-search/mock-data/global-search.mock.ts`

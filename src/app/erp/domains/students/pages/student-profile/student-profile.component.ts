@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -50,6 +51,7 @@ export class StudentProfileComponent implements OnInit {
   private feesHttpSvc = inject(FeesHttpService);
   private fb = inject(FormBuilder);
   protected feesService = inject(FeesService);
+  private destroyRef = inject(DestroyRef);
   
   readonly PERMISSIONS = ERP_PERMISSIONS;
 
@@ -139,7 +141,7 @@ export class StudentProfileComponent implements OnInit {
     });
 
     // Add dynamic validation to discount values
-    this.profileForm.get('hasDiscount')?.valueChanges.subscribe(hasDisc => {
+    this.profileForm.get('hasDiscount')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(hasDisc => {
       const typeCtrl = this.profileForm.get('discountType');
       const valCtrl = this.profileForm.get('discountValue');
       if (hasDisc) {
@@ -156,7 +158,7 @@ export class StudentProfileComponent implements OnInit {
 
   loadFeeLedger(studentId: string) {
     this.loadingLedger.set(true);
-    this.feesHttpSvc.getStudentLedger(studentId).subscribe({
+    this.feesHttpSvc.getStudentLedger(studentId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.studentLedger.set(res.data);
@@ -172,7 +174,7 @@ export class StudentProfileComponent implements OnInit {
 
   loadStudentFeeProfile(studentId: string) {
     this.loadingProfile.set(true);
-    this.feesHttpSvc.getStudentFeeProfile(studentId).subscribe({
+    this.feesHttpSvc.getStudentFeeProfile(studentId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.feeProfile.set(res.data);
@@ -221,7 +223,7 @@ export class StudentProfileComponent implements OnInit {
       discountValue: this.profileForm.value.hasDiscount ? Number(this.profileForm.value.discountValue) : null
     };
 
-    this.feesHttpSvc.upsertStudentFeeProfile(studentId, payload).subscribe({
+    this.feesHttpSvc.upsertStudentFeeProfile(studentId, payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.displayProfileDialog.set(false);
@@ -291,7 +293,7 @@ export class StudentProfileComponent implements OnInit {
     this.uploadingPhoto.set(true);
     this.photoError.set('');
 
-    this.store.updateStudentPhoto(studentId, photoUrl).subscribe({
+    this.store.updateStudentPhoto(studentId, photoUrl).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.uploadingPhoto.set(false);
         this.displayPhotoDialog.set(false);

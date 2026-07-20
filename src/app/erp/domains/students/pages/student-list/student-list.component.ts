@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StudentStore } from '../../store/student.store';
@@ -40,6 +41,7 @@ export class StudentListComponent implements OnInit {
   protected store = inject(StudentStore);
   private router = inject(Router);
   private messageService = inject(MessageService);
+  private destroyRef = inject(DestroyRef);
 
   readonly PERMISSIONS = ERP_PERMISSIONS;
 
@@ -76,7 +78,7 @@ export class StudentListComponent implements OnInit {
   }
 
   onStatusChange(studentId: string, status: string) {
-    this.store.updateStudentStatus(studentId, status).subscribe({
+    this.store.updateStudentStatus(studentId, status).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',

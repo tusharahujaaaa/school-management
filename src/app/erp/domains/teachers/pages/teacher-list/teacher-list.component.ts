@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TeachersService } from '../../services/teachers.service';
@@ -29,6 +30,7 @@ export class TeacherListComponent implements OnInit {
   protected teachersService = inject(TeachersService);
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
+  private destroyRef = inject(DestroyRef);
 
   teacherDialog = signal<boolean>(false);
   isEditMode = signal<boolean>(false);
@@ -129,7 +131,7 @@ export class TeacherListComponent implements OnInit {
     }
 
     if (this.isEditMode() && this.selectedTeacherId()) {
-      this.teachersService.updateTeacher(this.selectedTeacherId()!, payload).subscribe({
+      this.teachersService.updateTeacher(this.selectedTeacherId()!, payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res: any) => {
           if (res?.success) {
             this.messageService.add({
@@ -150,7 +152,7 @@ export class TeacherListComponent implements OnInit {
         }
       });
     } else {
-      this.teachersService.createTeacher(payload).subscribe({
+      this.teachersService.createTeacher(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res: any) => {
           if (res?.success) {
             this.messageService.add({
@@ -185,7 +187,7 @@ export class TeacherListComponent implements OnInit {
 
   deleteTeacher(teacher: any) {
     if (confirm(`Are you sure you want to delete teacher ${teacher.name}?`)) {
-      this.teachersService.deleteTeacher(teacher.id).subscribe({
+      this.teachersService.deleteTeacher(teacher.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res: any) => {
           if (res?.success) {
             this.messageService.add({

@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TransportStore } from '../../store/transport.store';
@@ -36,6 +37,7 @@ export class BusListComponent implements OnInit {
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   busDialog = signal<boolean>(false);
   isEditMode = signal<boolean>(false);
@@ -114,7 +116,7 @@ export class BusListComponent implements OnInit {
     const payload = this.busForm.value;
 
     if (this.isEditMode() && this.selectedBusId()) {
-      this.transportStore.updateBus(this.selectedBusId()!, payload).subscribe({
+      this.transportStore.updateBus(this.selectedBusId()!, payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           if (res?.success) {
             this.messageService.add({
@@ -134,7 +136,7 @@ export class BusListComponent implements OnInit {
         }
       });
     } else {
-      this.transportStore.createBus(payload).subscribe({
+      this.transportStore.createBus(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           if (res?.success) {
             this.messageService.add({
@@ -165,7 +167,7 @@ export class BusListComponent implements OnInit {
     const bus = this.busToDelete();
     if (!bus) return;
 
-    this.transportStore.deleteBus(bus.id).subscribe({
+    this.transportStore.deleteBus(bus.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         if (res?.success) {
           this.messageService.add({
