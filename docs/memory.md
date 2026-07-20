@@ -4,6 +4,10 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-20: Resolved Silent Errors and Date Validation Gaps
+- **Files changed:** `src/app/erp/domains/students/pages/student-profile/student-profile.component.ts`, `src/app/erp/domains/students/pages/student-profile/student-profile.component.html`, `src/app/erp/domains/exams/pages/marks-entry/marks-entry.component.ts`, `src/app/erp/domains/fees/pages/fee-records/fee-records.component.ts`, `src/app/erp/domains/fees/pages/fee-records/fee-records.component.html`
+- **Changes made:** Bound PrimeNG `MessageService` toast notifications to handle errors on marks-entry roster, student-profile ledger, and student-profile fee configuration queries rather than logging silently. Added `[max]` dynamic constraints and a reactive validator `noFutureDate` inside `FeeRecordsComponent` to block cashier/staff registration of payments with future dates.
+
 ### 2026-07-20: Refactored CSV Split Logic to Shared Utility
 - **Files added:** `src/app/erp/shared/utils/csv.utils.ts`
 - **Files changed:** `src/app/erp/domains/exams/pages/marks-entry/marks-entry.component.ts`, `src/app/erp/domains/admissions/pages/admit-bulk/admit-bulk.component.ts`

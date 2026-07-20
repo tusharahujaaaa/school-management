@@ -66,7 +66,14 @@ export class MarksEntryComponent implements OnInit {
             this.roster.set(res.data.roster || []);
           }
         },
-        error: () => this.loading.set(false)
+        error: (err: any) => {
+          this.loading.set(false);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Failed to Load Roster',
+            detail: err?.error?.message || 'Unable to retrieve records from the server.'
+          });
+        }
       });
   }
 

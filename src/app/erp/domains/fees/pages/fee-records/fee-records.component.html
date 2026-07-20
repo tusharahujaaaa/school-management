@@ -167,8 +167,11 @@
         <div>
           <label for="paidDate" class="text-700 font-semibold text-sm block mb-1.5">Date of Payment <span
               class="text-red-500">*</span></label>
-          <input id="paidDate" type="date" pInputText formControlName="paidDate"
+          <input id="paidDate" type="date" pInputText formControlName="paidDate" [max]="todayStr"
             class="p-inputtext-sm border-round-md" />
+          <small *ngIf="paymentForm.get('paidDate')?.errors?.['futureDate']" class="text-red-500 block mt-1">
+            Date of payment cannot be in the future.
+          </small>
         </div>
 
         <!-- Remarks -->
@@ -182,7 +185,7 @@
         <div class="flex gap-2 justify-content-end mt-4">
           <button pButton type="button" label="Cancel" class="p-button-text p-button-sm"
             (click)="paymentDialog.set(false)"></button>
-          <button pButton type="submit" label="Record Collections" class="p-button-success p-button-sm px-4"></button>
+          <button pButton type="submit" label="Record Collections" class="p-button-success p-button-sm px-4" [disabled]="paymentForm.invalid"></button>
         </div>
 
       </form>

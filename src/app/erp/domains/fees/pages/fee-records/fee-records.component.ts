@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { FeesService } from '../../services/fees.service';
 import { StudentService } from '../../../students/services/student.service';
 import { MessageService } from 'primeng/api';
@@ -37,6 +37,7 @@ export class FeeRecordsComponent implements OnInit {
   private messageService = inject(MessageService);
 
   readonly PERMISSIONS = ERP_PERMISSIONS;
+  readonly todayStr = new Date().toISOString().split('T')[0];
 
   paymentDialog = signal<boolean>(false);
   receiptDialog = signal<boolean>(false);
@@ -75,10 +76,18 @@ export class FeeRecordsComponent implements OnInit {
     this.feesService.loadFeeRecords(1);
   }
 
+  noFutureDate(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const selected = new Date(control.value);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return selected > today ? { futureDate: true } : null;
+  }
+
   initPaymentForm() {
     this.paymentForm = this.fb.group({
       paymentMode: ['CASH', Validators.required],
-      paidDate: [new Date().toISOString().split('T')[0], Validators.required],
+      paidDate: [new Date().toISOString().split('T')[0], [Validators.required, this.noFutureDate]],
       remarks: ['']
     });
     this.waiverForm = this.fb.group({

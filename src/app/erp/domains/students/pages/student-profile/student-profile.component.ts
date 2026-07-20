@@ -1,5 +1,7 @@
 import { Component, inject, OnInit, signal, computed, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -40,8 +42,10 @@ import { SkeletonLoaderComponent } from '@/app/erp/shared/ui/loaders/skeleton-lo
     CheckboxModule,
     InputTextModule,
     HasPermissionDirective,
-    SkeletonLoaderComponent
+    SkeletonLoaderComponent,
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './student-profile.component.html',
   styleUrl: './student-profile.component.scss'
 })
@@ -52,6 +56,7 @@ export class StudentProfileComponent implements OnInit {
   private fb = inject(FormBuilder);
   protected feesService = inject(FeesService);
   private destroyRef = inject(DestroyRef);
+  private messageService = inject(MessageService);
   
   readonly PERMISSIONS = ERP_PERMISSIONS;
 
@@ -168,6 +173,11 @@ export class StudentProfileComponent implements OnInit {
       error: (err: any) => {
         console.error('Error fetching student ledger:', err);
         this.loadingLedger.set(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Ledger Load Failed',
+          detail: err?.error?.message || 'Unable to load student fee ledger.'
+        });
       }
     });
   }
@@ -187,6 +197,11 @@ export class StudentProfileComponent implements OnInit {
         console.error('Error loading student fee profile:', err);
         this.feeProfile.set(null);
         this.loadingProfile.set(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Profile Load Failed',
+          detail: err?.error?.message || 'Unable to load student billing configurations.'
+        });
       }
     });
   }
