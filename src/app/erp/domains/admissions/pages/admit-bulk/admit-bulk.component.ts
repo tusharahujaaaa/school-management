@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { splitCSVLine } from '../../../../shared/utils/csv.utils';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StudentService } from '../../../students/services/student.service';
@@ -139,7 +140,7 @@ export class AdmitBulkComponent implements OnInit {
       if (!line) continue; // skip empty lines
 
       // Handle simple comma separation (ignoring internal commas inside quotes for simplicity, or simple strip)
-      const cols = this.splitCSVLine(line);
+      const cols = splitCSVLine(line);
       if (cols.length < headers.length) {
         parsedRows.push({
           data: { name: cols[0] || 'Unknown', rollNumber: '', className: '', section: '', gender: '', parentName: '', parentPhone: '', parentEmail: '', address: '' },
@@ -201,26 +202,6 @@ export class AdmitBulkComponent implements OnInit {
 
     this.parsedStudents.set(parsedRows);
     this.messageService.add({ severity: 'success', summary: 'Parsed CSV', detail: `Identified ${parsedRows.length} rows to review.` });
-  }
-
-  // Simple CSV Split handling quoted values (escaped commas)
-  private splitCSVLine(line: string): string[] {
-    const result: string[] = [];
-    let current = '';
-    let inQuotes = false;
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        result.push(current);
-        current = '';
-      } else {
-        current += char;
-      }
-    }
-    result.push(current);
-    return result.map(s => s.replace(/^"|"$/g, '').trim()); // remove wrapping quotes
   }
 
   clearFile() {

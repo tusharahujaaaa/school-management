@@ -4,6 +4,11 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-20: Refactored CSV Split Logic to Shared Utility
+- **Files added:** `src/app/erp/shared/utils/csv.utils.ts`
+- **Files changed:** `src/app/erp/domains/exams/pages/marks-entry/marks-entry.component.ts`, `src/app/erp/domains/admissions/pages/admit-bulk/admit-bulk.component.ts`
+- **Changes made:** Extracted the regex-aware `splitCSVLine` function (which ignores commas inside double-quoted values) into a shared utility file. Refactored both `MarksEntryComponent` and `AdmitBulkComponent` to import and call this common utility rather than holding duplicate private implementations.
+
 ### 2026-07-20: Resolved Auth Startup Permissions Collision
 - **Files changed:** `src/app/erp/core/api/constants/api.constants.ts`, `src/app/erp/domains/auth/services/auth.service.ts`
 - **Changes made:** Redirected active academic session query from the teacher-restricted `/attendance/students/setup` endpoint to the new, role-agnostic `/auth/session` backend route. This allows non-administrative roles (e.g. students or parents) to resolve active session storage variables successfully on login without triggers console `403 Forbidden` exceptions.

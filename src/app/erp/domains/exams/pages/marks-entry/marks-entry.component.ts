@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { splitCSVLine } from '../../../../shared/utils/csv.utils';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -169,7 +170,7 @@ export class MarksEntryComponent implements OnInit {
       const line = lines[i].trim();
       if (!line) continue;
 
-      const cols = line.split(',').map(c => c.replace(/"/g, ''));
+      const cols = splitCSVLine(line);
       if (cols.length < 3) continue;
 
       const rollNumber = cols[0];
