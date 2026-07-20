@@ -4,6 +4,10 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-20: Resolved Auth Startup Permissions Collision
+- **Files changed:** `src/app/erp/core/api/constants/api.constants.ts`, `src/app/erp/domains/auth/services/auth.service.ts`
+- **Changes made:** Redirected active academic session query from the teacher-restricted `/attendance/students/setup` endpoint to the new, role-agnostic `/auth/session` backend route. This allows non-administrative roles (e.g. students or parents) to resolve active session storage variables successfully on login without triggers console `403 Forbidden` exceptions.
+
 ### 2026-07-20: Resolved RxJS Subscription Memory Leaks
 - **Files changed:** `src/app/erp/domains/students/pages/student-list/student-list.component.ts`, `src/app/erp/domains/students/pages/student-profile/student-profile.component.ts`, `src/app/erp/domains/teachers/pages/teacher-list/teacher-list.component.ts`, `src/app/erp/domains/transport/pages/bus-list/bus-list.component.ts`, `src/app/erp/domains/exams/pages/marks-entry/marks-entry.component.ts`
 - **Changes made:** Injected `DestroyRef` and applied the RxJS `takeUntilDestroyed` operator on all component level subscriptions (router parameter maps, form value changes, and HTTP updates). This forces all active subscriptions to unsubscribe upon component destruction, preventing SPA cumulative memory leaks.

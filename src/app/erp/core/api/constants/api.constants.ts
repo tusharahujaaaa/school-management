@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
     RESET_PASSWORD: '/auth/reset-password',
     PROFILE: '/auth/profile',
     ME: '/auth/me',
+    SESSION: '/auth/session',
   },
   ADMISSIONS: {
     BASE: '/admissions',

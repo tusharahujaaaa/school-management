@@ -84,7 +84,7 @@ export class AuthService {
   }
 
   fetchActiveSession() {
-    this.apiService.get<any>('/attendance/students/setup').subscribe(res => {
+    this.apiService.get<any>(API_ENDPOINTS.AUTH.SESSION).subscribe(res => {
       if (res.success && res.data?.academicSession) {
         const session = res.data.academicSession;
         const sessionId = res.data.academicSessionId || '';
