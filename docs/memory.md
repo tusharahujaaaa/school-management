@@ -4,6 +4,10 @@ This file is a living document that tracks architectural modifications, bug fixe
 
 ## History Logs
 
+### 2026-07-22: Connected Global Search Service to Backend API
+- **Files changed:** `src/app/erp/core/api/constants/api.constants.ts`, `src/app/erp/shared/components/global-search/services/global-search.service.ts`
+- **Changes made:** Mapped `SEARCH: '/search'` under API_ENDPOINTS. Refactored the `GlobalSearchService` to extend `BaseApiService`, fetching dynamic search results from the database API `/search` with parameter `q` matching search criteria.
+
 ### 2026-07-20: Resolved Silent Errors and Date Validation Gaps
 - **Files changed:** `src/app/erp/domains/students/pages/student-profile/student-profile.component.ts`, `src/app/erp/domains/students/pages/student-profile/student-profile.component.html`, `src/app/erp/domains/exams/pages/marks-entry/marks-entry.component.ts`, `src/app/erp/domains/fees/pages/fee-records/fee-records.component.ts`, `src/app/erp/domains/fees/pages/fee-records/fee-records.component.html`
 - **Changes made:** Bound PrimeNG `MessageService` toast notifications to handle errors on marks-entry roster, student-profile ledger, and student-profile fee configuration queries rather than logging silently. Added `[max]` dynamic constraints and a reactive validator `noFutureDate` inside `FeeRecordsComponent` to block cashier/staff registration of payments with future dates.

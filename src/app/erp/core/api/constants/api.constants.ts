@@ -23,6 +23,9 @@ export const API_ENDPOINTS = {
     ME: '/auth/me',
     SESSION: '/auth/session',
   },
+  SEARCH: {
+    BASE: '/search',
+  },
   ADMISSIONS: {
     BASE: '/admissions',
     DETAILS: (leadId: string) => `/admissions/${leadId}`,
